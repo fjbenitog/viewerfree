@@ -1,28 +1,15 @@
 package es.viewerfree.gwt.client;
 
-import java.util.Locale;
-
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.StackLayoutPanel;
-import com.google.gwt.user.client.ui.StackPanel;
-import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import es.viewerfree.gwt.shared.DateUtil;
 
@@ -32,13 +19,16 @@ public class Login implements EntryPoint {
 	private PasswordTextBox userPassword;
 	private Button sendButton;
 	private DockPanel mainPanel;
-	private HorizontalPanel northPanel;
+	private HorizontalPanel headerPanel;
 	private HorizontalPanel titlePanel;
 	private HorizontalPanel userPanel;
 	private Label titleViewerfree;
 	private Label titleBy;
 	private Label dateLabel;
 	private HorizontalPanel languagePanel;
+	private HorizontalPanel footerPanel;
+	private HorizontalPanel contentPanel;
+	private HorizontalPanel linksPanel;
 
 
 	public void onModuleLoad() {
@@ -71,27 +61,57 @@ public class Login implements EntryPoint {
 		if(this.mainPanel==null){
 			this.mainPanel = new DockPanel();
 			this.mainPanel.setWidth("100%");
-			this.mainPanel.add(getNorthPanel(), DockPanel.NORTH);
-			this.mainPanel.add(getSendButton(), DockPanel.SOUTH);
+			this.mainPanel.add(getHeaderPanel(), DockPanel.NORTH);
+			this.mainPanel.add(getFooterPanel(), DockPanel.SOUTH);
+			this.mainPanel.add(getContentPanel(), DockPanel.SOUTH);
 
 		}
 		return this.mainPanel;
 	}
 	
-	private HorizontalPanel getNorthPanel(){
-		if(this.northPanel==null){
-			this.northPanel = new HorizontalPanel();
-			this.northPanel.addStyleName("northPanel");
-			this.northPanel.setSpacing(20);
-			this.northPanel.add(getTitlePanel());
-			this.northPanel.setCellWidth(getTitlePanel(), "30%");
-			this.northPanel.add(getUserPanel());
-			this.northPanel.setCellHorizontalAlignment(getUserPanel(), HorizontalPanel.ALIGN_RIGHT);
-			this.northPanel.setCellVerticalAlignment(getUserPanel(), HorizontalPanel.ALIGN_MIDDLE);
-			this.northPanel.setCellWidth(getUserPanel(), "70%");
+	private HorizontalPanel getHeaderPanel(){
+		if(this.headerPanel==null){
+			this.headerPanel = new HorizontalPanel();
+			this.headerPanel.addStyleName("headerPanel");
+			this.headerPanel.setSpacing(20);
+			this.headerPanel.add(getTitlePanel());
+			this.headerPanel.setCellWidth(getTitlePanel(), "55%");
+			this.headerPanel.add(getUserPanel());
+			this.headerPanel.setCellHorizontalAlignment(getUserPanel(), HorizontalPanel.ALIGN_RIGHT);
+			this.headerPanel.setCellVerticalAlignment(getUserPanel(), HorizontalPanel.ALIGN_MIDDLE);
+			this.headerPanel.setCellWidth(getUserPanel(), "45%");
 			
 		}
-		return this.northPanel;
+		return this.headerPanel;
+	}
+	
+	private HorizontalPanel getFooterPanel(){
+		if(this.footerPanel==null){
+			this.footerPanel = new HorizontalPanel();
+			this.footerPanel.addStyleName("footerPanel");
+			this.footerPanel.add(getLinksPanel());
+		}
+		return this.footerPanel;
+	}
+	
+	private HorizontalPanel getLinksPanel(){
+		if(this.linksPanel==null){
+			this.linksPanel = new HorizontalPanel();
+			this.linksPanel.setSpacing(20);
+			this.linksPanel.add(new HTML("&copy; <a href=\"http://sourceforge.net/projects/viewerfree/\">ViewerFree 3.5.3-SNAPSHOT</a>"+
+					". GNU General Public License (GPL). Design by"+
+					"<a href=\"http://javi.viewerfree.es\">Javier Benito</a>"));
+		}
+		return this.linksPanel;
+	}
+	
+	private HorizontalPanel getContentPanel(){
+		if(this.contentPanel==null){
+			this.contentPanel = new HorizontalPanel();
+			this.contentPanel.addStyleName("footerPanel");
+			this.contentPanel.setWidth("100%");
+		}
+		return this.contentPanel;
 	}
 	
 	private HorizontalPanel getTitlePanel(){
