@@ -6,23 +6,6 @@ package es.viewerfree.gwt.client;
  */
 public interface Constants extends com.google.gwt.i18n.client.Constants {
   
-  /**
-   * Translated "gb.gif".
-   * 
-   * @return translated "gb.gif"
-   */
-  @DefaultStringValue("gb.gif")
-  @Key("enFlag")
-  String enFlag();
-
-  /**
-   * Translated "es.gif".
-   * 
-   * @return translated "es.gif"
-   */
-  @DefaultStringValue("es.gif")
-  @Key("esFlag")
-  String esFlag();
 
   /**
    * Translated "images/flags/".
