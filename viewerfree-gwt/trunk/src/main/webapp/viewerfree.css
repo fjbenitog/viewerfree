@@ -1,0 +1,61 @@
+/** Add css rules here for your application. */
+
+.footerPanel a {
+    color: #8C8C73;
+    text-decoration: none;
+}
+
+.footerPanel a:hover {
+    color: #8C8C73;
+    text-decoration:underline;
+}
+
+.footerPanel a:visited {
+    color: #8C8C73;
+}
+
+
+.headerPanel {
+	background: #FFA64D;
+	width: 100%;
+	border-bottom: 1px solid #FF8000;
+	padding-left: 10%;
+}
+
+.footerPanel {
+	background-image: url("images/footer.gif");
+	width: 100%;
+	color: #A8A88D;
+	position: absolute;
+	text-align: center;
+	bottom: 0px;
+	padding-left: 5%
+}
+
+.title {
+	color: white;
+	font-size: 38px;
+	font-weight: bold;
+	font-family: Comic Sans MS;
+	vertical-align: bottom;
+}
+
+.titleBy {
+	color: white;
+	font-size: 12px;
+	font-weight: normal;
+	font-family: Comic Sans MS;
+	vertical-align: bottom
+}
+
+.toDay {
+	padding-right: 10%;
+	color: #CC6600;
+	font-size: 15px;
+	font-weight: bolder;
+	font-family: Comic Sans MS;
+}
+
+.flag {
+	padding-left: 15px;
+}

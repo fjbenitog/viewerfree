@@ -78,9 +78,14 @@
         <!-- Plugin configuration. There are many available options, see 
           gwt-maven-plugin documentation at codehaus.org -->
         <configuration>
-          <runTarget>Module.html</runTarget>
+          <runTarget>Main.html</runTarget>
           <hostedWebapp>${webappDirectory}</hostedWebapp>
+        <i18nMessagesBundles>
           <i18nMessagesBundle>es.viewerfree.gwt.client.Messages</i18nMessagesBundle>
+          <i18nMessagesBundle>es.viewerfree.gwt.client.ViewerFreeMessages</i18nMessagesBundle>
+        </i18nMessagesBundles>
+      <!--  <i18nConstantsBundle>es.viewerfree.gwt.client.Constants</i18nConstantsBundle>-->
+          
         </configuration>
       </plugin>
 
@@ -99,6 +104,7 @@
         </executions>
         <configuration>
           <webappDirectory>${webappDirectory}</webappDirectory>
+          <productionMode>true</productionMode>
         </configuration>
       </plugin>
       <plugin>

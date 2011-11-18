@@ -1,22 +1,16 @@
 package es.viewerfree.gwt.shared;
 
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
+
 
 public class DateUtil {
 
 	
-	public static SimpleDateFormat getDateFormat(){
-		return new SimpleDateFormat("dd MMMM,yyyy");
-	}
-	
-	public static SimpleDateFormat getDateFormatDDMMYYYY(){
-		return new SimpleDateFormat("dd/MM/yyyy");
-	}
-	
 	public static String getToDay(){
-		return getDateFormat().format(new Date());
+		return DateTimeFormat.getFormat("dd MMMM,yyyy").format(new Date());
 	}
 	
 }
