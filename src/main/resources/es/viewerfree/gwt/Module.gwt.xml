@@ -2,6 +2,14 @@
 <module rename-to='Module'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User' />
+   <!-- French language, independent of country -->
+  <extend-property name="locale" values="fr"/>
+  
+  <extend-property name="locale" values="es"/>
+
+  
+  <!-- English language, independent of country -->
+  <extend-property name="locale" values="en"/>
 
   <!-- We need the JUnit module in the main module,               -->
   <!-- otherwise eclipse complains (Google plugin bug?)           -->
@@ -18,6 +26,8 @@
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='es.viewerfree.gwt.client.Module' />
+  
+  <set-property-fallback name="locale" value="es"/>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client' />
