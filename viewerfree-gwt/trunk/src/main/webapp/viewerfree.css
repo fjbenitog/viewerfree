@@ -1,19 +1,17 @@
 /** Add css rules here for your application. */
-
 .footerPanel a {
-    color: #8C8C73;
-    text-decoration: none;
+	color: #8C8C73;
+	text-decoration: none;
 }
 
 .footerPanel a:hover {
-    color: #8C8C73;
-    text-decoration:underline;
+	color: #8C8C73;
+	text-decoration: underline;
 }
 
 .footerPanel a:visited {
-    color: #8C8C73;
+	color: #8C8C73;
 }
-
 
 .headerPanel {
 	background: #FFA64D;
@@ -58,4 +56,46 @@
 
 .flag {
 	padding-left: 15px;
+}
+
+.loginPanel {
+	
+}
+
+.loginPanel .title {
+	color: #FF8000;
+	font-family: Comic Sans MS;
+	font-size: 22px;
+	font-weight: bold;
+	padding-bottom: 4px;
+	width: 300px;
+}
+
+.loginPanel .subtitle {
+	font-family: Comic Sans MS;
+	font-size: 16px;
+	padding-bottom: 15px;
+}
+
+.loginPanel .content {
+	font-family: Comic Sans MS;
+	font-size: 13px;
+	max-width: 500px;
+}
+
+.loginPanel ul {
+	font-family: Comic Sans MS;
+	font-size: 13px;
+	
+	
+}
+.loginPanel li {
+	padding-bottom: 15px;
+	}
+
+.loginForm {
+	border: 1px solid #AFAFA4;
+	padding: 20px;
+	width: 450px;
+	height: 250px;
 }
