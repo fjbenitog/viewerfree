@@ -1,9 +1,6 @@
 package es.viewerfree.gwt.client;
 
-/**
- * Interface to represent the constants contained in resource bundle:
- * 	'C:/Personal/MisProyectos/viewerfree-gwt/src/main/resources/es/viewerfree/gwt/client/Constants.properties'.
- */
+
 public interface Constants extends com.google.gwt.i18n.client.Constants {
   
 
