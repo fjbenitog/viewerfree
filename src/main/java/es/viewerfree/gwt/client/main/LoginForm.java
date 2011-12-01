@@ -7,7 +7,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 
-import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 
 public class LoginForm extends FlexTable{
@@ -26,18 +25,16 @@ public class LoginForm extends FlexTable{
 		setStyleName("loginForm");
 		FlexCellFormatter cellFormatter = getFlexCellFormatter();
 
-		setHTML(0, 0, messages.login());
-		cellFormatter.setColSpan(0, 0, 2);
-		cellFormatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
 		// Add some standard form options
-		setHTML(1, 0, messages.user());
-		setWidget(1, 1, getUserField());
-		setHTML(2, 0, messages.password());
-		setWidget(2, 1, getPasswordField());
-		setWidget(3, 0, getEnterButton());
-		cellFormatter.setColSpan(3, 0, 2);
-		cellFormatter.setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		setHTML(0, 0, messages.user());
+		setWidget(0, 1, getUserField());
+		setHTML(1, 0, messages.password());
+		setWidget(1, 1, getPasswordField());
+		setWidget(2, 0, getEnterButton());
+		cellFormatter.setColSpan(2, 0, 2);
+		cellFormatter.setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		getEnterButton().setFocus(true);
 	}
 
 	private TextBox getUserField(){
