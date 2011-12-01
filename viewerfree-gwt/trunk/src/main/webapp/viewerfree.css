@@ -90,6 +90,7 @@
 
 .loginPanel li {
 	padding-bottom: 15px;
+	max-width: 450px;
 }
 
 .loginForm {
