@@ -24,7 +24,7 @@ public class Content extends HorizontalPanel{
 		add(getLoginForm());
 	}
 
-	private LoginForm getLoginForm(){
+	public LoginForm getLoginForm(){
 		if(this.loginForm==null){
 			this.loginForm = new LoginForm();
 		}
@@ -43,8 +43,13 @@ public class Content extends HorizontalPanel{
 			htmlText.append("<li>").append(messages.list3()).append("</li>");
 			htmlText.append("<li>").append(messages.list4()).append("</li>");
 			htmlText.append("</ul>");
+			htmlText.append("<div class='info'>").append(messages.demoMessage()).append("</div>");
 			this.info = new HTML(htmlText.toString());
 		}
 		return this.info;
+	}
+	
+	public void focus(){
+		getLoginForm().focus();
 	}
 }

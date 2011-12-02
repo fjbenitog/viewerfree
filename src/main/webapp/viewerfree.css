@@ -83,6 +83,14 @@
 	max-width: 500px;
 }
 
+.loginPanel .info {
+	font-family: Comic Sans MS;
+	font-size: 13px;
+	max-width: 500px;
+	color: #CC6600;
+	font-weight: bold;
+}
+
 .loginPanel ul {
 	font-family: Comic Sans MS;
 	font-size: 13px;
@@ -134,4 +142,9 @@
 }
 .loginForm input:hover {
 	border: 1px solid #8A8A7B;
+}
+
+.error{
+	font-family: Comic Sans MS;
+	color: red;
 }

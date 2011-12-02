@@ -5,20 +5,41 @@
 
 <web-app>
 
-  <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>es.viewerfree.gwt.server.GreetingServiceImpl</servlet-class>
-  </servlet>
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+  		</listener-class>
+	</listener>
 
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/Module/greet</url-pattern>
-  </servlet-mapping>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:context/ApplicationContext.xml</param-value>
+	</context-param>
 
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>Main.html</welcome-file>
-  </welcome-file-list>
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>greetServlet</servlet-name>
+		<servlet-class>es.viewerfree.gwt.server.GreetingServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>greetServlet</servlet-name>
+		<url-pattern>/Module/greet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>userServlet</servlet-name>
+		<servlet-class>es.viewerfree.gwt.server.UserServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>userServlet</servlet-name>
+		<url-pattern>/Main/user</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Main.html</welcome-file>
+	</welcome-file-list>
 
 </web-app>

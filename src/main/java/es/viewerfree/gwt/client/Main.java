@@ -15,10 +15,16 @@ public class Main implements EntryPoint {
 	private DockPanel mainPanel;
 	private Panel headerPanel;
 	private Panel footerPanel;
-	private Panel contentPanel;
+	private Content contentPanel;
 
+	  
 	public void onModuleLoad() {
 		RootPanel.get().add(getMainPanel());
+		focus();
+	}
+
+	private void focus() {
+		getContentPanel().getLoginForm().focus();
 	}
 
 	private DockPanel getMainPanel(){
@@ -48,11 +54,12 @@ public class Main implements EntryPoint {
 		return this.footerPanel;
 	}
 
-	private Panel getContentPanel(){
+	private Content getContentPanel(){
 		if(this.contentPanel==null){
 			this.contentPanel = new Content();
 		}
 		return this.contentPanel;
 	}
 
+	
 }
