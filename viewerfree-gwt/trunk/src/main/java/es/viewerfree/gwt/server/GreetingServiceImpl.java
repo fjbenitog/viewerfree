@@ -1,8 +1,9 @@
 package es.viewerfree.gwt.server;
 
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 import es.viewerfree.gwt.client.GreetingService;
 import es.viewerfree.gwt.shared.FieldVerifier;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
  * The server side implementation of the RPC service.
