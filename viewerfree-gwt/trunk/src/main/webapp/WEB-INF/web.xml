@@ -17,24 +17,15 @@
 	</context-param>
 
 	<!-- Servlets -->
-	<servlet>
-		<servlet-name>greetServlet</servlet-name>
-		<servlet-class>es.viewerfree.gwt.server.GreetingServiceImpl</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>greetServlet</servlet-name>
-		<url-pattern>/Module/greet</url-pattern>
-	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>userServlet</servlet-name>
-		<servlet-class>es.viewerfree.gwt.server.UserServiceImpl</servlet-class>
+		<servlet-class>org.spring4gwt.server.SpringGwtRemoteServiceServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>userServlet</servlet-name>
-		<url-pattern>/Main/user</url-pattern>
+		<url-pattern>/Main/springGwtServices/*</url-pattern>
 	</servlet-mapping>
 
 	<!-- Default page to serve -->
