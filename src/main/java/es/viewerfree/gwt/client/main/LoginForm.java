@@ -78,7 +78,13 @@ public class LoginForm extends FlexTable{
 			userService.login(getUserField().getText(),getPasswordField().getText(),new AsyncCallback<Boolean>() {
 				
 				public void onSuccess(Boolean result) {
-					setHTML(0, 0,"<div class='error'>Errrorrrrrrrrrrrrrrrrrrr</div>");
+					String message = "";
+					if(result){
+						message = "Usuario correcto";
+					}else{
+						message = "Usuario no es valido";
+					}
+					setHTML(0, 0,"<div class='error'>"+message+"</div>");
 					FlexCellFormatter cellFormatter = getFlexCellFormatter();
 					cellFormatter.setColSpan(0, 0, 2);
 					cellFormatter.setHorizontalAlignment(0,0, HasHorizontalAlignment.ALIGN_CENTER);

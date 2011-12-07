@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 /**
  * The client side stub for the RPC service.
  */
-@RemoteServiceRelativePath("user")
+@RemoteServiceRelativePath("springGwtServices/user")
 public interface UserService extends RemoteService {
   Boolean login(String userName, String password) throws IllegalArgumentException;
 }
