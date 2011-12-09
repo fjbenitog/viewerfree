@@ -11,7 +11,7 @@
 		<property name="key"><value>${key}</value></property>
 	</bean>
 	
-	<bean id="user" class="es.viewerfree.gwt.server.UserServiceImpl">
+	<bean id="user" class="es.viewerfree.gwt.server.UserServiceImpl" scope="request">
 		<property name="userService" ref="service.user"/>
 	</bean>
 	

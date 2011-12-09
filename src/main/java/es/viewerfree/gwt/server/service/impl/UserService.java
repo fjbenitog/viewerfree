@@ -31,12 +31,6 @@ public class UserService implements IUserService {
 
 	public UserDto getCredentials(String user, String password) throws ServiceException {
 		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
 			UserDto userDto = _userDao.getUser(user);
 			if(userDto!=null && !BCrypt.checkpw(password, userDto.getPassword())) {
 				return null;

@@ -10,6 +10,9 @@
 			org.springframework.web.context.ContextLoaderListener
   		</listener-class>
 	</listener>
+	<listener>
+          <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+   </listener>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -32,5 +35,14 @@
 	<welcome-file-list>
 		<welcome-file>Main.html</welcome-file>
 	</welcome-file-list>
+	
+	<filter>
+		<filter-name>Login</filter-name>
+		<filter-class>es.viewerfree.gwt.server.filter.LoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>Login</filter-name>
+		<url-pattern>/Viewer/*</url-pattern>
+	</filter-mapping>
 
 </web-app>

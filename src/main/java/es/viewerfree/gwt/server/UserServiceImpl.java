@@ -1,19 +1,21 @@
 package es.viewerfree.gwt.server;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
 import es.viewerfree.gwt.client.service.UserService;
+import es.viewerfree.gwt.server.dto.UserDto;
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.server.service.ServiceException;
+import es.viewerfree.gwt.server.service.SpringRemoteServiceServlet;
+import es.viewerfree.gwt.shared.ParamKey;
 
 /**
  * The server side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class UserServiceImpl extends RemoteServiceServlet implements
+public class UserServiceImpl extends SpringRemoteServiceServlet implements
 UserService {
-
+	
 	private IUserService userService;
+	
 
 	public IUserService getUserService() {
 		return userService;
@@ -26,7 +28,9 @@ UserService {
 	public Boolean login(String userName, String password)
 	throws IllegalArgumentException {
 		try {
-			return userService.getCredentials(userName, password)!=null;
+			UserDto credentials = userService.getCredentials(userName, password);
+			setSession(ParamKey.USER.toString(),credentials);
+			return credentials!=null;
 		} catch (ServiceException e) {
 			new IllegalArgumentException(e);
 		}
