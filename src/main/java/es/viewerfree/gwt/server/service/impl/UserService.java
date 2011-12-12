@@ -15,8 +15,6 @@ import es.viewerfree.gwt.server.service.ServiceException;
 
 public class UserService implements IUserService {
 
-	private String _key;
-
 	private IUserDao _userDao;
 
 	public void createUser(UserDto userDto ) throws ServiceException {
@@ -64,14 +62,6 @@ public class UserService implements IUserService {
 
 	public void setUserDao(IUserDao userDao) {
 		_userDao = userDao;
-	}
-
-	public String getKey() {
-		return _key;
-	}
-
-	public void setKey(String key) {
-		_key = key;
 	}
 
 	public UserDto getUser(Long id) throws ServiceException {

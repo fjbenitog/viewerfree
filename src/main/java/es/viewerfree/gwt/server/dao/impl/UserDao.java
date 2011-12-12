@@ -15,19 +15,6 @@ import es.viewerfree.gwt.server.entities.User;
 
 public class UserDao extends JpaDaoSupport implements IUserDao{
 
-	public List<UserDto> findUser(String user, String password)throws DaoException {
-		try{
-		
-			List<User> users = getJpaTemplate().findByNamedQuery("findUserByUserAndPassword", new Object[]{user,password});
-			List<UserDto> usersDto = new ArrayList<UserDto>();
-			for (User userEntity : users) {
-				usersDto.add(toUserDto(userEntity));
-			}
-			return usersDto;
-		}catch (Exception e) {
-			throw new DaoException("Unanabled to find a User",e);
-		}
-	}
 	
 	public UserDto getUser(String user) throws DaoException {
 		try{

@@ -33,6 +33,13 @@ import javax.persistence.Table;
 	@NamedQuery(name="findUserByUser",query="SELECT u from User u where u.user = ?"),
 	@NamedQuery(name="findAllUsers",query="SELECT u from User u")})
 public class User {
+	@Override
+	public String toString() {
+		return "User [_id=" + _id + ", user=" + user + ", password=" + password
+				+ ", name=" + name + ", surname=" + surname + ", email="
+				+ email + ", profile=" + profile + "]";
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "ID_USER")
@@ -117,6 +124,7 @@ public class User {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((profile == null) ? 0 : profile.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
@@ -130,7 +138,7 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final User other = (User) obj;
+		User other = (User) obj;
 		if (_id != other._id)
 			return false;
 		if (email == null) {
@@ -147,6 +155,11 @@ public class User {
 			if (other.password != null)
 				return false;
 		} else if (!password.equals(other.password))
+			return false;
+		if (profile == null) {
+			if (other.profile != null)
+				return false;
+		} else if (!profile.equals(other.profile))
 			return false;
 		if (surname == null) {
 			if (other.surname != null)
