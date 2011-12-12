@@ -8,7 +8,6 @@
 
 	<bean id="service.user" class="es.viewerfree.gwt.server.service.impl.UserService">
 		<property name="userDao" ref="userDao"/>
-		<property name="key"><value>${key}</value></property>
 	</bean>
 	
 	<bean id="user" class="es.viewerfree.gwt.server.UserServiceImpl" scope="request">

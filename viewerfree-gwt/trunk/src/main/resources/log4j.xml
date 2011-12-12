@@ -10,14 +10,14 @@
     </layout> 
   </appender> 
 
-  <root> 
+   <logger name="es.viewerfree">
+    	 <level value="DEBUG" />
+    </logger>
+
+  <root > 
     <priority value ="info" /> 
     <appender-ref ref="console" /> 
   </root>
   
-  <category name="es.viewefree.*">  
-        <priority value="debug" />  
-        <appender-ref ref="console" />  
-    </category> 
-  
+
 </log4j:configuration>

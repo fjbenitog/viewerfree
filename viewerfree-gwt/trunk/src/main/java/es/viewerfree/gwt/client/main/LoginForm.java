@@ -108,22 +108,17 @@ public class LoginForm extends FlexTable{
 		private void proccesLogin() {
 			setEnable(false);
 			setMessageLogin("<div class='warning'>"+messages.logingInMessage()+"</div>");
-
 			userService.login(getUserField().getText(),getPasswordField().getText(),new AsyncCallback<Boolean>() {
 
 				public void onSuccess(Boolean result) {
-					String message = "";
 					if(result){
 						Window.Location.replace(GWT.getHostPageBaseURL()+"Viewer/index.html");
 					}else{
-						message = messages.userNotValid();
+						setMessageLogin("<div class='error'>"+messages.userNotValid()+"</div>");
 					}
-					setMessageLogin("<div class='error'>"+message+"</div>");
 					setEnable(true);
 				}
-
-
-
+				
 				public void onFailure(Throwable throwable) {
 					getErrorDialogBox().center();
 					getErrorDialogBox().show();
