@@ -30,6 +30,9 @@
 		<servlet-name>userServlet</servlet-name>
 		<url-pattern>/Main/springGwtServices/*</url-pattern>
 	</servlet-mapping>
+	
+	
+
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
@@ -43,6 +46,10 @@
 	<filter-mapping>
 		<filter-name>Login</filter-name>
 		<url-pattern>/Viewer/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>Login</filter-name>
+		<url-pattern>/Viewer.html</url-pattern>
 	</filter-mapping>
 
 </web-app>
