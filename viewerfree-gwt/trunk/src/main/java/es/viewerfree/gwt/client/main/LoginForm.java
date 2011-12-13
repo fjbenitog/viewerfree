@@ -112,7 +112,7 @@ public class LoginForm extends FlexTable{
 
 				public void onSuccess(Boolean result) {
 					if(result){
-						Window.Location.replace(GWT.getHostPageBaseURL()+"Viewer/index.html");
+						Window.Location.replace(GWT.getHostPageBaseURL()+"Viewer.html");
 					}else{
 						setMessageLogin("<div class='error'>"+messages.userNotValid()+"</div>");
 					}
