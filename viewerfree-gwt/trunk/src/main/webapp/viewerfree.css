@@ -169,3 +169,22 @@
 	max-width: 300px;
 	padding: 30px;
 }
+
+.barPanel {
+	background: none repeat scroll 0 0 black;
+
+	padding-right: 25px;
+	width: 100%;
+}
+
+.logoutLink {
+	color: #A8A88D;
+    cursor: pointer;
+    padding: 5px 10px;
+    text-align: center;
+    width: -moz-max-content;
+    border-left: 1px solid #A8A88D;
+}
+.logoutLink:hover {
+	background: #3D3D2F;
+}

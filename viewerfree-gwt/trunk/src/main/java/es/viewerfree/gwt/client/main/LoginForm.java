@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -36,6 +37,8 @@ public class LoginForm extends FlexTable{
 	
 	private LoginActionHandler actionHandler;
 
+	private static final String APP_URL = "Viewer.html";
+	
 	public LoginForm() {
 		setCellSpacing(6);
 		setStyleName("loginForm");
@@ -95,6 +98,7 @@ public class LoginForm extends FlexTable{
 
 	private class LoginActionHandler implements ClickHandler, KeyUpHandler{
 
+
 		public void onClick(ClickEvent clickevent) {
 			proccesLogin();
 		}
@@ -112,7 +116,7 @@ public class LoginForm extends FlexTable{
 
 				public void onSuccess(Boolean result) {
 					if(result){
-						Window.Location.replace(GWT.getHostPageBaseURL()+"Viewer.html");
+						Window.Location.replace(GWT.getHostPageBaseURL()+APP_URL+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName());
 					}else{
 						setMessageLogin("<div class='error'>"+messages.userNotValid()+"</div>");
 					}

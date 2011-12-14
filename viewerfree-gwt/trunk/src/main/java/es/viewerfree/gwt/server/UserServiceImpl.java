@@ -36,4 +36,9 @@ UserService {
 		}
 		return false;
 	}
+
+	@Override
+	public void logout() {
+		getHttpServletRequest().getSession().invalidate();
+	}
 }
