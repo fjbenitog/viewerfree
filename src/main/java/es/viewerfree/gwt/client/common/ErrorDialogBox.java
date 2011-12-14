@@ -23,7 +23,7 @@ public class ErrorDialogBox extends DialogBox {
 	
 	public ErrorDialogBox(String strMessage){
 		this();
-		getMessage().setText(strMessage);
+		getMessage().setHTML(strMessage);
 	}
 	
 	public ErrorDialogBox() {

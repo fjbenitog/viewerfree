@@ -5,6 +5,9 @@
   <inherits name="com.google.gwt.i18n.I18N"/>
   
   <!-- French language, independent of country -->
+  <extend-property name="locale" values="es"/>
+  <extend-property name="locale" values="en"/>
+  <set-property-fallback name="locale" value="es"/>
 
   
 
@@ -24,7 +27,6 @@
   <!-- Specify the app entry point class.                         -->
   <entry-point class='es.viewerfree.gwt.client.Main' />
   
-  <extend-property name="locale" values="es"/>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client' />
