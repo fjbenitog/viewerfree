@@ -7,6 +7,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import es.viewerfree.gwt.shared.ParamKey;
+
 @SuppressWarnings("serial")
 public abstract class SpringRemoteServiceServlet extends RemoteServiceServlet {
 
@@ -14,12 +16,12 @@ public abstract class SpringRemoteServiceServlet extends RemoteServiceServlet {
 		return ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 	}
 	
-	protected Object getSession(String key){
-		return getHttpServletRequest().getSession().getAttribute(key);
+	protected Object getSession(ParamKey key){
+		return getHttpServletRequest().getSession().getAttribute(key.toString());
 	}
 	
-	protected void setSession(String key, Object object){
-		getHttpServletRequest().getSession().setAttribute(key, object);
+	protected void setSession(ParamKey key, Object object){
+		getHttpServletRequest().getSession().setAttribute(key.toString(), object);
 	}
 	
 

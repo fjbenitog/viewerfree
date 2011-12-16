@@ -1,10 +1,6 @@
 package es.viewerfree.gwt.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -13,8 +9,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import es.viewerfree.gwt.client.common.BaseEntryPoint;
 import es.viewerfree.gwt.client.common.ErrorDialogBox;
+import es.viewerfree.gwt.client.common.Logout;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
+import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.dto.UserProfile;
 
 public class Viewer extends BaseEntryPoint {
 	  
@@ -22,13 +22,41 @@ public class Viewer extends BaseEntryPoint {
 	
 	private HorizontalPanel barPanel;
 	
+	private HorizontalPanel labelsPanel;
+	
+	private HorizontalPanel adminPanel;
+	
 	private Label logoutLink;
+	
+	private Label userName;
+	
+	private Label adminLabel;
 	
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 	
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 	
-	private ErrorDialogBox errorDialogBox;
+	@Override
+	protected void initValues() {
+		userService.getUser(new AsyncCallback<UserDto>() {
+			@Override
+			public void onSuccess(UserDto user) {
+				getUserName().setText(user.getFullName()+" "+user.getSurname());
+				if(user.getProfile().equals(UserProfile.ADMIN)){
+					getBarPanel().insert(getAdminPanel(),0);
+					getBarPanel().setCellHorizontalAlignment(getAdminPanel(), HorizontalPanel.ALIGN_LEFT);
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable throwable) {
+				ErrorDialogBox errorDialogBox = ErrorMessageUtil.getErrorDialogBox(messages.serverError());
+				errorDialogBox.center();
+				errorDialogBox.show();
+				errorDialogBox.focus();					
+			}
+		});
+	}
 
 	@Override
 	protected Panel getContentPanel() {
@@ -36,6 +64,7 @@ public class Viewer extends BaseEntryPoint {
 			this.contentPanel = new VerticalPanel();
 			this.contentPanel.setWidth("100%");
 			this.contentPanel.add(getBarPanel());
+			this.contentPanel.setCellHorizontalAlignment(getBarPanel(), VerticalPanel.ALIGN_RIGHT);
 		}
 		return this.contentPanel ;
 	}
@@ -43,46 +72,52 @@ public class Viewer extends BaseEntryPoint {
 	private HorizontalPanel getBarPanel(){
 		if(this.barPanel==null){
 			this.barPanel = new HorizontalPanel();
-			this.barPanel.add(getLogoutLink());
-			this.barPanel.setCellHorizontalAlignment(getLogoutLink(), HorizontalPanel.ALIGN_RIGHT);
 			this.barPanel.setStyleName("barPanel");
+			this.barPanel.add(getLabelsPanel());
+			this.barPanel.setCellHorizontalAlignment(getLabelsPanel(), HorizontalPanel.ALIGN_RIGHT);
+
 		}
 		return this.barPanel;
+	}
+	
+	private HorizontalPanel getLabelsPanel(){
+		if(this.labelsPanel==null){
+			this.labelsPanel = new HorizontalPanel();
+			this.labelsPanel.add(getUserName());
+			this.labelsPanel.add(getLogoutLink());
+		}
+		return this.labelsPanel;
+	}
+	
+	private HorizontalPanel getAdminPanel(){
+		if(this.adminPanel==null){
+			this.adminPanel = new HorizontalPanel();
+			this.adminPanel.add(getAdminLabel());
+		}
+		return this.adminPanel;
+	}
+	
+	private Label getAdminLabel(){
+		if(this.adminLabel==null){
+			this.adminLabel = new Label(messages.adminLabel());
+			this.adminLabel.setStyleName("barLink");
+		}
+		return this.adminLabel;
 	}
 
 	private Label getLogoutLink(){
 		if(this.logoutLink==null){
-			this.logoutLink = new Label(messages.logout());
-			this.logoutLink.setStyleName("logoutLink");
-			this.logoutLink.addClickHandler(new ClickHandler() {
-				
-				@Override
-				public void onClick(ClickEvent clickevent) {
-					userService.logout(new AsyncCallback<Void>() {
-						
-						@Override
-						public void onSuccess(Void arg0) {
-							Window.Location.replace(GWT.getHostPageBaseURL()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName());
-						}
-						
-						@Override
-						public void onFailure(Throwable throwable) {
-							getErrorDialogBox().center();
-							getErrorDialogBox().show();
-							getErrorDialogBox().focus();
-						}
-					});
-				}
-			});
+			this.logoutLink = new Logout(messages.logout());
 		}
 		return this.logoutLink;
 	}
-
-	private ErrorDialogBox getErrorDialogBox(){
-		if(this.errorDialogBox == null){
-			this.errorDialogBox = new ErrorDialogBox(messages.logoutError());
+	
+	private Label getUserName(){
+		if(this.userName==null){
+			this.userName = new Label();
+			this.userName.setStyleName("barLabel");
 		}
-		return this.errorDialogBox;
+		return this.userName;
 	}
 	
 }

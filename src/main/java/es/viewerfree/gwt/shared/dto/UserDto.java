@@ -1,8 +1,11 @@
-package es.viewerfree.gwt.server.dto;
+package es.viewerfree.gwt.shared.dto;
+
+import java.io.Serializable;
 
 
 
-public class UserDto {
+
+public class UserDto implements Serializable {
 
 	private long id;
 	
@@ -12,6 +15,10 @@ public class UserDto {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public UserDto() {
+		super();
 	}
 
 	private String _name;

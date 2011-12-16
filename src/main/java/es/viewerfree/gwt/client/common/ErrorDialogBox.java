@@ -68,5 +68,8 @@ public class ErrorDialogBox extends DialogBox {
 		getCloseButton().setFocus(true);
 	}
 
+	public void setMessage(String message){
+		getMessage().setHTML(message);
+	}
 
 }

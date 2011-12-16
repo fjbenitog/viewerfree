@@ -2,7 +2,7 @@ package es.viewerfree.gwt.server.service;
 
 import java.util.List;
 
-import es.viewerfree.gwt.server.dto.UserDto;
+import es.viewerfree.gwt.shared.dto.UserDto;
 
 
 public interface IUserService {
