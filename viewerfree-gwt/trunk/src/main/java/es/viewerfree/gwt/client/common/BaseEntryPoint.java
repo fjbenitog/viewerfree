@@ -15,6 +15,11 @@ public abstract class BaseEntryPoint implements EntryPoint {
 	  
 	public void onModuleLoad() {
 		RootPanel.get().add(getMainPanel());
+		initValues();
+	}
+
+	protected void initValues() {
+		
 	}
 
 	private DockPanel getMainPanel(){

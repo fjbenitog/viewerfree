@@ -19,6 +19,7 @@ import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.common.ErrorDialogBox;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
+import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 
 public class LoginForm extends FlexTable{
 
@@ -33,7 +34,6 @@ public class LoginForm extends FlexTable{
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
-	private ErrorDialogBox errorDialogBox;
 	
 	private LoginActionHandler actionHandler;
 
@@ -81,14 +81,6 @@ public class LoginForm extends FlexTable{
 		return this.enterButton;
 	}
 
-	private ErrorDialogBox getErrorDialogBox(){
-		if(this.errorDialogBox == null){
-			this.errorDialogBox = new ErrorDialogBox(messages.authenticationError());
-		}
-		return this.errorDialogBox;
-	}
-
-
 	private LoginActionHandler getLoginActionHandler(){
 		if(this.actionHandler == null){
 			this.actionHandler = new LoginActionHandler();
@@ -124,9 +116,10 @@ public class LoginForm extends FlexTable{
 				}
 				
 				public void onFailure(Throwable throwable) {
-					getErrorDialogBox().center();
-					getErrorDialogBox().show();
-					getErrorDialogBox().focus();
+					ErrorDialogBox errorDialogBox = ErrorMessageUtil.getErrorDialogBox(messages.authenticationError());
+					errorDialogBox.center();
+					errorDialogBox.show();
+					errorDialogBox.focus();
 					setMessageLogin("");
 					setEnable(true);
 				}

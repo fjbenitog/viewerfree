@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import es.viewerfree.gwt.server.dto.UserDto;
 import es.viewerfree.gwt.shared.ParamKey;
+import es.viewerfree.gwt.shared.dto.UserDto;
 
 
 public class LoginFilter implements Filter {

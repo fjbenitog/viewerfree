@@ -7,9 +7,9 @@ import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.IUserDao;
-import es.viewerfree.gwt.server.dto.UserDto;
-import es.viewerfree.gwt.server.dto.UserProfile;
 import es.viewerfree.gwt.server.entities.User;
+import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.dto.UserProfile;
 
 
 

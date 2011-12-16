@@ -7,9 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import es.viewerfree.gwt.server.dto.UserDto;
-import es.viewerfree.gwt.server.dto.UserProfile;
 import es.viewerfree.gwt.server.service.IUserService;
+import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.dto.UserProfile;
 
 public class InitializeDBTest {
 

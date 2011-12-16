@@ -17,8 +17,8 @@ import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import es.viewerfree.gwt.server.dto.UserDto;
 import es.viewerfree.gwt.shared.ParamKey;
+import es.viewerfree.gwt.shared.dto.UserDto;
 
 
 
