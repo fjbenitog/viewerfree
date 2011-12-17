@@ -200,3 +200,20 @@
 	text-align: right;
 	border-right: 1px solid #A8A88D;
 }
+
+.gwt-SplitLayoutPanel-HDragger {
+  background: #FFFFFF url(images/thumb_vertical.png) center center no-repeat;
+  cursor: col-resize;
+}
+.gwt-SplitLayoutPanel-VDragger {
+  background: #FFFFFF url(images/thumb_horz.png) center center no-repeat;
+  cursor: row-resize;
+}
+
+.albums{
+	border-right: 1px solid #A8A88D;
+}
+
+.pictures{
+
+}
