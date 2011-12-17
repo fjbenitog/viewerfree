@@ -25,7 +25,6 @@ public abstract class BaseEntryPoint implements EntryPoint {
 	private LayoutPanel getMainPanel(){
 		if(this.mainPanel==null){
 			this.mainPanel = new LayoutPanel();
-//			this.mainPanel.setWidth("100%");
 			this.mainPanel.add(getHeaderPanel());
 			this.mainPanel.setWidgetTopHeight(getHeaderPanel(), 0, Unit.PX, 105, Unit.PX);
 			this.mainPanel.add(getFooterPanel());

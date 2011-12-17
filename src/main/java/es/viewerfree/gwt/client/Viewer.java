@@ -1,10 +1,12 @@
 package es.viewerfree.gwt.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -20,7 +22,7 @@ import es.viewerfree.gwt.shared.dto.UserProfile;
 
 public class Viewer extends BaseEntryPoint {
 	  
-	private VerticalPanel contentPanel;
+	private LayoutPanel contentPanel;
 	
 	private BarPanel barPanel;
 	
@@ -59,10 +61,11 @@ public class Viewer extends BaseEntryPoint {
 	@Override
 	protected Panel getContentPanel() {
 		if(this.contentPanel==null){
-			this.contentPanel = new VerticalPanel();
-			this.contentPanel.setWidth("100%");
+			this.contentPanel = new LayoutPanel();
 			this.contentPanel.add(getBarPanel());
+			this.contentPanel.setWidgetTopHeight(getBarPanel(), 0, Unit.PX, 25, Unit.PX);
 			this.contentPanel.add(getViewerPanel());
+			this.contentPanel.setWidgetTopBottom(getViewerPanel(), 25, Unit.PX, 0, Unit.PX);
 		}
 		return this.contentPanel ;
 	}
@@ -94,10 +97,14 @@ public class Viewer extends BaseEntryPoint {
 
 	private SplitLayoutPanel getViewerPanel(){
 		if(this.viewerPanel==null){
-			this.viewerPanel = new SplitLayoutPanel(5);
-			this.viewerPanel.addWest(new HTML("navigation"), 128);
-			this.viewerPanel.addNorth(new HTML("list"), 384);
-			this.viewerPanel.add(new HTML("details"));
+			this.viewerPanel = new SplitLayoutPanel(6);
+			HTML left = new HTML("navigation");
+			left.setStyleName("albums");
+			this.viewerPanel.addWest(left, 128);
+//			this.viewerPanel.addNorth(new HTML("list"), 384);
+			HTML right = new HTML("details");
+			right.setStyleName("pictures");
+			this.viewerPanel.add(right);
 		}
 		return this.viewerPanel;
 	}
