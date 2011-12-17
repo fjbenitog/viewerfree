@@ -202,19 +202,20 @@
 }
 
 .gwt-SplitLayoutPanel-HDragger {
-	background-image: linear-gradient(left, rgb(246, 246, 243) 5%,
-		rgb(224, 224, 215) 53%, rgb(168, 168, 141) 100% );
-	background-image: -o-linear-gradient(left, rgb(246, 246, 243) 5%,
-		rgb(224, 224, 215) 53%, rgb(168, 168, 141) 100% );
-	background-image: -moz-linear-gradient(left, rgb(246, 246, 243) 5%,
-		rgb(224, 224, 215) 53%, rgb(168, 168, 141) 100% );
-	background-image: -webkit-linear-gradient(left, rgb(246, 246, 243) 5%,
-		rgb(224, 224, 215) 53%, rgb(168, 168, 141) 100% );
-	background-image: -ms-linear-gradient(left, rgb(246, 246, 243) 5%,
-		rgb(224, 224, 215) 53%, rgb(168, 168, 141) 100% );
-	background-image: -webkit-gradient(linear, left top, right top, color-stop(0.05, rgb(246,
-		246, 243) ), color-stop(0.53, rgb(224, 224, 215) ),
-		color-stop(1, rgb(168, 168, 141) ) );
+	background-image: linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
+	background-image: -o-linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
+	background-image: -moz-linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
+	background-image: -webkit-linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
+	background-image: -ms-linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
+
+	background-image: -webkit-gradient(
+	linear,
+	left top,
+	right top,
+	color-stop(0.05, #F6F6F3),
+	color-stop(0.53, #E0E0D7),
+	color-stop(1, #A8A88D)
+	);
 	cursor: col-resize;
 }
 
@@ -230,3 +231,34 @@
 .pictures {
 	border-left: 1px solid #A8A88D;
 }
+
+
+.gwt-DisclosurePanel {
+}
+
+.gwt-DisclosurePanel-open {
+}
+
+.gwt-DisclosurePanel-closed {
+}
+
+.gwt-DisclosurePanel .header,
+.gwt-DisclosurePanel .header a,
+.gwt-DisclosurePanel .header td {
+  text-decoration: none;  /* Remove underline from header */
+  color: black; 
+  cursor: pointer;
+  cursor: hand;
+  font-weight: bold;
+}
+
+.gwt-DisclosurePanel .content {
+  border-left: 3px solid #e7e7e7;
+  padding: 4px 0px 4px 8px;
+  margin-left: 22px;
+}
+
+.gwt-DisclosurePanel .gwt-HTML {
+ padding-bottom: 8px;
+}
+
