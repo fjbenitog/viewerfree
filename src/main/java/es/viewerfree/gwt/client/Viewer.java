@@ -97,7 +97,7 @@ public class Viewer extends BaseEntryPoint {
 
 	private SplitLayoutPanel getViewerPanel(){
 		if(this.viewerPanel==null){
-			this.viewerPanel = new SplitLayoutPanel(6);
+			this.viewerPanel = new SplitLayoutPanel(5);
 			HTML left = new HTML("navigation");
 			left.setStyleName("albums");
 			this.viewerPanel.addWest(left, 128);
