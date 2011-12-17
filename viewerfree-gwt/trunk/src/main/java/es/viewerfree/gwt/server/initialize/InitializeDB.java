@@ -30,8 +30,8 @@ public class InitializeDB implements ApplicationContextAware {
 			if(user==null){
 				UserDto userDto = new UserDto(ADMIN, ADMIN);
 				userDto.setProfile(UserProfile.ADMIN);
-				userDto.setFullName("Francisco Javier");
-				userDto.setSurname("Benito Gómez");
+//				userDto.setFullName("Francisco Javier");
+//				userDto.setSurname("Benito Gómez");
 				_userService.createUser(userDto);
 			}
 		} catch (ServiceException e) {
