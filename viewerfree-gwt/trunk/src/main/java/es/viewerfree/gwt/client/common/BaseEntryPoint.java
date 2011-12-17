@@ -1,20 +1,20 @@
 package es.viewerfree.gwt.client.common;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 public abstract class BaseEntryPoint implements EntryPoint {
 
-	private DockPanel mainPanel;
+	private LayoutPanel mainPanel;
 	private Panel headerPanel;
 	private Panel footerPanel;
 
 	  
 	public void onModuleLoad() {
-		RootPanel.get().add(getMainPanel());
+		RootLayoutPanel.get().add(getMainPanel());
 		initValues();
 	}
 
@@ -22,16 +22,18 @@ public abstract class BaseEntryPoint implements EntryPoint {
 		
 	}
 
-	private DockPanel getMainPanel(){
+	private LayoutPanel getMainPanel(){
 		if(this.mainPanel==null){
-			this.mainPanel = new DockPanel();
-			this.mainPanel.setWidth("100%");
-			this.mainPanel.add(getHeaderPanel(), DockPanel.NORTH);
-			this.mainPanel.add(getFooterPanel(), DockPanel.SOUTH);
+			this.mainPanel = new LayoutPanel();
+//			this.mainPanel.setWidth("100%");
+			this.mainPanel.add(getHeaderPanel());
+			this.mainPanel.setWidgetTopHeight(getHeaderPanel(), 0, Unit.PX, 105, Unit.PX);
+			this.mainPanel.add(getFooterPanel());
+			this.mainPanel.setWidgetBottomHeight(getFooterPanel(), 0, Unit.PX, 55, Unit.PX);
 			Panel contentPanel = getContentPanel();
-			this.mainPanel.add(contentPanel, DockPanel.CENTER);
-			this.mainPanel.setCellHorizontalAlignment(contentPanel, HorizontalPanel.ALIGN_CENTER);
-			this.mainPanel.setCellVerticalAlignment(contentPanel, HorizontalPanel.ALIGN_MIDDLE);
+			this.mainPanel.add(contentPanel);
+			this.mainPanel.setWidgetLeftRight(contentPanel, 0, Unit.PX, 0, Unit.PX);
+			this.mainPanel.setWidgetTopBottom(contentPanel, 105, Unit.PX, 55, Unit.PX);
 		}
 		return this.mainPanel;
 	}

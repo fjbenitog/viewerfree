@@ -15,7 +15,6 @@ import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.client.viewer.BarPanel;
-import es.viewerfree.gwt.client.viewer.ViewerPanel;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 
@@ -86,7 +85,7 @@ public class Viewer extends BaseEntryPoint {
 	
 	private Label getAdminLabel(){
 		if(this.adminLabel==null){
-			this.adminLabel = new Label(messages.adminLabel());
+			this.adminLabel = new HTML(messages.adminLabel());
 			this.adminLabel.setStyleName("barLink");
 		}
 		return this.adminLabel;
