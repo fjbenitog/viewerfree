@@ -8,8 +8,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import es.viewerfree.gwt.client.common.BaseEntryPoint;
 import es.viewerfree.gwt.client.common.ErrorDialogBox;
@@ -17,6 +15,7 @@ import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.client.viewer.BarPanel;
+import es.viewerfree.gwt.client.viewer.ViewerPanel;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 
@@ -34,7 +33,7 @@ public class Viewer extends BaseEntryPoint {
 	
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 	
-	private SplitLayoutPanel viewerPanel;
+	private ViewerPanel viewerPanel;
 	
 	@Override
 	protected void initValues() {
@@ -95,16 +94,9 @@ public class Viewer extends BaseEntryPoint {
 	}
 
 
-	private SplitLayoutPanel getViewerPanel(){
+	private ViewerPanel getViewerPanel(){
 		if(this.viewerPanel==null){
-			this.viewerPanel = new SplitLayoutPanel(5);
-			HTML left = new HTML("navigation");
-			left.setStyleName("albums");
-			this.viewerPanel.addWest(left, 128);
-//			this.viewerPanel.addNorth(new HTML("list"), 384);
-			HTML right = new HTML("details");
-			right.setStyleName("pictures");
-			this.viewerPanel.add(right);
+			this.viewerPanel = new ViewerPanel();
 		}
 		return this.viewerPanel;
 	}
