@@ -63,6 +63,11 @@
 	
 }
 
+.loginPanel .left {
+	padding-left: 35%;
+	padding-top: 50px
+}
+
 .loginPanel .title {
 	color: #FF8000;
 	font-family: Comic Sans MS;
@@ -117,7 +122,7 @@
 	border: 1px solid #AFAFA4;
 	font-size: 15px;
 	height: 35px;
-	line-height: 35px; 
+	line-height: 35px;
 	margin: 5px 0 5px 8px;
 	vertical-align: middle;
 }
@@ -180,17 +185,18 @@
 
 .barLink {
 	color: #A8A88D;
-    cursor: pointer;
-    padding: 5px 10px;
-    text-align: right;
+	cursor: pointer;
+	padding: 5px 10px;
+	text-align: right;
 }
+
 .barLink:hover {
 	background: #3D3D2F;
 }
 
 .barLabel {
 	color: #A8A88D;
-    padding: 5px 10px;
-    text-align: right;
-    border-right: 1px solid #A8A88D;
+	padding: 5px 10px;
+	text-align: right;
+	border-right: 1px solid #A8A88D;
 }
