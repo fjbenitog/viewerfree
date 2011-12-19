@@ -1,0 +1,19 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+		  "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+  	
+  	<bean id="dirFilenameFilter" class="es.viewerfree.gwt.server.util.FileFilter">
+		<constructor-arg><value>${dir.included.extension}</value></constructor-arg>
+		<constructor-arg><value>${dir.excluded.extension}</value></constructor-arg>
+		<constructor-arg><value>true</value></constructor-arg>
+	</bean>
+  	
+  	<bean id="albumManager" class="es.viewerfree.gwt.server.viewer.impl.AlbumManagerImpl" >
+		<property name="dirfilenameFilter" ref="dirFilenameFilter"/>
+		<property name="albumPath"><value>${album.path}</value></property>
+		<property name="applicationPath"><value>${application.path}</value></property>
+	</bean>
+
+
+	
+</beans>
