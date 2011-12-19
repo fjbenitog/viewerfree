@@ -26,7 +26,7 @@ public class Content extends LayoutPanel{
 		add(getInfo());
 		setWidgetLeftWidth(getInfo(), 0, Unit.PCT, 50, Unit.PCT);
 		add(getRightPanel());
-		setWidgetRightWidth(getRightPanel(), 0, Unit.PX, 50, Unit.PCT);
+		setWidgetRightWidth(getRightPanel(), 0, Unit.PX, 48, Unit.PCT);
 	}
 
 	public LayoutPanel getRightPanel(){

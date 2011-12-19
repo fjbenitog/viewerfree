@@ -71,4 +71,8 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("Viewerfree")
   @Key("viewerfree")
   String viewerfree();
+  
+  @DefaultStringValue("images/viewer")
+  @Key("viewerImagesPath")
+  String viewerImagesPath();
 }

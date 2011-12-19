@@ -13,6 +13,8 @@ import es.viewerfree.gwt.client.common.BaseEntryPoint;
 import es.viewerfree.gwt.client.common.ErrorDialogBox;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
+import es.viewerfree.gwt.client.service.ViewerService;
+import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.client.viewer.BarPanel;
 import es.viewerfree.gwt.client.viewer.ViewerPanel;
@@ -33,6 +35,8 @@ public class Viewer extends BaseEntryPoint {
 	
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 	
+	private final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
+	
 	private ViewerPanel viewerPanel;
 	
 	@Override
@@ -49,12 +53,30 @@ public class Viewer extends BaseEntryPoint {
 			
 			@Override
 			public void onFailure(Throwable throwable) {
-				ErrorDialogBox errorDialogBox = ErrorMessageUtil.getErrorDialogBox(messages.serverError());
-				errorDialogBox.center();
-				errorDialogBox.show();
-				errorDialogBox.focus();					
+				showErrorDialogBox();					
+			}
+
+		});
+		
+		viewerService.getAlbums(new AsyncCallback<String[]>() {
+			
+			@Override
+			public void onSuccess(String[] albums) {
+				getViewerPanel().setAlbumsList(albums);
+			}
+			
+			@Override
+			public void onFailure(Throwable arg0) {
+				showErrorDialogBox();
 			}
 		});
+	}
+	
+	private void showErrorDialogBox() {
+		ErrorDialogBox errorDialogBox = ErrorMessageUtil.getErrorDialogBox(messages.serverError());
+		errorDialogBox.center();
+		errorDialogBox.show();
+		errorDialogBox.focus();
 	}
 
 	@Override
