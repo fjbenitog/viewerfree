@@ -73,10 +73,7 @@ public class Viewer extends BaseEntryPoint {
 	}
 	
 	private void showErrorDialogBox() {
-		ErrorDialogBox errorDialogBox = ErrorMessageUtil.getErrorDialogBox(messages.serverError());
-		errorDialogBox.center();
-		errorDialogBox.show();
-		errorDialogBox.focus();
+		ErrorMessageUtil.getErrorDialogBox(messages.serverError());
 	}
 
 	@Override

@@ -30,6 +30,7 @@ public class ErrorDialogBox extends DialogBox {
 		super();
 		setHTML("<div style='font-weight: bold;'>"+messages.errorTitle()+"</div>");
 		setAnimationEnabled(true);
+		setGlassEnabled(true);
 		setWidget(getDialogVPanel());
 	}
 	

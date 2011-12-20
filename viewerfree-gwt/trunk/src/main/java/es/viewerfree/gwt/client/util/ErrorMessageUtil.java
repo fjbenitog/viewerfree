@@ -6,8 +6,10 @@ public class ErrorMessageUtil {
 
 	private static ErrorDialogBox errorDialogBox = new ErrorDialogBox("");
 
-	public static  ErrorDialogBox getErrorDialogBox(String message){
+	public static void getErrorDialogBox(String message){
 		errorDialogBox.setMessage(message);
-		return errorDialogBox;
+		errorDialogBox.center();
+		errorDialogBox.show();
+		errorDialogBox.focus();
 	}
 }

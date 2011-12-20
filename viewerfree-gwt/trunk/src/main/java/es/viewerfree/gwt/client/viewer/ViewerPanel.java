@@ -1,69 +1,59 @@
 package es.viewerfree.gwt.client.viewer;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import es.viewerfree.gwt.client.Constants;
-import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 
 public class ViewerPanel extends SplitLayoutPanel {
 	
-	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+	private FoldersListPanel foldersListPanel;
 	
-	private final Constants constants = GWT.create(Constants.class);
-
-	private VerticalPanel leftPanel;
-	
-	private LayoutPanel rightPanel;
-	
-	private DisclosurePanel albumsListPanel;
+	private FolderPanel rightPanel;
 	
 	public ViewerPanel() {
-		super(5);
-		addWest(getLeftPanel(), 200);
+		super(7);
+		addWest(getFoldersListPanel(), 200);
 		add(getRightPanel());
 	}
 
-	private VerticalPanel getLeftPanel(){
-		if(this.leftPanel == null){
-			this.leftPanel = new VerticalPanel();
-			this.leftPanel.setStyleName("albums");
-			this.leftPanel.add(getAlbumsListPanel());
-			this.leftPanel.setWidth("100%");
-			this.leftPanel.setSpacing(10);
+	private FoldersListPanel getFoldersListPanel(){
+		if(this.foldersListPanel == null){
+			this.foldersListPanel = new FoldersListPanel();
 		}
-		return this.leftPanel;
+		return this.foldersListPanel;
 	}
 	
-	private DisclosurePanel getAlbumsListPanel(){
-		if(this.albumsListPanel == null){
-			this.albumsListPanel =  new DisclosurePanel(messages.albumsLabel());
-			this.albumsListPanel.setAnimationEnabled(true);
-			this.albumsListPanel.setOpen(true);
-		}
-		return this.albumsListPanel;
-	}
 	
-	private LayoutPanel getRightPanel(){
+	private FolderPanel getRightPanel(){
 		if(this.rightPanel == null){
-			this.rightPanel = new LayoutPanel();
-			this.rightPanel.setStyleName("pictures");
+			this.rightPanel = new FolderPanel();
 		}
 		return this.rightPanel;
 	}
 	
 	public void setAlbumsList(String[] albums){
-		FlowPanel list = new FlowPanel();
+		AlbumClickHandler albumClickHandler = new AlbumClickHandler();
 		for (String album : albums) {
-			list.add(new HTML("<img border=\"0\" src=\""+constants.viewerImagesPath()+"folder.png"+"\">"+album));
-			
+			getRightPanel().addFolder(album,albumClickHandler);
+			getFoldersListPanel().addFolder(album,albumClickHandler);
 		}
-		getAlbumsListPanel().setContent(list);
 	}
 	
+	private static class AlbumClickHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent clickevent) {
+			if(clickevent.getSource() instanceof HTML){
+				HTML albumLink = (HTML) clickevent.getSource();
+				ErrorMessageUtil.getErrorDialogBox(albumLink.getText());
+			}
+			
+		}
+		
+	}
 }
