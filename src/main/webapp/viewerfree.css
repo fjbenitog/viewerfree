@@ -200,20 +200,7 @@
 }
 
 .gwt-SplitLayoutPanel-HDragger {
-	background-image: linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
-	background-image: -o-linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
-	background-image: -moz-linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
-	background-image: -webkit-linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
-	background-image: -ms-linear-gradient(left , #F6F6F3 5%, #E0E0D7 53%, #A8A88D 100%);
-
-	background-image: -webkit-gradient(
-	linear,
-	left top,
-	right top,
-	color-stop(0.05, #F6F6F3),
-	color-stop(0.53, #E0E0D7),
-	color-stop(1, #A8A88D)
-	);
+	background: #A8A88D  url("images/splitHbar.png") repeat-y ;
 	cursor: col-resize;
 }
 
@@ -223,14 +210,21 @@
 }
 
 .albums {
-	border-right: 1px solid #A8A88D;
+	height: 100%;
 }
 
 .pictures {
-	border-left: 1px solid #A8A88D;
+	padding-left: 80px;
+    padding-top: 25px;
+}
+.pictures img{
+	cursor: pointer;
 }
 
-
+.pictures .label{
+	font-weight: bold;
+	text-align: center;
+}
 .gwt-DisclosurePanel {
 }
 
@@ -257,7 +251,13 @@
 }
 
 .gwt-DisclosurePanel .gwt-HTML {
- padding-bottom: 5px;
+ padding-bottom: 2px;
+ padding-top: 2px;
+ cursor: pointer;
+}
+
+.gwt-DisclosurePanel .gwt-HTML:hover {
+ background: #DDDDDA;
 }
 
 .gwt-DisclosurePanel .gwt-HTML img{
@@ -266,3 +266,7 @@
  vertical-align: middle
 }
 
+.pictures .gwt-HTML{
+	display: inline-table;
+    padding-right: 65px;
+}

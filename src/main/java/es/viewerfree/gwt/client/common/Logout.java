@@ -38,10 +38,7 @@ public class Logout extends Label {
 				
 				@Override
 				public void onFailure(Throwable throwable) {
-					ErrorDialogBox errorDialogBox = ErrorMessageUtil.getErrorDialogBox(messages.logoutError());
-					errorDialogBox.center();
-					errorDialogBox.show();
-					errorDialogBox.focus();
+					ErrorMessageUtil.getErrorDialogBox(messages.logoutError());
 				}
 			});
 		}
