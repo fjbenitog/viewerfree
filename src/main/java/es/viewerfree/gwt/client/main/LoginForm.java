@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 
 import es.viewerfree.gwt.client.ViewerFreeMessages;
-import es.viewerfree.gwt.client.common.ErrorDialogBox;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;

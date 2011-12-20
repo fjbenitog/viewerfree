@@ -10,7 +10,6 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
 
 import es.viewerfree.gwt.client.common.BaseEntryPoint;
-import es.viewerfree.gwt.client.common.ErrorDialogBox;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.service.ViewerService;

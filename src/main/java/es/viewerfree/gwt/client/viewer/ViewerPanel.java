@@ -1,12 +1,10 @@
 package es.viewerfree.gwt.client.viewer;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
-import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 
 public class ViewerPanel extends SplitLayoutPanel {

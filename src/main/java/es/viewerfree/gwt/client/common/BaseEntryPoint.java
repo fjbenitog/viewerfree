@@ -32,7 +32,7 @@ public abstract class BaseEntryPoint implements EntryPoint {
 			Panel contentPanel = getContentPanel();
 			this.mainPanel.add(contentPanel);
 			this.mainPanel.setWidgetLeftRight(contentPanel, 0, Unit.PX, 0, Unit.PX);
-			this.mainPanel.setWidgetTopBottom(contentPanel, 105, Unit.PX, 55, Unit.PX);
+			this.mainPanel.setWidgetTopBottom(contentPanel, 104, Unit.PX, 55, Unit.PX);
 		}
 		return this.mainPanel;
 	}
