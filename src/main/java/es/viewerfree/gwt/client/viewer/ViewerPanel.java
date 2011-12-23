@@ -72,6 +72,7 @@ public class ViewerPanel extends SplitLayoutPanel {
 		public void onClick(ClickEvent clickevent) {
 			if(clickevent.getSource() instanceof HTML){
 				viewerPanel.getRightPanel().clear();
+				viewerPanel.getImagesPanel().clear();
 				HTML albumLink = (HTML) clickevent.getSource();
 				viewerPanel.getImagesPanel().addImage(albumLink.getText(), null);
 				viewerPanel.getRightPanel().add(viewerPanel.getImagesPanel());
