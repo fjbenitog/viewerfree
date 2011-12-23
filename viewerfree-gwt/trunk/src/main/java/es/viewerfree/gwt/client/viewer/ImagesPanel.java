@@ -27,4 +27,8 @@ public class ImagesPanel extends ScrollPanel {
 		}
 		getImagesPanel().add(label);
 	}
+	
+	public void clear(){
+		getImagesPanel().clear();
+	}
 }
