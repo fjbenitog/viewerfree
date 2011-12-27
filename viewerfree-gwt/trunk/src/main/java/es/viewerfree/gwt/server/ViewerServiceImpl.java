@@ -24,4 +24,9 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 		return this.albumManager.getAlbums((UserDto) getSession(ParamKey.USER)) ;
 	}
 
+	@Override
+	public String[] getPictures(String albumName) {
+		return albumManager.getPictures((UserDto) getSession(ParamKey.USER), albumName);
+	}
+
 }

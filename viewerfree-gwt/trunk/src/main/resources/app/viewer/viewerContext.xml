@@ -7,13 +7,31 @@
 		<constructor-arg><value>${dir.excluded.extension}</value></constructor-arg>
 		<constructor-arg><value>true</value></constructor-arg>
 	</bean>
+	
+	<bean id="fileFilenameFilter" class="es.viewerfree.gwt.server.util.FileFilter">
+		<constructor-arg><value>${file.included.extension}</value></constructor-arg>
+		<constructor-arg><value>${file.excluded.extension}</value></constructor-arg>
+		<constructor-arg><value>false</value></constructor-arg>
+	</bean>
   	
   	<bean id="albumManager" class="es.viewerfree.gwt.server.viewer.impl.AlbumManagerImpl" >
 		<property name="dirfilenameFilter" ref="dirFilenameFilter"/>
+		<property name="filenameFilter" ref="fileFilenameFilter"/>
 		<property name="albumPath"><value>${album.path}</value></property>
 		<property name="applicationPath"><value>${application.path}</value></property>
+		<property name="manageImage" ref="manageImage"/>
 	</bean>
 
-
+	<bean id="manageImage" class="es.viewerfree.gwt.server.viewer.impl.ManageImageImpl">
+		<property name="memoryLimit"><value>${image.memory.limit}</value></property>
+	</bean>
+	
+	<bean id="imageService" class="es.viewerfree.gwt.server.ImageService">
+		<property name="albumManager" ref="albumManager"/>
+		<property name="cachedPath"><value>${preview.path}</value></property>
+		<property name="height"><value>${image.max.height}</value></property>
+		<property name="thumbnailCachedPath"><value>${thumbnail.path}</value></property>
+		<property name="thumbnailHeight"><value>${thumbnail.max.height}</value></property>
+	</bean>
 	
 </beans>

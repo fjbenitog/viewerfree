@@ -7,4 +7,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface ViewerService extends RemoteService{
 
 	String[] getAlbums();
+	
+	String[] getPictures(String albumName);
 }

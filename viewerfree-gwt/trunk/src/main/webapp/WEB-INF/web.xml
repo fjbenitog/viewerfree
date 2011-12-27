@@ -36,6 +36,14 @@
 		<url-pattern>/Viewer/springGwtServices/*</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+        <servlet-name>imageService</servlet-name>
+        <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>imageService</servlet-name>
+        <url-pattern>/Viewer/imageService</url-pattern>
+    </servlet-mapping>
 	
 
 
