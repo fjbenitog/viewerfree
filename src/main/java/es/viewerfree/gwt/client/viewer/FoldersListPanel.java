@@ -52,4 +52,13 @@ public class FoldersListPanel extends VerticalPanel {
 			getListPanel().add(albumLink);
 	}
 	
+	public void markFolder(String album){
+		for (int i = 0; i < getListPanel().getWidgetCount(); i++) {
+			HTML widget = (HTML)getListPanel().getWidget(i);
+			widget.setStyleName("gwt-HTML");
+			if(album.equals(widget.getText())){
+				widget.setStyleName("selectedFolder");
+			}
+		}
+	}
 }

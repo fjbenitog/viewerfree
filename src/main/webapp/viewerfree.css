@@ -200,7 +200,7 @@
 }
 
 .gwt-SplitLayoutPanel-HDragger {
-	background: #A8A88D  url("images/splitHbar.png") repeat-y ;
+	background: #A8A88D url("images/splitHbar.png") repeat-y;
 	cursor: col-resize;
 }
 
@@ -215,58 +215,89 @@
 
 .pictures {
 	padding-left: 80px;
-    padding-top: 25px;
+	padding-top: 25px;
 }
-.pictures img{
+
+.pictures img {
 	cursor: pointer;
 }
 
-.pictures .label{
+.pictures .label {
 	font-weight: bold;
 	text-align: center;
 }
+
 .gwt-DisclosurePanel {
+	
 }
 
 .gwt-DisclosurePanel-open {
+	
 }
 
 .gwt-DisclosurePanel-closed {
+	
 }
 
-.gwt-DisclosurePanel .header,
-.gwt-DisclosurePanel .header a,
-.gwt-DisclosurePanel .header td {
-  text-decoration: none;  /* Remove underline from header */
-  color: black; 
-  cursor: pointer;
-  cursor: hand;
-  font-weight: bold;
+.gwt-DisclosurePanel .header,.gwt-DisclosurePanel .header a,.gwt-DisclosurePanel .header td
+	{
+	text-decoration: none; /* Remove underline from header */
+	color: black;
+	cursor: pointer;
+	cursor: hand;
+	font-weight: bold;
 }
 
 .gwt-DisclosurePanel .content {
-  border-left: 3px solid #e7e7e7;
-  padding: 4px 0px 4px 8px;
-  margin-left: 22px;
+	border-left: 3px solid #e7e7e7;
+	padding: 4px 0px 4px 8px;
+	margin-left: 22px;
 }
 
 .gwt-DisclosurePanel .gwt-HTML {
- padding-bottom: 2px;
- padding-top: 2px;
- cursor: pointer;
+	padding-bottom: 2px;
+	padding-top: 2px;
+	cursor: pointer;
 }
 
 .gwt-DisclosurePanel .gwt-HTML:hover {
- background: #DDDDDA;
+	background: #DDDDDA;
 }
 
-.gwt-DisclosurePanel .gwt-HTML img{
- padding-right: 8px;
-  padding-bottom: 4px;
- vertical-align: middle
+.gwt-DisclosurePanel .gwt-HTML img {
+	padding-right: 8px;
+	padding-bottom: 4px;
+	vertical-align: middle
 }
 
-.pictures .gwt-HTML{
+.gwt-DisclosurePanel .selectedFolder {
+	padding-bottom: 2px;
+	padding-top: 2px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.gwt-DisclosurePanel .selectedFolder:hover {
+	background: #DDDDDA;
+}
+
+.gwt-DisclosurePanel .selectedFolder img {
+	padding-right: 8px;
+	padding-bottom: 4px;
+	vertical-align: middle
+}
+
+.pictures .gwt-HTML {
 	display: inline-table;
-    padding-right: 65px;
+	padding-right: 65px;
+}
+
+.pictures .image {
+	display: inline-table;
+	padding: 15px 30px;
+}
+
+.image img {
+	border: 1px solid #FF8000;
+	padding: 4px;
 }

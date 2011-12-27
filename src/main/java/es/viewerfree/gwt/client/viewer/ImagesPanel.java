@@ -1,15 +1,35 @@
 package es.viewerfree.gwt.client.viewer;
 
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.reveregroup.gwt.imagepreloader.ImageLoadEvent;
+import com.reveregroup.gwt.imagepreloader.ImageLoadHandler;
+import com.reveregroup.gwt.imagepreloader.ImagePreloader;
+
+import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.service.ViewerService;
+import es.viewerfree.gwt.client.service.ViewerServiceAsync;
+import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.shared.Action;
+import es.viewerfree.gwt.shared.ParamKey;
 
 public class ImagesPanel extends ScrollPanel {
 
+	private final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
+	
+	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+
 	private FlowPanel imagesPanel;
+	
 
 	public ImagesPanel() {
+		setStyleName("pictures");
 		add(getImagesPanel());
 	}
 
@@ -20,15 +40,78 @@ public class ImagesPanel extends ScrollPanel {
 		return this.imagesPanel;
 	}
 
-	public void addImage(String image,ClickHandler clickHandler){
-		Label label = new  Label(image);
-		if(clickHandler!=null){
-			label.addClickHandler(clickHandler);
-		}
-		getImagesPanel().add(label);
+	public void init(final String albumName){
+		getImagesPanel().setTitle(albumName);
+		viewerService.getPictures(albumName, new CallGetPictures(albumName));
 	}
 	
 	public void clear(){
 		getImagesPanel().clear();
+	}
+	
+	private final class CallGetPictures implements AsyncCallback<String[]> {
+
+		private final String albumName;
+
+		protected CallGetPictures(String albumName) {
+			this.albumName = albumName;
+		}
+
+		@Override
+		public void onSuccess(String[] images) {
+			for (String imageName : images) {
+				final Image loaderImage = new Image("images/ajax-loader.gif");
+				final HorizontalPanel imagePanel = createImagePanel(loaderImage);
+				getImagesPanel().add(imagePanel);
+				ImagePreloader.load(createUrlImage(albumName, imageName),new ImageLoaderHandlerImpl(loaderImage, imagePanel));
+			}
+		}
+
+		@Override
+		public void onFailure(Throwable arg0) {
+			ErrorMessageUtil.getErrorDialogBox(messages.serverError());
+		}
+		
+		private void addImage(final HorizontalPanel imagePanel, Image image) {
+			imagePanel.add(image);
+			imagePanel.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
+			imagePanel.setCellVerticalAlignment(image, VerticalPanel.ALIGN_MIDDLE);
+		}
+		
+		private HorizontalPanel createImagePanel(final Image loaderImage) {
+			final HorizontalPanel imagePanel = new HorizontalPanel();
+			imagePanel.setStyleName("image");
+			imagePanel.setWidth("150px");
+			imagePanel.add(loaderImage);
+			imagePanel.setCellHorizontalAlignment(loaderImage, HorizontalPanel.ALIGN_CENTER);
+			imagePanel.setCellVerticalAlignment(loaderImage, VerticalPanel.ALIGN_MIDDLE);
+			return imagePanel;
+		}
+		
+		private String createUrlImage(final String albumName, String imageName) {
+			StringBuffer urlImage = new StringBuffer();
+			urlImage.append(GWT.getModuleBaseURL()).append("imageService?")
+					.append(ParamKey.ALBUM_NAME).append("=").append(albumName)
+					.append("&").append(ParamKey.PICTURE_NAME).append("=").append(imageName)
+					.append("&").append(ParamKey.ACTION).append("=").append(Action.SHOW_THUMBNAIL);
+			return urlImage.toString();
+		}
+		
+		private final class ImageLoaderHandlerImpl implements ImageLoadHandler {
+			private final Image loaderImage;
+			private final HorizontalPanel imagePanel;
+			
+			private ImageLoaderHandlerImpl(Image loaderImage,
+					HorizontalPanel imagePanel) {
+				this.loaderImage = loaderImage;
+				this.imagePanel = imagePanel;
+			}
+			
+			@Override
+			public void imageLoaded(ImageLoadEvent event) {
+				imagePanel.remove(loaderImage);
+				addImage(imagePanel, event.takeImage());
+			}
+		}
 	}
 }
