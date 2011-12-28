@@ -211,11 +211,13 @@
 
 .albums {
 	height: 100%;
+	background-color: #FFF3E5;
 }
 
 .pictures {
 	padding-left: 40px;
 	padding-top: 10px;
+	background-color: #FFF3E5;
 }
 
 .pictures img {
@@ -246,10 +248,11 @@
 	cursor: pointer;
 	cursor: hand;
 	font-weight: bold;
+	font-family: arial,sans-serif;
 }
 
 .gwt-DisclosurePanel .content {
-	border-left: 3px solid #e7e7e7;
+	border-left: 3px solid #FF8000;
 	padding: 4px 0px 4px 8px;
 	margin-left: 22px;
 }
@@ -258,10 +261,11 @@
 	padding-bottom: 2px;
 	padding-top: 2px;
 	cursor: pointer;
+	font-family: arial,sans-serif;
 }
 
 .gwt-DisclosurePanel .gwt-HTML:hover {
-	background: #DDDDDA;
+	background: #FFDBB3;
 }
 
 .gwt-DisclosurePanel .gwt-HTML img {
@@ -274,11 +278,12 @@
 	padding-bottom: 2px;
 	padding-top: 2px;
 	cursor: pointer;
-	font-weight: bold;
+	font-weight: bolder;
+	font-family: arial,sans-serif;
 }
 
 .gwt-DisclosurePanel .selectedFolder:hover {
-	background: #DDDDDA;
+	background: #FFDBB3;
 }
 
 .gwt-DisclosurePanel .selectedFolder img {
@@ -294,7 +299,8 @@
 
 .pictures .image {
 	display: inline-table;
-	padding: 15px 30px;
+	padding: 15px 18px;
+	vertical-align: middle;
 }
 
 .image img {
@@ -305,11 +311,16 @@
 	box-shadow: 0 0 10px black;
 }
 
-.titleAlbum {
+.titlePanel{
+	background-color: #FFF3E5;
+}
+
+.titlePanel .titleAlbum {
 	font-size: 20px;
 	font-weight: bold;
-	font-family: arial,sans-serif;;
+	font-family: arial,sans-serif;
 	padding-left: 25px;
 	padding-top: 20px;
-	border-bottom: 1px solid #A8A88D;
+	border-bottom: 1px solid #FF8000;
+	text-shadow: 2px 2px 3px #6374AB;
 }
