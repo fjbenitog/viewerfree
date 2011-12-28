@@ -214,8 +214,8 @@
 }
 
 .pictures {
-	padding-left: 80px;
-	padding-top: 25px;
+	padding-left: 40px;
+	padding-top: 10px;
 }
 
 .pictures img {
@@ -298,6 +298,18 @@
 }
 
 .image img {
-	border: 1px solid #FF8000;
-	padding: 4px;
+	border: 1px solid #A8A88D;
+}
+
+.image img:hover {
+	box-shadow: 0 0 10px black;
+}
+
+.titleAlbum {
+	font-size: 20px;
+	font-weight: bold;
+	font-family: arial,sans-serif;;
+	padding-left: 25px;
+	padding-top: 20px;
+	border-bottom: 1px solid #A8A88D;
 }

@@ -13,7 +13,7 @@ public class FolderPanel extends ScrollPanel {
 	private final Constants constants = GWT.create(Constants.class);
 	
 	private FlowPanel folderPanel;
-
+	
 	public FolderPanel() {
 		setStyleName("pictures");
 		add(getFolderPanel());
