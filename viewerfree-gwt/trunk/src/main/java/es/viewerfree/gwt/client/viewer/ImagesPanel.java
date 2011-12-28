@@ -2,8 +2,6 @@ package es.viewerfree.gwt.client.viewer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -51,6 +49,7 @@ public class ImagesPanel extends LayoutPanel {
 			this.albumTitlePanel.add(getAlbumTitleLabel());
 			this.albumTitlePanel.setWidgetLeftRight(getAlbumTitleLabel(), 50, Unit.PX, 100, Unit.PX);
 			this.albumTitlePanel.setWidgetTopBottom(getAlbumTitleLabel(), 2, Unit.PX, 15, Unit.PX);
+			this.albumTitlePanel.setStyleName("titlePanel");
 		}
 		return this.albumTitlePanel;
 	}
@@ -122,8 +121,7 @@ public class ImagesPanel extends LayoutPanel {
 			imagePanel.setStyleName("image");
 			imagePanel.setWidth("150px");
 			imagePanel.add(loaderImage);
-			imagePanel.setCellHorizontalAlignment(loaderImage, HorizontalPanel.ALIGN_CENTER);
-			imagePanel.setCellVerticalAlignment(loaderImage, VerticalPanel.ALIGN_MIDDLE);
+			imagePanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 			return imagePanel;
 		}
 		
