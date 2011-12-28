@@ -1,6 +1,5 @@
 package es.viewerfree.gwt.server.util;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -147,18 +146,10 @@ public class CriptoUtil {
 				e.printStackTrace();
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} 
 			return null;
 		}
 
 	}
 	
-	public static void main(String[] args) throws Exception {
-		String key = "pepe";
-		String encrypt = encrypt("Hola que tal", key);
-		System.err.println(encrypt);
-		System.err.println(decrypt(encrypt, key));
-	}
 }

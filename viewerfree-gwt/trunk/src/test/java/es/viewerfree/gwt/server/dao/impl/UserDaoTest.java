@@ -21,10 +21,10 @@ import es.viewerfree.gwt.shared.dto.UserProfile;
 
 public class UserDaoTest {
 
-	private UserDao _userDao;
+	private UserDao userDao;
 	private static final String USER="USER";
 	private static final String PASSWORD ="PASSWORD";
-	private JpaTemplate _jpaTemplateMock; 
+	private JpaTemplate jpaTemplateMock; 
 	
 	private User _user;
 	
@@ -34,23 +34,23 @@ public class UserDaoTest {
 		_user.setUser(USER);
 		_user.setPassword(PASSWORD);
 		_user.setProfile(UserProfile.ADMIN.toString());
-		_jpaTemplateMock = Mockito.mock(JpaTemplate.class);
-		_userDao = new UserDao();
-		_userDao.setJpaTemplate(_jpaTemplateMock);
+		jpaTemplateMock = Mockito.mock(JpaTemplate.class);
+		userDao = new UserDao();
+		userDao.setJpaTemplate(jpaTemplateMock);
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		_userDao = null;
-		_jpaTemplateMock = null;
+		userDao = null;
+		jpaTemplateMock = null;
 	}
 
 	@Test
 	public void testFindUser() throws DaoException {
 		List<User> list = new ArrayList<User>();
 		list.add(_user);
-		Mockito.when(_jpaTemplateMock.findByNamedQuery("findUserByUser", new Object[]{USER})).thenReturn(list);
-		UserDto user = _userDao.getUser(USER);
+		Mockito.when(jpaTemplateMock.findByNamedQuery("findUserByUser", new Object[]{USER})).thenReturn(list);
+		UserDto user = userDao.getUser(USER);
 		assertEquals(user.getSurname(),_user.getSurname());
 	}
 	
@@ -59,19 +59,42 @@ public class UserDaoTest {
 		List<User> list = new ArrayList<User>();
 		list.add(_user);
 		list.add(_user);
-		Mockito.when(_jpaTemplateMock.findByNamedQuery("findUserByUser", new Object[]{USER})).thenReturn(list);
-		assertNull(_userDao.getUser(USER));
+		Mockito.when(jpaTemplateMock.findByNamedQuery("findUserByUser", new Object[]{USER})).thenReturn(list);
+		assertNull(userDao.getUser(USER));
 	}
 	
 	@Test(expected=DaoException.class)
 	public void testFindUserException() throws DaoException {
 		List<User> list = new ArrayList<User>();
 		list.add(_user);
-		Mockito.doThrow(new DataAccessExceptionImpl("TEST")).when(_jpaTemplateMock).findByNamedQuery("findUserByUser", new Object[]{USER});
-		_userDao.getUser(USER);
+		Mockito.doThrow(new DataAccessExceptionImpl("TEST")).when(jpaTemplateMock).findByNamedQuery("findUserByUser", new Object[]{USER});
+		userDao.getUser(USER);
 	}
 	
-	@SuppressWarnings({ "serial", "unused" })
+	@Test
+	public void testCreateUser() throws Exception {
+		UserDto userDto = new UserDto(USER,PASSWORD);
+		userDao.createUser(userDto);
+		User user = new User();
+		user.setUser(USER);
+		user.setPassword(PASSWORD);
+		user.setProfile(UserProfile.NORMAL.toString());
+		Mockito.verify(jpaTemplateMock).persist(user);
+	}
+	
+	@Test(expected=DaoException.class)
+	public void testICreateUserException() throws DaoException {
+		User user = new User();
+		user.setUser(USER);
+		user.setPassword(PASSWORD);
+		user.setProfile(UserProfile.NORMAL.toString());
+		Mockito.doThrow(new DataAccessExceptionImpl("TEST")).when(jpaTemplateMock).persist(user);
+		UserDto userDto = new UserDto(USER,PASSWORD);
+		userDao.createUser(userDto);
+		
+	}
+	
+	@SuppressWarnings({ "serial" })
 	private class DataAccessExceptionImpl extends DataAccessException{
 
 		public DataAccessExceptionImpl(String msg) {
