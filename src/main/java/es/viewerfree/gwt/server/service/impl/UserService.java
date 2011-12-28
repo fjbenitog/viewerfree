@@ -44,7 +44,7 @@ public class UserService implements IUserService {
 			try {
 				return _userDao.getUser(user.toLowerCase());
 			} catch (DaoException e) {
-				throw new ServiceException("Error listing users",e);
+				throw new ServiceException("Error getting user",e);
 			}
 	}
 	
