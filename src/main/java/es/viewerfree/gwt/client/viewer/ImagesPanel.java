@@ -2,12 +2,16 @@ package es.viewerfree.gwt.client.viewer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.reveregroup.gwt.imagepreloader.ImageLoadEvent;
@@ -40,7 +44,6 @@ public class ImagesPanel extends LayoutPanel {
 		setWidgetTopHeight(getAlbumTitlePanel(), 0, Unit.PX, 70, Unit.PX);
 		add(getScrollImagesPanel());
 		setWidgetTopBottom(getScrollImagesPanel(), 70, Unit.PX, 0, Unit.PX);
-		
 	}
 	
 	private LayoutPanel getAlbumTitlePanel(){
@@ -89,6 +92,7 @@ public class ImagesPanel extends LayoutPanel {
 	
 	private final class CallGetPictures implements AsyncCallback<String[]> {
 
+		private static final String IMAGE_SERVICE = "imageService";
 		private final String albumName;
 
 		protected CallGetPictures(String albumName) {
@@ -101,7 +105,8 @@ public class ImagesPanel extends LayoutPanel {
 				final Image loaderImage = new Image("images/ajax-loader.gif");
 				final HorizontalPanel imagePanel = createImagePanel(loaderImage);
 				getImagesPanel().add(imagePanel);
-				ImagePreloader.load(createUrlImage(albumName, imageName),new ImageLoaderHandlerImpl(loaderImage, imagePanel));
+				ImagePreloader.load(createUrlImage(albumName, imageName, Action.SHOW_THUMBNAIL),
+						new ImageLoaderHandlerImpl(loaderImage, imagePanel,imageName));
 			}
 		}
 
@@ -110,11 +115,7 @@ public class ImagesPanel extends LayoutPanel {
 			ErrorMessageUtil.getErrorDialogBox(messages.serverError());
 		}
 		
-		private void addImage(final HorizontalPanel imagePanel, Image image) {
-			imagePanel.add(image);
-			imagePanel.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
-			imagePanel.setCellVerticalAlignment(image, VerticalPanel.ALIGN_MIDDLE);
-		}
+
 		
 		private HorizontalPanel createImagePanel(final Image loaderImage) {
 			final HorizontalPanel imagePanel = new HorizontalPanel();
@@ -125,23 +126,25 @@ public class ImagesPanel extends LayoutPanel {
 			return imagePanel;
 		}
 		
-		private String createUrlImage(final String albumName, String imageName) {
+		private String createUrlImage(final String albumName, String imageName, Action action) {
 			StringBuffer urlImage = new StringBuffer();
-			urlImage.append(GWT.getModuleBaseURL()).append("imageService?")
+			urlImage.append(GWT.getModuleBaseURL()).append(IMAGE_SERVICE+"?")
 					.append(ParamKey.ALBUM_NAME).append("=").append(albumName)
 					.append("&").append(ParamKey.PICTURE_NAME).append("=").append(imageName)
-					.append("&").append(ParamKey.ACTION).append("=").append(Action.SHOW_THUMBNAIL);
+					.append("&").append(ParamKey.ACTION).append("=").append(action);
 			return urlImage.toString();
 		}
 		
 		private final class ImageLoaderHandlerImpl implements ImageLoadHandler {
 			private final Image loaderImage;
 			private final HorizontalPanel imagePanel;
+			private final String imageName;
 			
 			private ImageLoaderHandlerImpl(Image loaderImage,
-					HorizontalPanel imagePanel) {
+					HorizontalPanel imagePanel,String imageName) {
 				this.loaderImage = loaderImage;
 				this.imagePanel = imagePanel;
+				this.imageName = imageName;
 			}
 			
 			@Override
@@ -149,6 +152,28 @@ public class ImagesPanel extends LayoutPanel {
 				imagePanel.remove(loaderImage);
 				addImage(imagePanel, event.takeImage());
 			}
+			
+			private void addImage(final HorizontalPanel imagePanel, Image image) {
+				image.addClickHandler(new ShowImageHandler());
+				imagePanel.add(image);
+				imagePanel.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
+				imagePanel.setCellVerticalAlignment(image, VerticalPanel.ALIGN_MIDDLE);
+			}
+			
+			private final class ShowImageHandler implements ClickHandler{
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					PopupPanel slidePanel = new PopupPanel();
+					slidePanel.add(new Image(createUrlImage(albumName, imageName, Action.SHOW_PICTURE)));
+					slidePanel.setGlassEnabled(true);
+					
+					slidePanel.setPopupPosition((Window.getClientWidth()-800)/2, 0);
+					slidePanel.show();
+				}
+				
+			}
 		}
+		
 	}
 }
