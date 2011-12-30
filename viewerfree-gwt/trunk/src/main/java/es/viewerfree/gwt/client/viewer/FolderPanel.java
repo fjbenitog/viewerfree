@@ -27,7 +27,7 @@ public class FolderPanel extends ScrollPanel {
 	}
 
 	public void addFolder(String album, ClickHandler clickHandler){
-		HTML html = new HTML("<img border=\"0\" src=\""+constants.viewerImagesPath()+"folder_huge.png"+"\"><div class='label'>"+album+"</div>");
+		HTML html = new HTML("<img border=\"0\" src=\""+constants.viewerImagesPath()+constants.imageHugeFolder()+"\"><div class='label'>"+album+"</div>");
 		html.addClickHandler(clickHandler);
 		getFolderPanel().add(html);
 	}
