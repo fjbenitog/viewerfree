@@ -305,6 +305,7 @@
 
 .image img {
 	border: 1px solid #A8A88D;
+	background-image: images/ajax-loader.gif
 }
 
 .image img:hover {
