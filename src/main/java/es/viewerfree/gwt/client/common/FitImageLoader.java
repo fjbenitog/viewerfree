@@ -1,6 +1,10 @@
 package es.viewerfree.gwt.client.common;
 
+import java.util.HashSet;
+
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Panel;
@@ -9,22 +13,29 @@ import com.reveregroup.gwt.imagepreloader.FitImage;
 import com.reveregroup.gwt.imagepreloader.FitImageLoadEvent;
 import com.reveregroup.gwt.imagepreloader.FitImageLoadHandler;
 
-public class FitImageLoader extends Image {
+public class FitImageLoader extends Image  implements Handler{
 
-	private ClickHandler clickHandler;
-
-	private FitImageLoadHandler fitImageLoadHandler;
-	
 	private FitImage fitImage;
+	
+	private static HashSet<String> URLS = new HashSet<String>();
+	
+	private String url;
+	
 
 	public FitImageLoader(String loaderUrl,String url,int maxWidth, int maxHeight) {
 		super(loaderUrl);
+		this.url = url;
 		fitImage = new FitImage(url, maxWidth, maxHeight);
 		fitImage.addFitImageLoadHandler(new FitImageLoaderHandlerImpl(this));
+		addAttachHandler(this);
 	}
-
-	public void addFitImageLoadHandler(FitImageLoadHandler fitImageLoadHandler){
-		this.fitImageLoadHandler = fitImageLoadHandler;
+	
+	@Override
+	public void onAttachOrDetach(AttachEvent event) {
+		if(URLS.contains(url) && event.isAttached()){
+			updatePanel(fitImage, this);
+		}
+		
 	}
 
 	private final class FitImageLoaderHandlerImpl implements FitImageLoadHandler {
@@ -38,37 +49,28 @@ public class FitImageLoader extends Image {
 
 		@Override
 		public void imageLoaded(FitImageLoadEvent event) {
+			URLS.add(url);
 			Image image = event.getFitImage();
-			if(clickHandler!=null){
-				image.addClickHandler(clickHandler);
-			}
-			Widget parent = imageLoader.getParent();
-			if(parent!=null && parent instanceof Panel){
-				((Panel)parent).add(image);
-			}
-			imageLoader.removeFromParent();
-			if(fitImageLoadHandler!=null){
-				fitImageLoadHandler.imageLoaded(event);
-			}
-			image.setTitle(imageLoader.getTitle());
+			updatePanel(image,imageLoader);
 		}
-
 	}
 	
-
-
+	private void updatePanel(Image image,FitImageLoader imageLoader) {
+		Widget parent = imageLoader.getParent();
+		if(parent!=null && parent instanceof Panel){
+			((Panel)parent).add(image);
+		}
+		imageLoader.removeFromParent();
+		image.setTitle(imageLoader.getTitle());
+	}
+	
 	@Override
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
-		this.clickHandler = handler;
-		return new HandlerRegistration() {
-
-			@Override
-			public void removeHandler() {
-				clickHandler = null;
-			}
-		};
+		return fitImage.addClickHandler(handler);
 	}
 
-
+	public HandlerRegistration addFitImageAttachHandler(Handler handler) {
+		return fitImage.addAttachHandler(handler);
+	}
 
 }
