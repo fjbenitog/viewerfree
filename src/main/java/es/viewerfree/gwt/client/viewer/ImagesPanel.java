@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.common.FitImageLoader;
 import es.viewerfree.gwt.client.service.ViewerService;
@@ -24,6 +25,8 @@ public class ImagesPanel extends LayoutPanel {
 	private final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+	
+	private final Constants constants = GWT.create(Constants.class);
 
 	private FlowPanel imagesPanel;
 
@@ -87,7 +90,6 @@ public class ImagesPanel extends LayoutPanel {
 	private final class CallGetPictures implements AsyncCallback<String[]> {
 
 
-		private static final int imageSize = 150;
 		private final String albumName;
 
 		protected CallGetPictures(String albumName) {
@@ -97,8 +99,8 @@ public class ImagesPanel extends LayoutPanel {
 		@Override
 		public void onSuccess(String[] images) {
 			for (String imageName : images) {
-				final FitImageLoader loaderImage = new FitImageLoader("images/ajax-loader.gif",
-						ViewerHelper.createUrlImage(albumName, imageName, Action.SHOW_THUMBNAIL),imageSize,imageSize);
+				final FitImageLoader loaderImage = new FitImageLoader(constants.viewerImagesPath()+constants.imageLoader(),
+						ViewerHelper.createUrlImage(albumName, imageName, Action.SHOW_THUMBNAIL),constants.imageThumbnailSize(),constants.imageThumbnailSize());
 				loaderImage.addClickHandler(new ShowImageHandler(albumName, imageName));
 				getImagesPanel().add(createImagePanel(loaderImage));
 			}
@@ -111,7 +113,7 @@ public class ImagesPanel extends LayoutPanel {
 
 		private HorizontalPanel createImagePanel(final Image loaderImage) {
 			final HorizontalPanel imagePanel = new HorizontalPanel();
-			imagePanel.setSize(imageSize+"px", imageSize+"px");
+			imagePanel.setSize(constants.imageThumbnailSize()+"px", constants.imageThumbnailSize()+"px");
 			imagePanel.setStyleName("image");
 			imagePanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 			imagePanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);

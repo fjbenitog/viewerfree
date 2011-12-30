@@ -45,7 +45,7 @@ public class FoldersListPanel extends VerticalPanel {
 	}
 
 	public void addFolder(String album,ClickHandler clickHandler){
-			HTML albumLink = new HTML("<img border=\"0\" src=\""+constants.viewerImagesPath()+"folder.png"+"\">"+album);
+			HTML albumLink = new HTML("<img border=\"0\" src=\""+constants.viewerImagesPath()+constants.imageFolder()+"\">"+album);
 			if(clickHandler!=null){
 				albumLink.addClickHandler(clickHandler);
 			}

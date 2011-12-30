@@ -25,9 +25,9 @@ public class FooterPanel extends HorizontalPanel {
 		if(this.linksPanel==null){
 			this.linksPanel = new HorizontalPanel();
 			this.linksPanel.setSpacing(20);
-			this.linksPanel.add(new HTML("&copy; <a href=\"http://sourceforge.net/projects/viewerfree/\">"+constants.softwareVersion()+"</a>."+
-					" GNU General Public License (GPL). "+messages.designedBy()+
-					"<a href=\"http://javi.viewerfree.es\">"+constants.owner()+"</a>"));
+			this.linksPanel.add(new HTML("&copy; <a href=\""+constants.projectURL()+"\">"+constants.softwareVersion()+"</a>."+
+					" "+constants.gnuLincense()+". "+messages.designedBy()+
+					"<a href=\""+constants.projectURL()+"\">"+constants.owner()+"</a>"));
 		}
 		return this.linksPanel;
 	}

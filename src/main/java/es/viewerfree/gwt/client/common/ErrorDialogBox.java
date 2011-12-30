@@ -36,7 +36,7 @@ public class ErrorDialogBox extends DialogBox {
 	
 	private Button getCloseButton(){
 		if(this.closeButton==null){
-			this.closeButton = new Button("Close");
+			this.closeButton = new Button(messages.close());
 			this.closeButton.getElement().setId("closeButton");
 			this.closeButton.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {

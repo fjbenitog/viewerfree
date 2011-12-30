@@ -72,7 +72,43 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("viewerfree")
   String viewerfree();
   
-  @DefaultStringValue("images/viewer")
+  @DefaultStringValue("images/viewer/")
   @Key("viewerImagesPath")
   String viewerImagesPath();
+  
+  @DefaultStringValue("Viewer.html")
+  @Key("viewerAppPath")
+  String viewerAppPath();
+  
+  @DefaultStringValue("folder_huge.png")
+  @Key("imageHugeFolder")
+  String imageHugeFolder();
+  
+  @DefaultStringValue("folder.png")
+  @Key("imageFolder")
+  String imageFolder();
+  
+  @DefaultIntValue(150)
+  @Key("imageThumbnailSize")
+  int imageThumbnailSize();
+  
+  @DefaultIntValue(400)
+  @Key("imageSize")
+  int imageSize();
+  
+  @DefaultIntValue(800)
+  @Key("imageLoaderSize")
+  int imageLoaderSize();
+  
+  @DefaultStringValue("ajax-loader.gif")
+  @Key("imageLoader")
+  String imageLoader();
+  
+  @DefaultStringValue("big-ajax-loader.gif")
+  @Key("imageLoaderBig")
+  String imageLoaderBig();
+  
+  @DefaultStringValue("imageService")
+  @Key("imageService")
+  String imageService();
 }

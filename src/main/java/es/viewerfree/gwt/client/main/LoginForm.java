@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 
+import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
@@ -30,13 +31,14 @@ public class LoginForm extends FlexTable{
 	private Button enterButton;
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+	
+	private final Constants constants = GWT.create(Constants.class);
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	
 	private LoginActionHandler actionHandler;
 
-	private static final String APP_URL = "Viewer.html";
 	
 	public LoginForm() {
 		setCellSpacing(6);
@@ -107,7 +109,7 @@ public class LoginForm extends FlexTable{
 
 				public void onSuccess(Boolean result) {
 					if(result){
-						Window.Location.replace(GWT.getHostPageBaseURL()+APP_URL+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName());
+						Window.Location.replace(GWT.getHostPageBaseURL()+constants.viewerAppPath()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName());
 					}else{
 						setMessageLogin("<div class='error'>"+messages.userNotValid()+"</div>");
 					}
