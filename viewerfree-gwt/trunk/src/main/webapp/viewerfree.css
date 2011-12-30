@@ -324,3 +324,9 @@
 	border-bottom: 1px solid #FF8000;
 	text-shadow: 2px 2px 3px #6374AB;
 }
+
+.gwt-PopupPanel {
+    background: none repeat scroll 0 0 black;
+    border: 2px solid #FFA64D;
+    padding: 2px;
+}
