@@ -17,6 +17,10 @@ public class FitImageLoader extends Image  implements Handler{
 
 	private FitImage fitImage;
 	
+	public FitImage getFitImage() {
+		return fitImage;
+	}
+
 	private static HashSet<String> URLS = new HashSet<String>();
 	
 	private String url;
@@ -26,6 +30,14 @@ public class FitImageLoader extends Image  implements Handler{
 		super(loaderUrl);
 		this.url = url;
 		fitImage = new FitImage(url, maxWidth, maxHeight);
+		fitImage.addFitImageLoadHandler(new FitImageLoaderHandlerImpl(this));
+		addAttachHandler(this);
+	}
+	
+	public FitImageLoader(String loaderUrl,String url) {
+		super(loaderUrl);
+		this.url = url;
+		fitImage = new FitImage(url);
 		fitImage.addFitImageLoadHandler(new FitImageLoaderHandlerImpl(this));
 		addAttachHandler(this);
 	}
@@ -59,6 +71,7 @@ public class FitImageLoader extends Image  implements Handler{
 		Widget parent = imageLoader.getParent();
 		if(parent!=null && parent instanceof Panel){
 			((Panel)parent).add(image);
+			parent.setSize(image.getWidth()+"px", image.getHeight()+"px");
 		}
 		imageLoader.removeFromParent();
 		image.setTitle(imageLoader.getTitle());
