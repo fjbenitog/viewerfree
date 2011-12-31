@@ -98,10 +98,12 @@ public class ImagesPanel extends LayoutPanel {
 
 		@Override
 		public void onSuccess(String[] images) {
+			ShowImageHandler handler = new ShowImageHandler();
 			for (String imageName : images) {
 				final FitImageLoader loaderImage = new FitImageLoader(constants.viewerImagesPath()+constants.imageLoader(),
 						ViewerHelper.createUrlImage(albumName, imageName, Action.SHOW_THUMBNAIL),constants.imageThumbnailSize(),constants.imageThumbnailSize());
-				loaderImage.addClickHandler(new ShowImageHandler(albumName, imageName));
+				loaderImage.setTitle(albumName+":"+imageName);
+				loaderImage.addClickHandler(handler);
 				getImagesPanel().add(createImagePanel(loaderImage));
 			}
 		}
