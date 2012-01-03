@@ -248,7 +248,7 @@
 	cursor: pointer;
 	cursor: hand;
 	font-weight: bold;
-	font-family: arial,sans-serif;
+	font-family: arial, sans-serif;
 }
 
 .gwt-DisclosurePanel .content {
@@ -261,7 +261,7 @@
 	padding-bottom: 2px;
 	padding-top: 2px;
 	cursor: pointer;
-	font-family: arial,sans-serif;
+	font-family: arial, sans-serif;
 }
 
 .gwt-DisclosurePanel .gwt-HTML:hover {
@@ -279,7 +279,7 @@
 	padding-top: 2px;
 	cursor: pointer;
 	font-weight: bolder;
-	font-family: arial,sans-serif;
+	font-family: arial, sans-serif;
 }
 
 .gwt-DisclosurePanel .selectedFolder:hover {
@@ -312,14 +312,14 @@
 	box-shadow: 0 0 10px black;
 }
 
-.titlePanel{
+.titlePanel {
 	background-color: #FFF3E5;
 }
 
 .titlePanel .titleAlbum {
 	font-size: 20px;
 	font-weight: bold;
-	font-family: arial,sans-serif;
+	font-family: arial, sans-serif;
 	padding-left: 25px;
 	padding-top: 20px;
 	border-bottom: 1px solid #FF8000;
@@ -327,7 +327,23 @@
 }
 
 .gwt-PopupPanel {
-    background: none repeat scroll 0 0 black;
-    border: 2px solid #FFA64D;
-    padding: 2px;
+	background: none repeat scroll 0 0 black;
+	border: 2px solid #FFA64D;
+	padding: 2px;
+}
+
+.gwt-PopupPanel .popupContent .arrows {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: alpha(opacity = 0);
+	-moz-opacity: 0.0;
+	-khtml-opacity: 0.0;
+	opacity: 0.0;
+}
+
+.gwt-PopupPanel .popupContent .arrows:hover {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity = 50);
+	-moz-opacity: 0.5;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
 }
