@@ -111,4 +111,12 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("imageService")
   @Key("imageService")
   String imageService();
+  
+  @DefaultStringValue("left_arrow_icon.png")
+  @Key("imageLeftArrow")
+  String imageLeftArrow();
+  
+  @DefaultStringValue("right_arrow_icon.png")
+  @Key("imageRightArrow")
+  String imageRightArrow();
 }
