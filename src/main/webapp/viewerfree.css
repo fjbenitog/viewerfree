@@ -305,7 +305,6 @@
 
 .image img {
 	border: 1px solid #A8A88D;
-	background-image: images/ajax-loader.gif
 }
 
 .image img:hover {
@@ -332,18 +331,15 @@
 	padding: 2px;
 }
 
+
 .gwt-PopupPanel .popupContent .arrows {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	zoom: 1;
 	filter: alpha(opacity = 0);
-	-moz-opacity: 0.0;
-	-khtml-opacity: 0.0;
 	opacity: 0.0;
 }
 
 .gwt-PopupPanel .popupContent .arrows:hover {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	zoom: 1;
 	filter: alpha(opacity = 50);
-	-moz-opacity: 0.5;
-	-khtml-opacity: 0.5;
-	opacity: 0.5;
+	opacity: 0.8;
 }

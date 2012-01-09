@@ -99,7 +99,9 @@ public class SlidePanel extends PopupPanel {
 			this.leftArrowPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
 			this.leftArrowPanel.setStyleName("arrows");
 			this.leftArrowPanel.setWidth("100%");
+			this.leftArrowPanel.setHeight("100%");
 			this.leftArrowPanel.add(getLeftArrow());
+			this.leftArrowPanel.setTitle("Previous Picture");
 		}
 		return this.leftArrowPanel;
 	}
@@ -107,7 +109,6 @@ public class SlidePanel extends PopupPanel {
 	private Image getLeftArrow(){
 		if(this.leftArrow == null){
 			this.leftArrow = new Image(constants.viewerImagesPath()+constants.imageLeftArrow());
-			this.leftArrow.setTitle("Previous Picture");
 		}
 		return this.leftArrow;
 	}
@@ -119,6 +120,7 @@ public class SlidePanel extends PopupPanel {
 			this.rightArrowPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
 			this.rightArrowPanel.setStyleName("arrows");
 			this.rightArrowPanel.setWidth("100%");
+			this.rightArrowPanel.setHeight("100%");
 			this.rightArrowPanel.add(getRightArrow());
 			this.rightArrowPanel.setTitle("Next Picture");
 		}
@@ -148,10 +150,10 @@ public class SlidePanel extends PopupPanel {
 		getMainPanel().setWidgetTopHeight(getImagePanel(), IMAGE_PADDING, Unit.PX, 100, Unit.PCT);
 		
 		getMainPanel().setWidgetTopHeight(getRightArrowPanel(), 0, Unit.PX, maxHeight, Unit.PX);
-		getMainPanel().setWidgetLeftRight(getRightArrowPanel(), 90, Unit.PCT, 0, Unit.PCT);
+		getMainPanel().setWidgetLeftRight(getRightArrowPanel(), 70, Unit.PCT, IMAGE_PADDING, Unit.PX);
 		
 		getMainPanel().setWidgetTopHeight(getLeftArrowPanel(), 0, Unit.PX, maxHeight, Unit.PX);
-		getMainPanel().setWidgetLeftWidth(getLeftArrowPanel(), 0, Unit.PCT, 10, Unit.PCT);
+		getMainPanel().setWidgetLeftWidth(getLeftArrowPanel(), IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
 
 	}
 	
