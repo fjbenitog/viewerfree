@@ -336,6 +336,9 @@
 	zoom: 1;
 	filter: alpha(opacity = 0);
 	opacity: 0.0;
+}
+
+.gwt-PopupPanel .popupContent .arrows .link:hover{
 	cursor: pointer;
 }
 
@@ -343,5 +346,5 @@
 	zoom: 1;
 	filter: alpha(opacity = 50);
 	opacity: 0.6;
-	cursor: pointer;
 }
+
