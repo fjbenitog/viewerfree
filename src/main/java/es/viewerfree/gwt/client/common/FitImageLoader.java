@@ -76,7 +76,7 @@ public class FitImageLoader extends Image  implements Handler{
 		imageLoader.removeFromParent();
 		image.setTitle(imageLoader.getTitle());
 	}
-	
+
 	@Override
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
 		return fitImage.addClickHandler(handler);

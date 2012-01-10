@@ -1,7 +1,5 @@
 package es.viewerfree.gwt.client.viewer;
 
-import java.util.HashMap;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -48,8 +46,6 @@ public class SlidePanel extends PopupPanel {
 	private Image rightArrow;
 
 	private Image leftArrow;
-	
-	private HashMap<String, Image> pictures = new HashMap<String, Image>();
 
 	public SlidePanel(AlbumDto albumDto) {
 		this.albumDto = albumDto;
@@ -85,20 +81,17 @@ public class SlidePanel extends PopupPanel {
 		return this.imagePanel;
 	}
 
-	private Image getFitImage() {
-		if(pictures.containsKey(albumDto.getPictures()[albumDto.getSelectedPic()])){
-			return pictures.get(albumDto.getPictures()[albumDto.getSelectedPic()]);
-		}
+	private FitImageLoader getFitImage() {
+
 		final FitImageLoader image = new FitImageLoader(constants.viewerImagesPath()+constants.imageLoaderBig(),
 				ViewerHelper.createUrlImage(albumDto.getName(), albumDto.getPictures()[albumDto.getSelectedPic()], Action.SHOW_PICTURE),
 				constants.imageSize(),constants.imageSize());
+
 		image.addFitImageAttachHandler(new Handler(){
 			@Override
 			public void onAttachOrDetach(AttachEvent event) {
 				if(event.isAttached()){ 
-					pictures.put(albumDto.getPictures()[albumDto.getSelectedPic()], image.getFitImage());
 					pack(image.getFitImage());
-
 					center();				
 				}
 			}
@@ -204,6 +197,7 @@ public class SlidePanel extends PopupPanel {
 			setSize((image.getWidth()+PANEL_PADDING)+"px",(image.getHeight()+BUTTONS_PANEL_HEIGHT)+"px");
 		}
 
+
 		getMainPanel().setWidgetLeftWidth(getImagePanel(), IMAGE_PADDING, Unit.PX, 100, Unit.PCT);
 		getMainPanel().setWidgetTopHeight(getImagePanel(), IMAGE_PADDING, Unit.PX, 100, Unit.PCT);
 
@@ -212,6 +206,8 @@ public class SlidePanel extends PopupPanel {
 
 		getMainPanel().setWidgetTopHeight(getLeftArrowPanel(), 0, Unit.PX, maxHeight, Unit.PX);
 		getMainPanel().setWidgetLeftWidth(getLeftArrowPanel(), IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
+		
+		
 
 	}
 
