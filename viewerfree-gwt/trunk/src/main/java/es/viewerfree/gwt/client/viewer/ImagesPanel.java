@@ -19,6 +19,7 @@ import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.client.util.ViewerHelper;
 import es.viewerfree.gwt.shared.Action;
+import es.viewerfree.gwt.shared.dto.AlbumDto;
 
 public class ImagesPanel extends LayoutPanel {
 
@@ -80,29 +81,22 @@ public class ImagesPanel extends LayoutPanel {
 
 	public void init(final String albumName){
 		getAlbumTitleLabel().setText(albumName);
-		viewerService.getPictures(albumName, new CallGetPictures(albumName));
+		viewerService.getPictures(albumName, new CallGetPictures());
 	}
 
 	public void clear(){
 		getImagesPanel().clear();
 	}
 
-	private final class CallGetPictures implements AsyncCallback<String[]> {
-
-
-		private final String albumName;
-
-		protected CallGetPictures(String albumName) {
-			this.albumName = albumName;
-		}
+	private final class CallGetPictures implements AsyncCallback<AlbumDto> {
 
 		@Override
-		public void onSuccess(String[] images) {
-			ShowImageHandler handler = new ShowImageHandler();
-			for (String imageName : images) {
+		public void onSuccess(AlbumDto album) {
+			for (int i = 0; i<album.getPictures().length ; i++){
+				ShowImageHandler handler = new ShowImageHandler(album,i);
 				final FitImageLoader loaderImage = new FitImageLoader(constants.viewerImagesPath()+constants.imageLoader(),
-						ViewerHelper.createUrlImage(albumName, imageName, Action.SHOW_THUMBNAIL),constants.imageThumbnailSize(),constants.imageThumbnailSize());
-				loaderImage.setTitle(albumName+":"+imageName);
+						ViewerHelper.createUrlImage(album.getName(), album.getPictures()[i], Action.SHOW_THUMBNAIL),constants.imageThumbnailSize(),constants.imageThumbnailSize());
+				loaderImage.setTitle(album.getPictures()[i]);
 				loaderImage.addClickHandler(handler);
 				getImagesPanel().add(createImagePanel(loaderImage));
 			}

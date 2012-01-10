@@ -4,6 +4,7 @@ import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.server.service.SpringRemoteServiceServlet;
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.shared.ParamKey;
+import es.viewerfree.gwt.shared.dto.AlbumDto;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
 @SuppressWarnings("serial")
@@ -25,8 +26,9 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	}
 
 	@Override
-	public String[] getPictures(String albumName) {
-		return albumManager.getPictures((UserDto) getSession(ParamKey.USER), albumName);
+	public AlbumDto getPictures(String albumName) {
+		String[] pictures = albumManager.getPictures((UserDto) getSession(ParamKey.USER), albumName);
+		return new AlbumDto(albumName, pictures);
 	}
 
 }
