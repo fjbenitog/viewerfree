@@ -3,6 +3,8 @@ package es.viewerfree.gwt.client.common;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -19,7 +21,6 @@ public class ErrorDialogBox extends DialogBox {
 	private HTML message;
 	
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
-	
 	
 	public ErrorDialogBox(String strMessage){
 		this();
@@ -41,6 +42,7 @@ public class ErrorDialogBox extends DialogBox {
 			this.closeButton.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
 					hide();
+					Window.Location.replace(GWT.getHostPageBaseURL()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName());
 				}
 			});
 		}
