@@ -10,10 +10,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.reveregroup.gwt.imagepreloader.FitImage;
+import com.reveregroup.gwt.imagepreloader.FitImageLoadEvent;
+import com.reveregroup.gwt.imagepreloader.FitImageLoadHandler;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
-import es.viewerfree.gwt.client.common.FitImageLoader;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
@@ -94,11 +96,21 @@ public class ImagesPanel extends LayoutPanel {
 		public void onSuccess(AlbumDto album) {
 			for (int i = 0; i<album.getPictures().length ; i++){
 				ShowImageHandler handler = new ShowImageHandler(album,i);
-				final FitImageLoader loaderImage = new FitImageLoader(constants.viewerImagesPath()+constants.imageLoader(),
-						ViewerHelper.createUrlImage(album.getName(), album.getPictures()[i], Action.SHOW_THUMBNAIL),constants.imageThumbnailSize(),constants.imageThumbnailSize());
-				loaderImage.setTitle(album.getPictures()[i]);
-				loaderImage.addClickHandler(handler);
-				getImagesPanel().add(createImagePanel(loaderImage));
+				final Image loaderImage = new Image(constants.viewerImagesPath()+constants.imageLoader());
+				final HorizontalPanel imagePanel = createImagePanel(loaderImage);
+				final FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(album.getName(), album.getPictures()[i], Action.SHOW_THUMBNAIL),
+						constants.imageThumbnailSize(),constants.imageThumbnailSize() ,
+						new FitImageLoadHandler() {
+							
+							@Override
+							public void imageLoaded(FitImageLoadEvent event) {
+								imagePanel.remove(loaderImage);
+								imagePanel.add(event.getFitImage());
+							}
+						});
+				fitImage.setTitle(album.getPictures()[i]);
+				fitImage.addClickHandler(handler);
+				getImagesPanel().add(imagePanel);
 			}
 		}
 
