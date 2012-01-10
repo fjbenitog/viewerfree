@@ -348,3 +348,7 @@
 	opacity: 0.6;
 }
 
+
+.gwt-PopupPanel .popupContent .buttons {
+	padding: 20px;
+}

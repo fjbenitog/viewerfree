@@ -26,7 +26,7 @@ public class SlidePanel extends PopupPanel {
 
 	private static final int IMAGE_PADDING = 5;
 
-	private static final int BUTTONS_PANEL_HEIGHT = 100;
+	private static final int BUTTONS_PANEL_HEIGHT = 60;
 
 	private final Constants constants = GWT.create(Constants.class);
 
@@ -47,6 +47,8 @@ public class SlidePanel extends PopupPanel {
 	private Image leftArrow;
 	
 	private Image imageLoader;
+	
+	private HorizontalPanel buttonsPanel;
 
 	public SlidePanel(AlbumDto albumDto) {
 		this.albumDto = albumDto;
@@ -71,6 +73,7 @@ public class SlidePanel extends PopupPanel {
 		if(this.mainPanel == null){
 			this.mainPanel = new LayoutPanel();
 			this.mainPanel.add(getImagePanel());
+			this.mainPanel.add(getButtonsPanel());
 			this.mainPanel.add(getRightArrowPanel());
 			this.mainPanel.add(getLeftArrowPanel());
 
@@ -155,6 +158,21 @@ public class SlidePanel extends PopupPanel {
 		return this.rightArrow;
 	}
 	
+	private HorizontalPanel getButtonsPanel(){
+		if(this.buttonsPanel == null){
+			this.buttonsPanel = new HorizontalPanel();
+			this.buttonsPanel.setSize("100%", "100%");
+			this.buttonsPanel.setStyleName("buttons");
+			this.buttonsPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+			this.buttonsPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+			this.buttonsPanel.add(new Image(constants.viewerImagesPath()+"stop.png"));
+			this.buttonsPanel.add(new Image(constants.viewerImagesPath()+"previous.png"));
+			this.buttonsPanel.add(new Image(constants.viewerImagesPath()+"play.png"));
+			this.buttonsPanel.add(new Image(constants.viewerImagesPath()+"next.png"));
+		}
+		return this.buttonsPanel;
+	}
+	
 	private void nextPicture() {
 		if(albumDto.getSelectedPic()<albumDto.getPictures().length-1){
 			albumDto.setSelectedPic(albumDto.getSelectedPic()+1);
@@ -214,6 +232,10 @@ public class SlidePanel extends PopupPanel {
 
 		getMainPanel().setWidgetTopHeight(getLeftArrowPanel(), 0, Unit.PX, maxHeight, Unit.PX);
 		getMainPanel().setWidgetLeftWidth(getLeftArrowPanel(), IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
+		
+		getMainPanel().setWidgetTopHeight(getButtonsPanel(), maxHeight, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
+		int offset = ((image.getWidth()+PANEL_PADDING)/2)-120;
+		getMainPanel().setWidgetLeftRight(getButtonsPanel(), offset, Unit.PX, offset, Unit.PX);
 		
 		center();
 
