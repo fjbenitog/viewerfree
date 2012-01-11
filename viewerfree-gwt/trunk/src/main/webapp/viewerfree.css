@@ -350,5 +350,8 @@
 
 
 .gwt-PopupPanel .popupContent .buttons {
-	padding: 20px;
+	cursor: pointer;
+}
+
+.gwt-PopupPanel .popupContent .disabledbuttons {
 }
