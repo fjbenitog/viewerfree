@@ -151,4 +151,8 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("disabled_next.png")
   @Key("imageDisabledNext")
   String imageDisabledNext();
+  
+  @DefaultStringValue("file_download.png")
+  @Key("imageFileDownload")
+  String imageFileDownload();
 }
