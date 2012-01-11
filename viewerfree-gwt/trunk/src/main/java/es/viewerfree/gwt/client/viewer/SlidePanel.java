@@ -8,6 +8,7 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -24,6 +25,8 @@ import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
 
 public class SlidePanel extends PopupPanel {
+
+	private static final int PANEL_BUTTONS_WIDTH = 120;
 
 	private static final int slideTime = 3000;
 
@@ -50,21 +53,25 @@ public class SlidePanel extends PopupPanel {
 	private Image rightArrow;
 
 	private Image leftArrow;
-	
+
 	private Image imageLoader;
-	
+
 	private Image imagePlay;
-	
+
 	private Image imageStop;
-	
+
 	private Image imageNext;
-	
+
 	private Image imagePrevious;
-	
+
+	private HTML imageFileDownload;
+
 	private HorizontalPanel buttonsPanel;
-	
+
+	private HorizontalPanel utilityPanel;
+
 	private Timer picTimer;
-	
+
 
 	public SlidePanel(AlbumDto albumDto) {
 		this.albumDto = albumDto;
@@ -75,24 +82,14 @@ public class SlidePanel extends PopupPanel {
 		add(getMainPanel());
 		getImagePanel().add(getImageLoader());
 		getFitImage();
-		addCloseHandler(new CloseHandler<PopupPanel>() {
-			
-			@Override
-			public void onClose(CloseEvent<PopupPanel> event) {
-				getPicTimer().cancel();
-				getImageStop().setStyleName("disabledbuttons");
-				getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
-				getImagePlay().setStyleName("buttons");
-				getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
-			}
-		});
+		addCloseHandler(new HandlerStopSlideshow());
 		center();
 	}
-	
+
 	private Timer getPicTimer(){
 		if(this.picTimer == null){
 			this.picTimer = new Timer() {
-				
+
 				@Override
 				public void run() {
 					nextPicture();
@@ -109,11 +106,12 @@ public class SlidePanel extends PopupPanel {
 		}
 		return this.imageLoader;
 	}
-	
+
 	private LayoutPanel getMainPanel(){
 		if(this.mainPanel == null){
 			this.mainPanel = new LayoutPanel();
 			this.mainPanel.add(getImagePanel());
+			this.mainPanel.add(getUtilityPanel());
 			this.mainPanel.add(getButtonsPanel());
 			this.mainPanel.add(getRightArrowPanel());
 			this.mainPanel.add(getLeftArrowPanel());
@@ -152,21 +150,7 @@ public class SlidePanel extends PopupPanel {
 	private Image getLeftArrow(){
 		if(this.leftArrow == null){
 			this.leftArrow = new Image(constants.viewerImagesPath()+constants.imageLeftArrow());
-			this.leftArrow.addClickHandler(new ClickHandler() {
-
-				@Override
-				public void onClick(ClickEvent event) {
-					getPicTimer().cancel();
-					getImageStop().setStyleName("disabledbuttons");
-					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
-					getImagePlay().setStyleName("buttons");
-					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
-					previousPicture();
-					update();
-				}
-
-
-			});
+			this.leftArrow.addClickHandler(new ClickHandlerPreviousPic());
 			this.leftArrow.setStyleName("link");
 		}
 		return this.leftArrow;
@@ -189,107 +173,67 @@ public class SlidePanel extends PopupPanel {
 	private Image getRightArrow(){
 		if(this.rightArrow == null){
 			this.rightArrow = new Image(constants.viewerImagesPath()+constants.imageRightArrow());
-			this.rightArrow.addClickHandler(new ClickHandler() {
-
-				@Override
-				public void onClick(ClickEvent event) {
-					getPicTimer().cancel();
-					getImageStop().setStyleName("disabledbuttons");
-					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
-					getImagePlay().setStyleName("buttons");
-					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
-					nextPicture();
-					update();
-				}
-
-
-			});
+			this.rightArrow.addClickHandler(new ClickHandlerNextPic());
 			this.rightArrow.setStyleName("link");
 		}
 		return this.rightArrow;
 	}
-	
+
 	private Image getImagePlay(){
 		if(this.imagePlay == null){
 			this.imagePlay = new Image(constants.viewerImagesPath()+constants.imagePlay());
 			this.imagePlay.setStyleName("buttons");
-			this.imagePlay.addClickHandler(new ClickHandler() {
-				
-				@Override
-				public void onClick(ClickEvent clickevent) {
-					getImageStop().setStyleName("buttons");
-					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageStop());
-					getImagePlay().setStyleName("disabledbuttons");
-					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imageDisabledPlay());
-					getPicTimer().scheduleRepeating(slideTime);
-				}
-			});
+			this.imagePlay.setTitle(messages.startSlideShow());
+			this.imagePlay.addClickHandler(new ClickHandlerStartSlideshow());
 		}
 		return this.imagePlay;
 	}
-	
+
 	private Image getImageNext(){
 		if(this.imageNext == null){
 			this.imageNext = new Image(constants.viewerImagesPath()+constants.imageNext());
 			this.imageNext.setStyleName("buttons");
-			this.imageNext.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent clickevent) {
-					getPicTimer().cancel();
-					getImageStop().setStyleName("disabledbuttons");
-					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
-					getImagePlay().setStyleName("buttons");
-					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
-					
-					
-					nextPicture();
-					update();
-				}
-			});
+			this.imageNext.setTitle(messages.nextPicture());
+			this.imageNext.addClickHandler(new ClickHandlerNextPic());
 		}
 		return this.imageNext;
 	}
-	
+
 	private Image getImagePrevious(){
 		if(this.imagePrevious == null){
 			this.imagePrevious = new Image(constants.viewerImagesPath()+constants.imagePrevious());
 			this.imagePrevious.setStyleName("buttons");
-			this.imagePrevious.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent clickevent) {
-					getPicTimer().cancel();
-					getImageStop().setStyleName("disabledbuttons");
-					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
-					getImagePlay().setStyleName("buttons");
-					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
-					
-					previousPicture();
-					update();
-				}
-			});
+			this.imagePrevious.setTitle(messages.previousPicture());
+			this.imagePrevious.addClickHandler(new ClickHandlerPreviousPic());
 		}
 		return this.imagePrevious;
 	}
-	
+
 	private Image getImageStop(){
 		if(this.imageStop == null){
 			this.imageStop = new Image(constants.viewerImagesPath()+constants.imageDisabledStop());
 			this.imageStop.setStyleName("disabledbuttons");
-			this.imageStop.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent clickevent) {
-					getPicTimer().cancel();
-					getImageStop().setStyleName("disabledbuttons");
-					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
-					getImagePlay().setStyleName("buttons");
-					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
-
-				}
-			});
+			this.imageStop.setTitle(messages.stopSlideShow());
+			this.imageStop.addClickHandler(new HandlerStopSlideshow());
 		}
 		return this.imageStop;
 	}
-	
+
+	private HTML getImageFileDownload(){
+		if(this.imageFileDownload == null){
+			this.imageFileDownload = new HTML(createDownloadImageLink());
+			this.imageFileDownload.setTitle(messages.downloadPic());
+			this.imageFileDownload.setStyleName("link");
+			this.imageFileDownload.addClickHandler(new HandlerStopSlideshow());
+		}
+		return this.imageFileDownload;
+	}
+
+	private String createDownloadImageLink() {
+		return "<a target='_blank' href='"+ViewerHelper.createUrlImage(albumDto.getName(), getSelectedImage(), Action.SHOW_REAL_PICTURE)+
+		"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/></a>";
+	}
+
 	private HorizontalPanel getButtonsPanel(){
 		if(this.buttonsPanel == null){
 			this.buttonsPanel = new HorizontalPanel();
@@ -303,7 +247,18 @@ public class SlidePanel extends PopupPanel {
 		}
 		return this.buttonsPanel;
 	}
-	
+
+	private HorizontalPanel getUtilityPanel(){
+		if(this.utilityPanel == null){
+			this.utilityPanel = new HorizontalPanel();
+			this.utilityPanel.setSize("100%", "100%");
+			this.utilityPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+			this.utilityPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
+			this.utilityPanel.add(getImageFileDownload());
+		}
+		return this.utilityPanel;
+	}
+
 	private void nextPicture() {
 		if(albumDto.getSelectedPic()<albumDto.getPictures().length-1){
 			albumDto.setSelectedPic(albumDto.getSelectedPic()+1);
@@ -311,7 +266,7 @@ public class SlidePanel extends PopupPanel {
 			albumDto.setSelectedPic(0);
 		}
 	}
-	
+
 	private void previousPicture() {
 		if(albumDto.getSelectedPic()>0){
 			albumDto.setSelectedPic(albumDto.getSelectedPic()-1);
@@ -324,24 +279,30 @@ public class SlidePanel extends PopupPanel {
 		getImagePanel().clear();
 		getImagePanel().add(getImageLoader());
 		getFitImage();
+		getImageFileDownload().setHTML(createDownloadImageLink());
 	}
 
 
 	private void getFitImage() {
-		new FitImage(ViewerHelper.createUrlImage(albumDto.getName(), albumDto.getPictures()[albumDto.getSelectedPic()], Action.SHOW_PICTURE),
+		FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(albumDto.getName(), getSelectedImage(), Action.SHOW_PICTURE),
 				constants.imageSize(),constants.imageSize(),
 				new FitImageLoadHandler() {
-					@Override
-					public void imageLoaded(FitImageLoadEvent event) {
-						getImagePanel().remove(getImageLoader());
-						getImagePanel().add(event.getFitImage());
-						pack(event.getFitImage());
-					}
-				});
+			@Override
+			public void imageLoaded(FitImageLoadEvent event) {
+				getImagePanel().remove(getImageLoader());
+				getImagePanel().add(event.getFitImage());
+				resize(event.getFitImage());
+			}
+		});
+		fitImage.setTitle(getSelectedImage());
 	}
 
-	
-	private void pack(FitImage image){
+	private String getSelectedImage() {
+		return albumDto.getPictures()[albumDto.getSelectedPic()];
+	}
+
+
+	private void resize(FitImage image){
 		int delta = Window.getClientHeight()-(image.getHeight()+BUTTONS_PANEL_HEIGHT);
 		int maxHeight = 0;
 		if(delta< IMAGE_PADDING){
@@ -355,7 +316,7 @@ public class SlidePanel extends PopupPanel {
 
 		setWidth((image.getWidth()+PANEL_PADDING)+"px");
 		getMainPanel().setWidgetTopHeight(getImagePanel(), IMAGE_PADDING, Unit.PX, 100, Unit.PCT);
-		
+
 		getImagePanel().setHeight(maxHeight+"px");
 
 		getMainPanel().setWidgetTopHeight(getRightArrowPanel(), 0, Unit.PX, maxHeight, Unit.PX);
@@ -363,13 +324,72 @@ public class SlidePanel extends PopupPanel {
 
 		getMainPanel().setWidgetTopHeight(getLeftArrowPanel(), 0, Unit.PX, maxHeight, Unit.PX);
 		getMainPanel().setWidgetLeftWidth(getLeftArrowPanel(), IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
-		
+
 		getMainPanel().setWidgetTopHeight(getButtonsPanel(), maxHeight+IMAGE_PADDING+1, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
-		int offset = ((image.getWidth()+PANEL_PADDING)/2)-120;
+		int offset = ((image.getWidth()+PANEL_PADDING)/2)-PANEL_BUTTONS_WIDTH;
 		getMainPanel().setWidgetLeftRight(getButtonsPanel(), offset, Unit.PX, offset, Unit.PX);
-		
+
+		getMainPanel().setWidgetTopHeight(getUtilityPanel(), maxHeight+IMAGE_PADDING+1, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
+		getMainPanel().setWidgetLeftWidth(getUtilityPanel(), 5*IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
+
 		center();
 
+	}
+
+	private void updateButtonsStop() {
+		getImageStop().setStyleName("disabledbuttons");
+		getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
+		getImagePlay().setStyleName("buttons");
+		getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
+	}
+
+	private class ClickHandlerNextPic implements ClickHandler{
+
+		public void onClick(ClickEvent clickevent) {
+			getPicTimer().cancel();
+			updateButtonsStop();
+			nextPicture();
+			update();
+		}
+	}
+	
+	private class ClickHandlerPreviousPic implements ClickHandler{
+
+		public void onClick(ClickEvent clickevent) {
+			getPicTimer().cancel();
+			updateButtonsStop();
+			previousPicture();
+			update();
+		}
+	}
+	
+	private class ClickHandlerStartSlideshow implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent clickevent) {
+			getImageStop().setStyleName("buttons");
+			getImageStop().setUrl(constants.viewerImagesPath()+constants.imageStop());
+			getImagePlay().setStyleName("disabledbuttons");
+			getImagePlay().setUrl(constants.viewerImagesPath()+constants.imageDisabledPlay());
+			getPicTimer().scheduleRepeating(slideTime);
+		}
+	}
+	
+	private class HandlerStopSlideshow implements ClickHandler,CloseHandler<PopupPanel>{
+
+		public void onClick(ClickEvent clickevent) {
+			stop();
+		}
+
+		private void stop() {
+			getPicTimer().cancel();
+			updateButtonsStop();
+		}
+
+		@Override
+		public void onClose(CloseEvent<PopupPanel> event) {
+			stop();
+		}
 	}
 
 }

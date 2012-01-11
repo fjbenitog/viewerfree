@@ -355,3 +355,11 @@
 
 .gwt-PopupPanel .popupContent .disabledbuttons {
 }
+
+.gwt-PopupPanel .popupContent  .link a, a:visited, a:hover {
+	border: none;
+	color: black;
+}
+
+
+
