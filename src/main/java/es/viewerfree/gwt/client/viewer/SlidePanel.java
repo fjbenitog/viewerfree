@@ -4,6 +4,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -21,6 +24,8 @@ import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
 
 public class SlidePanel extends PopupPanel {
+
+	private static final int slideTime = 3000;
 
 	private static final int PANEL_PADDING = 10;
 
@@ -48,7 +53,18 @@ public class SlidePanel extends PopupPanel {
 	
 	private Image imageLoader;
 	
+	private Image imagePlay;
+	
+	private Image imageStop;
+	
+	private Image imageNext;
+	
+	private Image imagePrevious;
+	
 	private HorizontalPanel buttonsPanel;
+	
+	private Timer picTimer;
+	
 
 	public SlidePanel(AlbumDto albumDto) {
 		this.albumDto = albumDto;
@@ -59,7 +75,32 @@ public class SlidePanel extends PopupPanel {
 		add(getMainPanel());
 		getImagePanel().add(getImageLoader());
 		getFitImage();
+		addCloseHandler(new CloseHandler<PopupPanel>() {
+			
+			@Override
+			public void onClose(CloseEvent<PopupPanel> event) {
+				getPicTimer().cancel();
+				getImageStop().setStyleName("disabledbuttons");
+				getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
+				getImagePlay().setStyleName("buttons");
+				getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
+			}
+		});
 		center();
+	}
+	
+	private Timer getPicTimer(){
+		if(this.picTimer == null){
+			this.picTimer = new Timer() {
+				
+				@Override
+				public void run() {
+					nextPicture();
+					update();
+				}
+			};
+		}
+		return this.picTimer;
 	}
 
 	private Image getImageLoader(){
@@ -115,6 +156,11 @@ public class SlidePanel extends PopupPanel {
 
 				@Override
 				public void onClick(ClickEvent event) {
+					getPicTimer().cancel();
+					getImageStop().setStyleName("disabledbuttons");
+					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
+					getImagePlay().setStyleName("buttons");
+					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
 					previousPicture();
 					update();
 				}
@@ -147,6 +193,11 @@ public class SlidePanel extends PopupPanel {
 
 				@Override
 				public void onClick(ClickEvent event) {
+					getPicTimer().cancel();
+					getImageStop().setStyleName("disabledbuttons");
+					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
+					getImagePlay().setStyleName("buttons");
+					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
 					nextPicture();
 					update();
 				}
@@ -158,17 +209,97 @@ public class SlidePanel extends PopupPanel {
 		return this.rightArrow;
 	}
 	
+	private Image getImagePlay(){
+		if(this.imagePlay == null){
+			this.imagePlay = new Image(constants.viewerImagesPath()+constants.imagePlay());
+			this.imagePlay.setStyleName("buttons");
+			this.imagePlay.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent clickevent) {
+					getImageStop().setStyleName("buttons");
+					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageStop());
+					getImagePlay().setStyleName("disabledbuttons");
+					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imageDisabledPlay());
+					getPicTimer().scheduleRepeating(slideTime);
+				}
+			});
+		}
+		return this.imagePlay;
+	}
+	
+	private Image getImageNext(){
+		if(this.imageNext == null){
+			this.imageNext = new Image(constants.viewerImagesPath()+constants.imageNext());
+			this.imageNext.setStyleName("buttons");
+			this.imageNext.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent clickevent) {
+					getPicTimer().cancel();
+					getImageStop().setStyleName("disabledbuttons");
+					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
+					getImagePlay().setStyleName("buttons");
+					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
+					
+					
+					nextPicture();
+					update();
+				}
+			});
+		}
+		return this.imageNext;
+	}
+	
+	private Image getImagePrevious(){
+		if(this.imagePrevious == null){
+			this.imagePrevious = new Image(constants.viewerImagesPath()+constants.imagePrevious());
+			this.imagePrevious.setStyleName("buttons");
+			this.imagePrevious.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent clickevent) {
+					getPicTimer().cancel();
+					getImageStop().setStyleName("disabledbuttons");
+					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
+					getImagePlay().setStyleName("buttons");
+					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
+					
+					previousPicture();
+					update();
+				}
+			});
+		}
+		return this.imagePrevious;
+	}
+	
+	private Image getImageStop(){
+		if(this.imageStop == null){
+			this.imageStop = new Image(constants.viewerImagesPath()+constants.imageDisabledStop());
+			this.imageStop.setStyleName("disabledbuttons");
+			this.imageStop.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent clickevent) {
+					getPicTimer().cancel();
+					getImageStop().setStyleName("disabledbuttons");
+					getImageStop().setUrl(constants.viewerImagesPath()+constants.imageDisabledStop());
+					getImagePlay().setStyleName("buttons");
+					getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
+
+				}
+			});
+		}
+		return this.imageStop;
+	}
+	
 	private HorizontalPanel getButtonsPanel(){
 		if(this.buttonsPanel == null){
 			this.buttonsPanel = new HorizontalPanel();
 			this.buttonsPanel.setSize("100%", "100%");
-			this.buttonsPanel.setStyleName("buttons");
 			this.buttonsPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 			this.buttonsPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-			this.buttonsPanel.add(new Image(constants.viewerImagesPath()+"stop.png"));
-			this.buttonsPanel.add(new Image(constants.viewerImagesPath()+"previous.png"));
-			this.buttonsPanel.add(new Image(constants.viewerImagesPath()+"play.png"));
-			this.buttonsPanel.add(new Image(constants.viewerImagesPath()+"next.png"));
+			this.buttonsPanel.add(getImageStop());
+			this.buttonsPanel.add(getImagePrevious());
+			this.buttonsPanel.add(getImagePlay());
+			this.buttonsPanel.add(getImageNext());
 		}
 		return this.buttonsPanel;
 	}
@@ -233,7 +364,7 @@ public class SlidePanel extends PopupPanel {
 		getMainPanel().setWidgetTopHeight(getLeftArrowPanel(), 0, Unit.PX, maxHeight, Unit.PX);
 		getMainPanel().setWidgetLeftWidth(getLeftArrowPanel(), IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
 		
-		getMainPanel().setWidgetTopHeight(getButtonsPanel(), maxHeight, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
+		getMainPanel().setWidgetTopHeight(getButtonsPanel(), maxHeight+IMAGE_PADDING+1, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
 		int offset = ((image.getWidth()+PANEL_PADDING)/2)-120;
 		getMainPanel().setWidgetLeftRight(getButtonsPanel(), offset, Unit.PX, offset, Unit.PX);
 		

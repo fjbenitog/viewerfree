@@ -119,4 +119,36 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("right_arrow_icon.png")
   @Key("imageRightArrow")
   String imageRightArrow();
+  
+  @DefaultStringValue("play.png")
+  @Key("imagePlay")
+  String imagePlay();
+  
+  @DefaultStringValue("stop.png")
+  @Key("imageStop")
+  String imageStop();
+  
+  @DefaultStringValue("previous.png")
+  @Key("imagePrevious")
+  String imagePrevious();
+  
+  @DefaultStringValue("next.png")
+  @Key("imageNext")
+  String imageNext();
+  
+  @DefaultStringValue("disabled_play.png")
+  @Key("imageDisabledPlay")
+  String imageDisabledPlay();
+  
+  @DefaultStringValue("disabled_stop.png")
+  @Key("imageDisabledStop")
+  String imageDisabledStop();
+  
+  @DefaultStringValue("disabled_previous.png")
+  @Key("imageDisabledPrevious")
+  String imageDisabledPrevious();
+  
+  @DefaultStringValue("disabled_next.png")
+  @Key("imageDisabledNext")
+  String imageDisabledNext();
 }
