@@ -8,7 +8,11 @@ public class AlbumDto implements Serializable{
 
 	private String name;
 	
+	private String cryptedName;
+	
 	private String[] pictures;
+	
+	private String[] cryptedPictures;
 	
 	private int selectedPic;
 
@@ -44,6 +48,22 @@ public class AlbumDto implements Serializable{
 
 	public void setSelectedPic(int picSelected) {
 		this.selectedPic = picSelected;
+	}
+
+	public String getCryptedName() {
+		return cryptedName;
+	}
+
+	public void setCryptedName(String cryptedName) {
+		this.cryptedName = cryptedName;
+	}
+
+	public String[] getCryptedPictures() {
+		return cryptedPictures;
+	}
+
+	public void setCryptedPictures(String[] cryptedPictures) {
+		this.cryptedPictures = cryptedPictures;
 	}
 	
 }

@@ -20,7 +20,7 @@ import javax.crypto.spec.PBEParameterSpec;
 import org.apache.commons.codec.binary.Base64;
 
 
-public class CriptoUtil {
+public class CryptoUtil {
 
 
 
@@ -152,4 +152,10 @@ public class CriptoUtil {
 
 	}
 	
+	public static void main(String[] args) throws Exception {
+		String key = "admin";
+		String encrypt = encrypt("Hola que tal", key);
+		System.err.println(encrypt);
+		System.err.println(decrypt(encrypt, key));
+	}
 }

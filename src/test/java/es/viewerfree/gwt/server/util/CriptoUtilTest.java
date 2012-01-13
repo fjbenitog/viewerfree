@@ -13,28 +13,28 @@ public class CriptoUtilTest {
 
 	@Test
 	public void testEncryptDecrypt() {
-		String decrypt = CriptoUtil.encrypt(PASSWORD, KEY);
-		assertEquals(PASSWORD,CriptoUtil.decrypt(decrypt, KEY));
+		String decrypt = CryptoUtil.encrypt(PASSWORD, KEY);
+		assertEquals(PASSWORD,CryptoUtil.decrypt(decrypt, KEY));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testEncryptKeyNullCheck() throws Exception {
-		CriptoUtil.encrypt(PASSWORD, null);
+		CryptoUtil.encrypt(PASSWORD, null);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testEncryptPasswordNullCheck() throws Exception {
-		CriptoUtil.encrypt(null, KEY);
+		CryptoUtil.encrypt(null, KEY);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testDecryptKeyNullCheck() throws Exception {
-		CriptoUtil.decrypt(PASSWORD, null);
+		CryptoUtil.decrypt(PASSWORD, null);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testDecryptPasswordNullCheck() throws Exception {
-		CriptoUtil.decrypt(null, KEY);
+		CryptoUtil.decrypt(null, KEY);
 	}
 
 }
