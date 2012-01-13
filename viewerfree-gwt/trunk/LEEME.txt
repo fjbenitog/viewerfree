@@ -1,0 +1,4 @@
+- Crear administracion
+- Añadir Gmail
+- Crear una forma que los usuarios suban fotos
+- Crear grupos

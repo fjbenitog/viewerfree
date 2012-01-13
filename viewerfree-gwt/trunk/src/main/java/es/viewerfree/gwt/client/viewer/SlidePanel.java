@@ -230,7 +230,7 @@ public class SlidePanel extends PopupPanel {
 	}
 
 	private String createDownloadImageLink() {
-		return "<a target='_blank' href='"+ViewerHelper.createUrlImage(albumDto.getName(), getSelectedImage(), Action.SHOW_REAL_PICTURE)+
+		return "<a target='_blank' href='"+ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_REAL_PICTURE)+
 		"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/></a>";
 	}
 
@@ -284,7 +284,7 @@ public class SlidePanel extends PopupPanel {
 
 
 	private void getFitImage() {
-		FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(albumDto.getName(), getSelectedImage(), Action.SHOW_PICTURE),
+		FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_PICTURE),
 				constants.imageSize(),constants.imageSize(),
 				new FitImageLoadHandler() {
 			@Override
@@ -299,6 +299,10 @@ public class SlidePanel extends PopupPanel {
 
 	private String getSelectedImage() {
 		return albumDto.getPictures()[albumDto.getSelectedPic()];
+	}
+	
+	private String getSelectedCriptedImage() {
+		return albumDto.getCryptedPictures()[albumDto.getSelectedPic()];
 	}
 
 
