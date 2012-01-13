@@ -2,6 +2,10 @@ package es.viewerfree.gwt.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -31,6 +35,8 @@ public class Viewer extends BaseEntryPoint {
 	private Label adminLabel;
 	
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+	
+	private final Constants constants = GWT.create(Constants.class);
 	
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 	
@@ -107,6 +113,13 @@ public class Viewer extends BaseEntryPoint {
 		if(this.adminLabel==null){
 			this.adminLabel = new HTML(messages.adminLabel());
 			this.adminLabel.setStyleName("barLink");
+			this.adminLabel.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent arg0) {
+					Window.open(GWT.getHostPageBaseURL()+constants.viewerAppPath()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName(),"_blank","");
+				}
+			});
 		}
 		return this.adminLabel;
 	}
