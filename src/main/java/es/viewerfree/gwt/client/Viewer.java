@@ -13,13 +13,13 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
 
+import es.viewerfree.gwt.client.common.BarPanel;
 import es.viewerfree.gwt.client.common.BaseEntryPoint;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
-import es.viewerfree.gwt.client.viewer.BarPanel;
 import es.viewerfree.gwt.client.viewer.ViewerPanel;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
@@ -117,7 +117,7 @@ public class Viewer extends BaseEntryPoint {
 				
 				@Override
 				public void onClick(ClickEvent arg0) {
-					Window.open(GWT.getHostPageBaseURL()+constants.viewerAppPath()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName(),"_blank","");
+					Window.open(GWT.getHostPageBaseURL()+constants.adminPath()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName(),"_blank","");
 				}
 			});
 		}

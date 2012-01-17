@@ -36,6 +36,11 @@
 		<url-pattern>/Viewer/springGwtServices/*</url-pattern>
 	</servlet-mapping>
 	
+	<servlet-mapping>
+		<servlet-name>userServlet</servlet-name>
+		<url-pattern>/Admin/springGwtServices/*</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
         <servlet-name>imageService</servlet-name>
         <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
@@ -63,6 +68,14 @@
 	<filter-mapping>
 		<filter-name>Login</filter-name>
 		<url-pattern>/Viewer.html</url-pattern>
+	</filter-mapping>
+		<filter-mapping>
+		<filter-name>Login</filter-name>
+		<url-pattern>/Admin/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>Login</filter-name>
+		<url-pattern>/Admin.html</url-pattern>
 	</filter-mapping>
 
 </web-app>
