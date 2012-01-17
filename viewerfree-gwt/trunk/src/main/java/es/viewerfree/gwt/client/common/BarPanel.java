@@ -1,11 +1,10 @@
-package es.viewerfree.gwt.client.viewer;
+package es.viewerfree.gwt.client.common;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import es.viewerfree.gwt.client.ViewerFreeMessages;
-import es.viewerfree.gwt.client.common.Logout;
 
 public class BarPanel extends HorizontalPanel {
 

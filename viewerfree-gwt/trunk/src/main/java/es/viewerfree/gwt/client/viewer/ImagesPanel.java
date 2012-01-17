@@ -60,7 +60,7 @@ public class ImagesPanel extends LayoutPanel {
 	private Label getAlbumTitleLabel(){
 		if(this.albumTitleLabel == null){
 			this.albumTitleLabel = new Label();
-			this.albumTitleLabel.setStyleName("titleAlbum");
+			this.albumTitleLabel.setStyleName("titleLabel");
 		}
 		return this.albumTitleLabel;
 	}

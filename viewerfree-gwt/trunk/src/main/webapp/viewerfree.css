@@ -143,6 +143,10 @@
 }
 
 .loginForm button:hover {
+	border: 1px solid #CC6600;
+}
+
+.loginForm button:active {
 	border: 1px solid #FFB366;
 }
 
@@ -211,13 +215,13 @@
 
 .albums {
 	height: 100%;
-	background-color: #FFF3E5;
+	background-color: #FFFFFF;
 }
 
 .pictures {
 	padding-left: 40px;
 	padding-top: 10px;
-	background-color: #FFF3E5;
+	background-color: #FFFFFF;
 }
 
 .pictures img {
@@ -312,10 +316,10 @@
 }
 
 .titlePanel {
-	background-color: #FFF3E5;
+	background-color: #FFFFFF;
 }
 
-.titlePanel .titleAlbum {
+.titlePanel .titleLabel {
 	font-size: 20px;
 	font-weight: bold;
 	font-family: arial, sans-serif;
@@ -331,35 +335,164 @@
 	padding: 2px;
 }
 
-
 .gwt-PopupPanel .popupContent .arrows {
 	zoom: 1;
-	filter: alpha(opacity = 0);
+	filter: alpha(opacity =         0);
 	opacity: 0.0;
 }
 
-.gwt-PopupPanel .popupContent .arrows .link:hover{
+.gwt-PopupPanel .popupContent .arrows .link:hover {
 	cursor: pointer;
 }
 
 .gwt-PopupPanel .popupContent .arrows:hover {
 	zoom: 1;
-	filter: alpha(opacity = 50);
+	filter: alpha(opacity =         50);
 	opacity: 0.6;
 }
-
 
 .gwt-PopupPanel .popupContent .buttons {
 	cursor: pointer;
 }
 
 .gwt-PopupPanel .popupContent .disabledbuttons {
+	
 }
 
-.gwt-PopupPanel .popupContent  .link a, a:visited, a:hover {
+.gwt-PopupPanel .popupContent  .link a,a:visited,a:hover {
 	border: none;
 	color: black;
 }
 
+.adminContent {
+	background-color: #FFFFFF;
+}
+
+.adminContent .titlePanel {
+	background-color: #FFFFFF;
+}
+
+.adminContent .titlePanel .titleLabel {
+	font-size: 20px;
+	font-weight: bold;
+	font-family: arial, sans-serif;
+	padding-left: 25px;
+	padding-top: 20px;
+	border-bottom: 1px solid #FF8000;
+	text-shadow: 2px 2px 3px #6374AB;
+}
+
+.gwt-TabLayoutPanelContentContainer {
+	border-color: #FFA64D;
+	border-style: solid;
+	border-width: 1px 1px 1px;
+	border-radius: 5px;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent {
+	border-color: #FFA64D;
+	border-style: solid;
+	border-width: 0px;
+	overflow: hidden;
+	padding: 15px 25px;
+	border-radius: 5px;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+	background: none repeat scroll 0 0 #FFCC99;
+	border-radius: 5px 5px 0 0;
+	color: black;
+	cursor: pointer;
+	font-weight: bold;
+	font-family: arial, sans-serif;
+	margin-left: 6px;
+	padding: 4px 10px;
+	text-align: center;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+	background: none repeat scroll 0 0 #FFA64D;
+	cursor: default;
+}
+
+.adminForm {
+	padding: 20px;
+	width: 450px;
+	height: 250px;
+	font-weight: bold;
+	font-family: arial, sans-serif;
+	background: none repeat scroll 0 0 #F5F5F4;
+}
+
+.adminForm input {
+	border: 1px solid #AFAFA4;
+	font-family: arial, sans-serif;
+	vertical-align: middle;
+}
+
+.adminForm select {
+	border: 1px solid #AFAFA4;
+	font-family: arial, sans-serif;
+	vertical-align: middle;
+}
+
+.adminForm td {
+	font-family: arial, sans-serif;
+	padding-right: 20px;
+}
+
+.adminForm button {
+	font-family: arial, sans-serif;
+	border: 1px solid #CC6600;
+	background: #FF8000;
+	border: 1px solid #CC6600;
+	color: white;
+	padding-left: 10px;
+	padding-right: 10px;
+	cursor: auto;
+}
+
+.adminForm button:hover {
+	border: 1px solid #CC6600;
+}
+
+.adminForm button:active {
+	border: 1px solid #FFB366;
+}
+
+.adminForm input:hover {
+	border: 1px solid #8A8A7B;
+}
+
+.adminForm input:focus {
+	border: 1px solid #FF8000;
+}
+
+.adminForm select:hover {
+	border: 1px solid #8A8A7B;
+}
+
+.adminForm select:focus {
+	border: 1px solid #FF8000;
+}
+
+.gwt-Button {
+	font-family: arial, sans-serif;
+	border: 1px solid #CC6600;
+	background: #FF8000;
+	border: 1px solid #CC6600;
+	color: white;
+	padding-left: 10px;
+	padding-right: 10px;
+	cursor: auto;
+}
+
+.gwt-Button:hover {
+	border: 1px solid #CC6600;
+}
+
+.gwt-Button:active {
+	border: 1px solid #FFB366;
+}
 
 

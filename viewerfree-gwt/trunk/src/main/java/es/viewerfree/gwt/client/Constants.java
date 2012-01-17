@@ -80,6 +80,10 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("viewerAppPath")
   String viewerAppPath();
   
+  @DefaultStringValue("Admin.html")
+  @Key("adminPath")
+  String adminPath();
+  
   @DefaultStringValue("folder_huge.png")
   @Key("imageHugeFolder")
   String imageHugeFolder();
@@ -155,4 +159,12 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @DefaultStringValue("file_download.png")
   @Key("imageFileDownload")
   String imageFileDownload();
+  
+  @DefaultStringValue("dialog_close.png")
+  @Key("imageCloseButton")
+  String imageCloseButton();
+  
+  @DefaultStringValue("images/")
+  @Key("imagesPath")
+  String imagesPath();
 }
