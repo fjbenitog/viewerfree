@@ -3,6 +3,7 @@ package es.viewerfree.gwt.server.service;
 import java.util.List;
 
 import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 
 public interface IUserService {

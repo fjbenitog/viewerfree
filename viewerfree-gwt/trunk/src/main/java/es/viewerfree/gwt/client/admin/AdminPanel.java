@@ -16,17 +16,15 @@ import es.viewerfree.gwt.client.ViewerFreeMessages;
 public class AdminPanel extends LayoutPanel {
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
-	
+
 	private LayoutPanel adminTitlePanel;
-	
+
 	private Label adminTitleLabel;
-	
+
 	private TabLayoutPanel adminTabs;
-	
-	private CreateUserForm createUserForm;
-	
+
 	private FlowPanel userActionPanel;
-	
+
 	private Button createUserButton;
 
 	public AdminPanel() {
@@ -37,7 +35,7 @@ public class AdminPanel extends LayoutPanel {
 		setWidgetTopBottom(getAdminTabs(), 70, Unit.PX, 50, Unit.PX);
 		setWidgetLeftRight(getAdminTabs(), 50, Unit.PX, 50, Unit.PX);
 	}
-	
+
 	private LayoutPanel getAdminTitlePanel(){
 		if(this.adminTitlePanel == null){
 			this.adminTitlePanel = new LayoutPanel();
@@ -48,7 +46,7 @@ public class AdminPanel extends LayoutPanel {
 		}
 		return this.adminTitlePanel;
 	}
-	
+
 	private Label getAdminTitleLabel(){
 		if(this.adminTitleLabel == null){
 			this.adminTitleLabel = new HTML(messages.adminLabel());
@@ -64,18 +62,16 @@ public class AdminPanel extends LayoutPanel {
 			this.adminTabs.add(new HTML("CREAR GRUPOS"), messages.groups(), true);
 		}		return this.adminTabs;
 	}
-	
-	
-	private CreateUserForm getCreateUserForm(){
-		if(this.createUserForm == null){
-			this.createUserForm = new CreateUserForm();
-			this.createUserForm.setAnimationEnabled(true);
-			this.createUserForm.setGlassEnabled(true);
-		}
-		return this.createUserForm;
+
+
+	private CreateUserForm newCreateUserForm(){
+		CreateUserForm createUserForm = new CreateUserForm();
+		createUserForm.setAnimationEnabled(true);
+		createUserForm.setGlassEnabled(true);
+		return createUserForm;
 	}
 
-	
+
 	private FlowPanel getUserActionPanel(){
 		if(this.userActionPanel == null){
 			this.userActionPanel = new FlowPanel();
@@ -83,21 +79,22 @@ public class AdminPanel extends LayoutPanel {
 		}
 		return this.userActionPanel;
 	}
-	
+
 	private Button getCreateUserButton(){
 		if(this.createUserButton == null){
 			this.createUserButton = new Button(messages.createUser());
 			this.createUserButton.addClickHandler(new ClickHandler() {
-				
+
 				@Override
 				public void onClick(ClickEvent clickevent) {
-					getCreateUserForm().show();
-					getCreateUserForm().center();
-					
+					CreateUserForm createUserForm = newCreateUserForm();
+					createUserForm.show();
+					createUserForm.center();
+
 				}
 			});
 		}
 		return this.createUserButton;
 	}
-	
+
 }

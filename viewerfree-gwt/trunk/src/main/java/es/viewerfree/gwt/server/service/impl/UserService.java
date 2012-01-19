@@ -7,8 +7,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.IUserDao;
 import es.viewerfree.gwt.server.service.IUserService;
-import es.viewerfree.gwt.server.service.ServiceException;
 import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 
 

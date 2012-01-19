@@ -44,7 +44,7 @@ public class Admin extends BaseEntryPoint {
 		userService.getUser(new AsyncCallback<UserDto>() {
 			@Override
 			public void onSuccess(UserDto user) {
-				getBarPanel().getUserName().setText(user.getFullName()+" "+user.getSurname());
+				getBarPanel().getUserName().setText(getFullName(user));
 			}
 			
 			@Override
@@ -107,5 +107,15 @@ public class Admin extends BaseEntryPoint {
 		return this.adminPanel;
 	}
 	
+	private String getFullName(UserDto user) {
+		StringBuffer fullName = new StringBuffer();
+		if(user.getFullName()!=null && !user.getFullName().isEmpty()){
+			fullName.append(user.getFullName());
+		}
+		if(user.getSurname()!=null && !user.getSurname().isEmpty()){
+			fullName.append(" ").append(user.getSurname());
+		}
+		return fullName.toString().isEmpty()?user.getName():fullName.toString();
+	}
 	
 }

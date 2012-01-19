@@ -5,9 +5,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import es.viewerfree.gwt.server.service.IUserService;
-import es.viewerfree.gwt.server.service.ServiceException;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 public class InitializeDB implements ApplicationContextAware {
 
