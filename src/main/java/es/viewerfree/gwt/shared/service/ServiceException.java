@@ -1,4 +1,4 @@
-package es.viewerfree.gwt.server.service;
+package es.viewerfree.gwt.shared.service;
 
 public class ServiceException extends Exception {
 

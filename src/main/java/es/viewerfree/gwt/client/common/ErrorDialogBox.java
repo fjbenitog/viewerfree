@@ -42,7 +42,6 @@ public class ErrorDialogBox extends DialogBox {
 			this.closeButton.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
 					hide();
-					Window.Location.replace(GWT.getHostPageBaseURL()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName());
 				}
 			});
 		}
@@ -53,7 +52,7 @@ public class ErrorDialogBox extends DialogBox {
 		if(this.dialogVPanel==null){
 			this.dialogVPanel = new VerticalPanel();
 			dialogVPanel.add(getMessage());
-			dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+			dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 			dialogVPanel.add(getCloseButton());
 		}
 		return this.dialogVPanel;

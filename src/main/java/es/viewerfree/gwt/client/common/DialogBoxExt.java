@@ -12,6 +12,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class DialogBoxExt extends DialogBox{
+	private boolean enabled = true;
+	
 	private HorizontalPanel captionPanel = new HorizontalPanel();
 
     // widget which will be use to close the dialog box
@@ -82,7 +84,9 @@ public class DialogBoxExt extends DialogBox{
      */
     private class DialogBoxCloseHandler {
             public void onClick(Event event) {
+            	if(enabled){
                     hide();
+            	}
             }
     }
 
@@ -141,6 +145,10 @@ public class DialogBoxExt extends DialogBox{
                     return t;
             }
             return false;
+    }
+    
+    public void setEnabled(boolean enabled){
+    	this.enabled = enabled;
     }
 
 }

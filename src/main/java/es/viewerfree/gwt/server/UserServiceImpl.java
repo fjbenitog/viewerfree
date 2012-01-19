@@ -2,19 +2,19 @@ package es.viewerfree.gwt.server;
 
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.server.service.IUserService;
-import es.viewerfree.gwt.server.service.ServiceException;
 import es.viewerfree.gwt.server.service.SpringRemoteServiceServlet;
 import es.viewerfree.gwt.shared.ParamKey;
 import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 /**
  * The server side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
 public class UserServiceImpl extends SpringRemoteServiceServlet implements UserService {
-	
+
 	private IUserService userService;
-	
+
 
 	public IUserService getUserService() {
 		return userService;
@@ -44,5 +44,10 @@ public class UserServiceImpl extends SpringRemoteServiceServlet implements UserS
 	@Override
 	public UserDto getUser() {
 		return (UserDto) getSession(ParamKey.USER);
+	}
+
+	@Override
+	public void createUser(UserDto user) throws ServiceException{
+		userService.createUser(user);
 	}
 }
