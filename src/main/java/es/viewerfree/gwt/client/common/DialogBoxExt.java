@@ -19,7 +19,13 @@ public class DialogBoxExt extends DialogBox{
     // widget which will be use to close the dialog box
     private Widget closeWidget = null;
 
-    /**
+    
+    
+    public DialogBoxExt() {
+		super();
+	}
+
+	/**
      * You have to provide a widget here. If click on the widget the dialog box
      * will be closed.
      * 
@@ -150,5 +156,13 @@ public class DialogBoxExt extends DialogBox{
     public void setEnabled(boolean enabled){
     	this.enabled = enabled;
     }
+
+	public Widget getCloseWidget() {
+		return closeWidget;
+	}
+
+	public void setCloseWidget(Widget closeWidget) {
+		this.closeWidget = closeWidget;
+	}
 
 }
