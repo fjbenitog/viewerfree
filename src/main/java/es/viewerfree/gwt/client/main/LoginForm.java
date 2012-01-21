@@ -117,7 +117,11 @@ public class LoginForm extends FlexTable{
 				}
 				
 				public void onFailure(Throwable throwable) {
-					ErrorMessageUtil.getErrorDialogBox(messages.authenticationError());
+					String authenticationError = messages.authenticationError();
+					if(constants.debugMode()){
+						authenticationError+=throwable.getMessage();
+					}
+					ErrorMessageUtil.getErrorDialogBox(authenticationError);
 					setMessageLogin("");
 					setEnable(true);
 				}
