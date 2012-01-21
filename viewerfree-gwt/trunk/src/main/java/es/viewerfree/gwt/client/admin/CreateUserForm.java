@@ -55,7 +55,10 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 	private Image loaderImage;
 	
 	public CreateUserForm() {
-		super(new Image(constants.imagesPath()+constants.imageCloseButton()));
+		super();
+		Image image = new Image(constants.imagesPath()+constants.imageCloseButton());
+		image.setStyleName("close");
+		setCloseWidget(image);
 		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+messages.createUser()+"</div>");
 		add(getFormPanel());
 	}
@@ -185,23 +188,23 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		getConfirmPasswordField().getElement().getStyle().clearBorderColor();
 		StringBuffer message = new StringBuffer();
 		if(getUserField().getText().isEmpty()){
-			message.append("El usuario es un campo obligatorio.</br>");
+			message.append("<div>El usuario es un campo obligatorio.</div>");
 			getUserField().getElement().getStyle().setBorderColor("red");
 		}
 		if(getNameField().getText().isEmpty()){
-			message.append("El nombre es un campo obligatorio.</br>");
+			message.append("<div>El nombre es un campo obligatorio.</div>");
 			getNameField().getElement().getStyle().setBorderColor("red");
 		}
 		if(getSurnameField().getText().isEmpty()){
-			message.append("El apellido es un campo obligatorio.</br>");
+			message.append("<div>El apellido es un campo obligatorio.</div>");
 			getSurnameField().getElement().getStyle().setBorderColor("red");
 		}
 		if(getPasswordField().getText().isEmpty()){
-			message.append("La contrase&ntilde;a es un campo obligatorio.</br>");
+			message.append("<div>La contrase&ntilde;a es un campo obligatorio.</div>");
 			getPasswordField().getElement().getStyle().setBorderColor("red");
 		}
 		if(!getPasswordField().getText().equals(getConfirmPasswordField().getText())){
-			message.append("Las contrase&ntilde;as no coinciden.</br>");
+			message.append("<div>Las contrase&ntilde;as no coinciden.</div>");
 			getPasswordField().getElement().getStyle().setBorderColor("red");
 			getConfirmPasswordField().getElement().getStyle().setBorderColor("red");
 		}
