@@ -172,7 +172,7 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("adminImagesPath")
   String adminImagesPath();
   
-  @DefaultStringValue("false")
+  @DefaultBooleanValue(false)
   @Key("debugMode")
   boolean debugMode();
 }

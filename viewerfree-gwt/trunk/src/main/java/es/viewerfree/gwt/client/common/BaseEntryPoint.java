@@ -2,9 +2,11 @@ package es.viewerfree.gwt.client.common;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 
 public abstract class BaseEntryPoint implements EntryPoint {
 
@@ -16,6 +18,7 @@ public abstract class BaseEntryPoint implements EntryPoint {
 	public void onModuleLoad() {
 		RootLayoutPanel.get().add(getMainPanel());
 		initValues();
+		 DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));
 	}
 
 	protected void initValues() {
