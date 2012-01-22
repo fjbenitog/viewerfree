@@ -175,4 +175,10 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @DefaultBooleanValue(false)
   @Key("debugMode")
   boolean debugMode();
+  
+  @DefaultIntValue(5000)
+  @Key("slideTime")
+  int slideTime();
+  
+  
 }
