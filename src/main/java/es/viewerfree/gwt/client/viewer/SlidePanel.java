@@ -28,8 +28,6 @@ public class SlidePanel extends PopupPanel {
 
 	private static final int PANEL_BUTTONS_WIDTH = 120;
 
-	private static final int slideTime = 3000;
-
 	private static final int PANEL_PADDING = 10;
 
 	private static final int IMAGE_PADDING = 5;
@@ -375,7 +373,7 @@ public class SlidePanel extends PopupPanel {
 			getImageStop().setUrl(constants.viewerImagesPath()+constants.imageStop());
 			getImagePlay().setStyleName("disabledbuttons");
 			getImagePlay().setUrl(constants.viewerImagesPath()+constants.imageDisabledPlay());
-			getPicTimer().scheduleRepeating(slideTime);
+			getPicTimer().scheduleRepeating(constants.slideTime());
 		}
 	}
 	
