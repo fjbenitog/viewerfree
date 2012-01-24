@@ -19,6 +19,7 @@ public abstract class BaseEntryPoint implements EntryPoint {
 		RootLayoutPanel.get().add(getMainPanel());
 		initValues();
 		 DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));
+		 SessionTime.start();
 	}
 
 	protected void initValues() {

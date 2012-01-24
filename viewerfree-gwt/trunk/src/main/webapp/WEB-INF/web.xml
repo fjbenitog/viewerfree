@@ -49,6 +49,15 @@
         <servlet-name>imageService</servlet-name>
         <url-pattern>/Viewer/imageService</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>logoutService</servlet-name>
+        <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logoutService</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
 	
 
 

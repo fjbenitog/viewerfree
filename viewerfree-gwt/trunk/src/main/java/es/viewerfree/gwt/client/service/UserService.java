@@ -13,9 +13,9 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 public interface UserService extends RemoteService {
   Boolean login(String userName, String password) throws IllegalArgumentException;
   
-  void logout();
-  
   UserDto getUser();
   
   void createUser(UserDto user) throws ServiceException ;
+  
+  void ping();
 }

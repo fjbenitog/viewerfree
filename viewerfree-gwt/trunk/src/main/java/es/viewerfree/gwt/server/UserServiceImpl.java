@@ -37,11 +37,6 @@ public class UserServiceImpl extends SpringRemoteServiceServlet implements UserS
 	}
 
 	@Override
-	public void logout() {
-		getHttpServletRequest().getSession().invalidate();
-	}
-
-	@Override
 	public UserDto getUser() {
 		return (UserDto) getSession(ParamKey.USER);
 	}
@@ -49,5 +44,9 @@ public class UserServiceImpl extends SpringRemoteServiceServlet implements UserS
 	@Override
 	public void createUser(UserDto user) throws ServiceException{
 		userService.createUser(user);
+	}
+
+	@Override
+	public void ping() {
 	}
 }
