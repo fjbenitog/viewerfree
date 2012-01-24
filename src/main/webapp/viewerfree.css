@@ -6,6 +6,9 @@
 	left: 50%;
 	text-align: center;
 	margin-left: -100px;
+	font-family: arial,sans-serif;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .footerPanel a {
@@ -201,8 +204,21 @@
 	text-align: right;
 }
 
+.barLink a, a:visited {
+	color: #A8A88D;
+	cursor: pointer;
+	padding: 5px 10px;
+	text-align: right;
+	text-decoration: none;
+}
+
 .barLink:hover {
 	background: #3D3D2F;
+}
+
+.barLink a:hover {
+	background: #3D3D2F;
+	text-decoration: none;
 }
 
 .barLabel {

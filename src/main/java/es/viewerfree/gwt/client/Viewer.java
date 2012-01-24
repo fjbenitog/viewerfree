@@ -5,6 +5,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
@@ -34,15 +35,17 @@ public class Viewer extends BaseEntryPoint {
 	
 	private Label adminLabel;
 	
-	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+	private static final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 	
-	private final Constants constants = GWT.create(Constants.class);
+	private static final Constants constants = GWT.create(Constants.class);
 	
-	private final UserServiceAsync userService = GWT.create(UserService.class);
+	private static final UserServiceAsync userService = GWT.create(UserService.class);
 	
-	private final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
+	private static final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
 	
 	private ViewerPanel viewerPanel;
+
+	private Timer sessionTimer;
 	
 	@Override
 	protected void initValues() {
@@ -75,6 +78,7 @@ public class Viewer extends BaseEntryPoint {
 				showErrorDialogBox();
 			}
 		});
+		
 	}
 	
 	private void showErrorDialogBox() {
@@ -142,6 +146,5 @@ public class Viewer extends BaseEntryPoint {
 		}
 		return fullName.toString().isEmpty()?user.getName():fullName.toString();
 	}
-	
 	
 }

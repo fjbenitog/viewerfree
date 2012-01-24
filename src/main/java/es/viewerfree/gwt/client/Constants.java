@@ -116,6 +116,10 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("imageService")
   String imageService();
   
+  @DefaultStringValue("logoutService")
+  @Key("logoutService")
+  String logoutService();
+  
   @DefaultStringValue("left_arrow_icon.png")
   @Key("imageLeftArrow")
   String imageLeftArrow();
@@ -180,5 +184,8 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("slideTime")
   int slideTime();
   
+  @DefaultIntValue(2100000)
+  @Key("sessionTime")
+  int sessionTime();
   
 }

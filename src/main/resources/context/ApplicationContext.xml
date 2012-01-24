@@ -16,6 +16,7 @@
 	<import resource="classpath:app/db/dataBaseContext.xml" />
 	<import resource="classpath:app/services/servicesContext.xml" />
 	<import resource="classpath:app/viewer/viewerContext.xml" />
+	<import resource="classpath:app/commonContext.xml" />
 
 	<bean class="es.viewerfree.gwt.server.initialize.InitializeDB">
 		<property name="userService" ref="service.user"/>
