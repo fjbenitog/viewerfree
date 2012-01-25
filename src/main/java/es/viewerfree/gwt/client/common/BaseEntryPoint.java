@@ -14,16 +14,16 @@ public abstract class BaseEntryPoint implements EntryPoint {
 	private Panel headerPanel;
 	private Panel footerPanel;
 
-	  
+
 	public void onModuleLoad() {
 		RootLayoutPanel.get().add(getMainPanel());
 		initValues();
-		 DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));
-		 SessionTime.start();
+		DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));
+		SessionTime.start();
 	}
 
 	protected void initValues() {
-		
+
 	}
 
 	private LayoutPanel getMainPanel(){
@@ -56,5 +56,5 @@ public abstract class BaseEntryPoint implements EntryPoint {
 	}
 
 	protected abstract Panel getContentPanel();
-	
+
 }
