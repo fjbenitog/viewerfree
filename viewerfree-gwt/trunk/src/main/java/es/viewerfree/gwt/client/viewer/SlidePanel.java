@@ -113,6 +113,12 @@ public class SlidePanel extends PopupPanel {
 			this.mainPanel.add(getButtonsPanel());
 			this.mainPanel.add(getRightArrowPanel());
 			this.mainPanel.add(getLeftArrowPanel());
+			this.mainPanel.setWidgetTopHeight(getButtonsPanel(), constants.imageLoaderSize()-PANEL_BUTTONS_WIDTH/2, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
+			int offset = ((constants.imageLoaderSize()+PANEL_PADDING)/2)-PANEL_BUTTONS_WIDTH;
+			this.mainPanel.setWidgetLeftRight(getButtonsPanel(), offset, Unit.PX, offset, Unit.PX);
+
+			this.mainPanel.setWidgetTopHeight(getUtilityPanel(), constants.imageLoaderSize()-PANEL_BUTTONS_WIDTH/2, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
+			this.mainPanel.setWidgetLeftWidth(getUtilityPanel(), 5*IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
 
 		}
 		return this.mainPanel;
@@ -124,8 +130,7 @@ public class SlidePanel extends PopupPanel {
 			this.imagePanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 			this.imagePanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 			this.imagePanel.setWidth("100%");
-
-
+			this.imagePanel.setHeight("100%");
 		}
 		return this.imagePanel;
 	}

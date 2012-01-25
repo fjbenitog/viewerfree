@@ -5,7 +5,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
@@ -45,8 +44,6 @@ public class Viewer extends BaseEntryPoint {
 	
 	private ViewerPanel viewerPanel;
 
-	private Timer sessionTimer;
-	
 	@Override
 	protected void initValues() {
 		userService.getUser(new AsyncCallback<UserDto>() {
