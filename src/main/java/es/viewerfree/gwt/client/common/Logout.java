@@ -10,7 +10,7 @@ public class Logout extends HTML {
 	private static final Constants constants = GWT.create(Constants.class);
 	
 	public Logout(String text) {
-		setHTML("<a href=\""+GWT.getHostPageBaseURL()+constants.logoutService()+"\">"+text+"</a>");
+		setHTML("<a style='color: #A8A88D;' href=\""+GWT.getHostPageBaseURL()+constants.logoutService()+"\">"+text+"</a>");
 		setStyleName("barLink");
 	}
 	

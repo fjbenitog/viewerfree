@@ -217,6 +217,7 @@
 }
 
 .barLink a:hover {
+	color: #A8A88D;
 	background: #3D3D2F;
 	text-decoration: none;
 }
