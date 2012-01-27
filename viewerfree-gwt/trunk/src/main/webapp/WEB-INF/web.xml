@@ -67,23 +67,23 @@
 	</welcome-file-list>
 	
 	<filter>
-		<filter-name>Login</filter-name>
-		<filter-class>es.viewerfree.gwt.server.filter.LoginFilter</filter-class>
+		<filter-name>login</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>Login</filter-name>
+		<filter-name>login</filter-name>
 		<url-pattern>/Viewer/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>Login</filter-name>
+		<filter-name>login</filter-name>
 		<url-pattern>/Viewer.html</url-pattern>
 	</filter-mapping>
-		<filter-mapping>
-		<filter-name>Login</filter-name>
+	<filter-mapping>
+		<filter-name>login</filter-name>
 		<url-pattern>/Admin/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>Login</filter-name>
+		<filter-name>login</filter-name>
 		<url-pattern>/Admin.html</url-pattern>
 	</filter-mapping>
 
