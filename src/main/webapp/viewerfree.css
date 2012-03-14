@@ -441,6 +441,10 @@
 	cursor: default;
 }
 
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent .cellTable{
+    width: 100%;
+}
+
 .adminForm {
 	padding: 20px;
 	width: 450px;
