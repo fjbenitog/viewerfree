@@ -54,8 +54,11 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 	
 	private Image loaderImage;
 	
-	public CreateUserForm() {
+	private AdminPanel adminPanel;
+	
+	public CreateUserForm(AdminPanel adminPanel) {
 		super();
+		this.adminPanel = adminPanel;
 		Image image = new Image(constants.imagesPath()+constants.imageCloseButton());
 		image.setStyleName("close");
 		setCloseWidget(image);
@@ -253,12 +256,12 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		setErrorMessage("");
 		setEnabled(true);
 		this.hide();
-		
 	}
 
 	@Override
 	public void onSuccess(Void arg0) {
 		getFormPanel().remove(getLoaderImage());
 		this.hide();
+		this.adminPanel.refresh();
 	}
 }
