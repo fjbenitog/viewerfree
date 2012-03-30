@@ -32,7 +32,7 @@ import es.viewerfree.gwt.shared.dto.UserDto;
 public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
-	
+
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	private LayoutPanel adminTitlePanel;
@@ -46,15 +46,15 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 	private Button createUserButton;
 
 	private CellTable<UserDto> userTable;
-	
+
 	private SimplePager pager;
-	
+
 	private ScrollPanel tableScrollPanel;
-	
+
 	private VerticalPanel tablePanel;
-	
+
 	private VerticalPanel buttonsPanel;
-	
+
 	ListDataProvider<UserDto> dataProvider;
 
 	public AdminPanel() {
@@ -100,7 +100,7 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 		createUserForm.setGlassEnabled(true);
 		return createUserForm;
 	}
-	
+
 	private LayoutPanel getUserActionPanel(){
 		if(this.userActionPanel == null){
 			this.userActionPanel = new LayoutPanel();
@@ -113,7 +113,7 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 		}
 		return this.userActionPanel;
 	}
-	
+
 	private ScrollPanel getTableScrollPanel(){
 		if(this.tableScrollPanel == null){
 			this.tableScrollPanel = new ScrollPanel();
@@ -121,7 +121,7 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 		}
 		return this.tableScrollPanel;
 	}
-	
+
 	private VerticalPanel getTablePanel(){
 		if(this.tablePanel==null){
 			this.tablePanel = new VerticalPanel();
@@ -133,7 +133,7 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 		}
 		return this.tablePanel;
 	}
-	
+
 	private SimplePager getPager(){
 		if(this.pager==null){
 			SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
@@ -149,71 +149,202 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 			this.userTable = new CellTable<UserDto>();
 			this.userTable.setStyleName("cellTable");
 			userService.getUsers(this);
-			TextColumn<UserDto> nameColumn = new TextColumn<UserDto>() {
-
-				@Override
-				public String getValue(UserDto userDto) {
-					return userDto.getName();
-				}
-			};
-			nameColumn.setSortable(true);
-			TextColumn<UserDto> fullNameColumn = new TextColumn<UserDto>() {
-
-				@Override
-				public String getValue(UserDto userDto) {
-					return userDto.getFullName();
-				}
-			};
-			fullNameColumn.setSortable(true);
-			this.userTable.addColumn(nameColumn,"User");
-			this.userTable.addColumn(fullNameColumn,"Name");
-			
-
-		    // Connect the table to the data provider.
+			// Connect the table to the data provider.
 			getDataProvider().addDataDisplay(this.userTable);
-		    
-		    List<UserDto> list = getDataProvider().getList();
-		    
-		    // Add a ColumnSortEvent.ListHandler to connect sorting to the
-		    // java.util.List.
-		    ListHandler<UserDto> columnSortHandler = new ListHandler<UserDto>(
-		    		list);
-		    columnSortHandler.setComparator(nameColumn,
-		        new Comparator<UserDto>() {
-		          public int compare(UserDto o1, UserDto o2) {
-		            if (o1 == o2) {
-		              return 0;
-		            }
 
-		            // Compare the name columns.
-		            if (o1 != null) {
-		              return (o2 != null) ? o1.getName().compareTo(o2.getName()) : 1;
-		            }
-		            return -1;
-		          }
-		        });
-		    columnSortHandler.setComparator(fullNameColumn,
-			        new Comparator<UserDto>() {
-			          public int compare(UserDto o1, UserDto o2) {
-			            if (o1 == o2) {
-			              return 0;
-			            }
+			List<UserDto> list = getDataProvider().getList();
 
-			            // Compare the name columns.
-			            if (o1 != null) {
-			              return (o2 != null) ? o1.getFullName().compareTo(o2.getFullName()) : 1;
-			            }
-			            return -1;
-			          }
-			        });
-		    this.userTable.addColumnSortHandler(columnSortHandler);
-
-		    // We know that the data is sorted alphabetically by default.
-		    this.userTable.getColumnSortList().push(nameColumn);
+			addColumns(list);
 		}
 		return this.userTable;
 	}
-	
+
+//	private void addColumns(List<UserDto> list){
+//		ListHandler<UserDto> columnSortHandler = new ListHandler<UserDto>(
+//				list);
+//		getUserTable().addColumnSortHandler(columnSortHandler);
+//		Method[] methods = UserDto.class.getDeclaredMethods();
+//		for (final Method method : methods) {
+//			if(method.getName().startsWith("get")){
+//				TextColumn<UserDto> nameColumn = new TextColumn<UserDto>() {
+//
+//					@Override
+//					public String getValue(UserDto userDto) {
+//						try{
+//							return (String) method.invoke(userDto);
+//						}catch (Exception e) {
+//							return "N/A";
+//						}
+//					}
+//				};
+//				nameColumn.setSortable(true);
+//				getUserTable().addColumn(nameColumn,method.getName().substring(3));
+//				
+//				columnSortHandler.setComparator(nameColumn,
+//						new Comparator<UserDto>() {
+//					public int compare(UserDto o1, UserDto o2) {
+//						if (o1 == o2) {
+//							return 0;
+//						}
+//
+//						// Compare the name columns.
+//						if (o1 != null) {
+//							String value1="";
+//							String value2="";
+//							try {
+//								value1 = (String) method.invoke(o1);
+//								value2 = (String) method.invoke(o1);
+//							} catch (Exception e) {
+//								e.printStackTrace();
+//							}
+//							return (o2 != null) ? value1.compareTo(value2) : 1;
+//						}
+//						return -1;
+//					}
+//				});
+//			}
+//
+//		}
+//		getUserTable().getColumnSortList().push(getUserTable().getColumn(0));
+//	}
+
+	private void addColumns(List<UserDto> list) {
+		// Add a ColumnSortEvent.ListHandler to connect sorting to the
+		// java.util.List.
+		ListHandler<UserDto> columnSortHandler = new ListHandler<UserDto>(
+				list);
+		getUserTable().addColumnSortHandler(columnSortHandler);
+
+		TextColumn<UserDto> nameColumn = new TextColumn<UserDto>() {
+
+			@Override
+			public String getValue(UserDto userDto) {
+				return userDto.getName();
+			}
+		};
+		nameColumn.setSortable(true);
+		getUserTable().addColumn(nameColumn,"User");
+		getUserTable().setColumnWidth(nameColumn, "20%");
+		
+		TextColumn<UserDto> fullNameColumn = new TextColumn<UserDto>() {
+
+			@Override
+			public String getValue(UserDto userDto) {
+				return userDto.getFullName();
+			}
+		};
+		fullNameColumn.setSortable(true);
+		getUserTable().addColumn(fullNameColumn,"Name");
+		getUserTable().setColumnWidth(fullNameColumn, "30%");
+
+		TextColumn<UserDto> surnameColumn = new TextColumn<UserDto>() {
+
+			@Override
+			public String getValue(UserDto userDto) {
+				return userDto.getSurname();
+			}
+		};
+		surnameColumn.setSortable(true);
+		getUserTable().addColumn(surnameColumn,"Surname");
+		getUserTable().setColumnWidth(surnameColumn, "30%");
+		
+		TextColumn<UserDto> emailColumn = new TextColumn<UserDto>() {
+
+			@Override
+			public String getValue(UserDto userDto) {
+				return userDto.getEmail();
+			}
+		};
+		emailColumn.setSortable(true);
+		getUserTable().addColumn(emailColumn,"Email");
+		getUserTable().setColumnWidth(emailColumn, "20%");
+
+		TextColumn<UserDto> profileColumn = new TextColumn<UserDto>() {
+
+			@Override
+			public String getValue(UserDto userDto) {
+				return userDto.getProfile().toString();
+			}
+		};
+		profileColumn.setSortable(true);
+		getUserTable().addColumn(profileColumn,"Profile");
+		getUserTable().setColumnWidth(profileColumn, "5%");
+		
+		columnSortHandler.setComparator(nameColumn,
+				new Comparator<UserDto>() {
+			public int compare(UserDto o1, UserDto o2) {
+				if (o1 == o2) {
+					return 0;
+				}
+
+				// Compare the name columns.
+				if (o1 != null) {
+					return (o2 != null) ? o1.getName().compareTo(o2.getName()) : 1;
+				}
+				return -1;
+			}
+		});
+		columnSortHandler.setComparator(fullNameColumn,
+				new Comparator<UserDto>() {
+			public int compare(UserDto o1, UserDto o2) {
+				if (o1 == o2) {
+					return 0;
+				}
+
+				// Compare the name columns.
+				if (o1 != null) {
+					return (o2 != null) ? o1.getFullName().compareTo(o2.getFullName()) : 1;
+				}
+				return -1;
+			}
+		});
+		columnSortHandler.setComparator(surnameColumn,
+				new Comparator<UserDto>() {
+			public int compare(UserDto o1, UserDto o2) {
+				if (o1 == o2) {
+					return 0;
+				}
+
+				// Compare the name columns.
+				if (o1 != null) {
+					return (o2 != null) ? o1.getSurname().compareTo(o2.getSurname()) : 1;
+				}
+				return -1;
+			}
+		});
+		columnSortHandler.setComparator(emailColumn,
+				new Comparator<UserDto>() {
+			public int compare(UserDto o1, UserDto o2) {
+				if (o1 == o2) {
+					return 0;
+				}
+
+				// Compare the name columns.
+				if (o1 != null && o1.getEmail()!=null) {
+					return (o2 != null && o2.getEmail()!=null) ? o1.getEmail().compareTo(o2.getEmail()) : 1;
+				}
+				return -1;
+			}
+		});
+		columnSortHandler.setComparator(profileColumn,
+				new Comparator<UserDto>() {
+			public int compare(UserDto o1, UserDto o2) {
+				if (o1 == o2) {
+					return 0;
+				}
+
+				// Compare the name columns.
+				if (o1 != null) {
+					return (o2 != null) ? o1.getProfile().compareTo(o2.getProfile()) : 1;
+				}
+				return -1;
+			}
+		});
+
+		// We know that the data is sorted alphabetically by default.
+		getUserTable().getColumnSortList().push(fullNameColumn);
+	}
+
 	private VerticalPanel getButtonsPanel(){
 		if(this.buttonsPanel==null){
 			this.buttonsPanel = new VerticalPanel();
@@ -238,7 +369,7 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 		}
 		return this.createUserButton;
 	}
-	
+
 	private ListDataProvider<UserDto> getDataProvider(){
 		if(this.dataProvider == null){
 			this.dataProvider = new ListDataProvider<UserDto>();
@@ -253,12 +384,13 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 
 	@Override
 	public void onSuccess(List users) {
-	    getDataProvider().getList().addAll(users);
+		getDataProvider().getList().addAll(users);
 	}
 
-	
+
 	public void refresh(){
-		 getDataProvider().getList().clear();
-		 userService.getUsers(this);
+		getDataProvider().getList().clear();
+		userService.getUsers(this);
+		getUserTable().getColumnSortList().push(getUserTable().getColumn(0));
 	}
 }

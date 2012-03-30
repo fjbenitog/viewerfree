@@ -191,23 +191,19 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		getConfirmPasswordField().getElement().getStyle().clearBorderColor();
 		StringBuffer message = new StringBuffer();
 		if(getUserField().getText().isEmpty()){
-			message.append("<div>El usuario es un campo obligatorio.</div>");
+			message.append("<div>"+messages.adminUserMandatory()+"</div>");
 			getUserField().getElement().getStyle().setBorderColor("red");
 		}
 		if(getNameField().getText().isEmpty()){
-			message.append("<div>El nombre es un campo obligatorio.</div>");
+			message.append("<div>"+messages.adminNameMandatory()+"</div>");
 			getNameField().getElement().getStyle().setBorderColor("red");
 		}
-		if(getSurnameField().getText().isEmpty()){
-			message.append("<div>El apellido es un campo obligatorio.</div>");
-			getSurnameField().getElement().getStyle().setBorderColor("red");
-		}
 		if(getPasswordField().getText().isEmpty()){
-			message.append("<div>La contrase&ntilde;a es un campo obligatorio.</div>");
+			message.append("<div>"+messages.adminPasswordMandatory()+"</div>");
 			getPasswordField().getElement().getStyle().setBorderColor("red");
 		}
 		if(!getPasswordField().getText().equals(getConfirmPasswordField().getText())){
-			message.append("<div>Las contrase&ntilde;as no coinciden.</div>");
+			message.append("<div>"+messages.adminConfirmPasswordError()+"</div>");
 			getPasswordField().getElement().getStyle().setBorderColor("red");
 			getConfirmPasswordField().getElement().getStyle().setBorderColor("red");
 		}
@@ -252,7 +248,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 	@Override
 	public void onFailure(Throwable throwable) {
 		getFormPanel().remove(getLoaderImage());
-		ErrorMessageUtil.getErrorDialogBox("El usuario no fue creado debido a un error en el servidor");
+		ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
 		setErrorMessage("");
 		setEnabled(true);
 		this.hide();
