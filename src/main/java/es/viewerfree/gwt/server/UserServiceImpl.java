@@ -1,5 +1,7 @@
 package es.viewerfree.gwt.server;
 
+import java.util.List;
+
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.server.service.SpringRemoteServiceServlet;
@@ -48,5 +50,11 @@ public class UserServiceImpl extends SpringRemoteServiceServlet implements UserS
 
 	@Override
 	public void ping() {
+	}
+
+	@Override
+	public List<UserDto> getUsers() throws ServiceException {
+		// TODO Auto-generated method stub
+		return userService.getAllUsers();
 	}
 }

@@ -12,8 +12,8 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -24,11 +24,16 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
 
 import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.service.UserService;
+import es.viewerfree.gwt.client.service.UserServiceAsync;
+import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
-public class AdminPanel extends LayoutPanel {
+public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+	
+	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	private LayoutPanel adminTitlePanel;
 
@@ -47,6 +52,10 @@ public class AdminPanel extends LayoutPanel {
 	private ScrollPanel tableScrollPanel;
 	
 	private VerticalPanel tablePanel;
+	
+	private VerticalPanel buttonsPanel;
+	
+	ListDataProvider<UserDto> dataProvider;
 
 	public AdminPanel() {
 		setStyleName("adminContent");
@@ -86,7 +95,7 @@ public class AdminPanel extends LayoutPanel {
 
 
 	private CreateUserForm newCreateUserForm(){
-		CreateUserForm createUserForm = new CreateUserForm();
+		CreateUserForm createUserForm = new CreateUserForm(this);
 		createUserForm.setAnimationEnabled(true);
 		createUserForm.setGlassEnabled(true);
 		return createUserForm;
@@ -95,9 +104,9 @@ public class AdminPanel extends LayoutPanel {
 	private LayoutPanel getUserActionPanel(){
 		if(this.userActionPanel == null){
 			this.userActionPanel = new LayoutPanel();
-			this.userActionPanel.add(getCreateUserButton());
-			this.userActionPanel.setWidgetTopHeight(getCreateUserButton(), 20, Unit.PX, 30, Unit.PX);
-			this.userActionPanel.setWidgetLeftWidth(getCreateUserButton(), 25, Unit.PX, 100, Unit.PCT);
+			this.userActionPanel.add(getButtonsPanel());
+			this.userActionPanel.setWidgetTopHeight(getButtonsPanel(), 20, Unit.PX, 30, Unit.PX);
+			this.userActionPanel.setWidgetLeftWidth(getButtonsPanel(), 25, Unit.PX, 100, Unit.PCT);
 			this.userActionPanel.add(getTableScrollPanel());
 			this.userActionPanel.setWidgetTopBottom(getTableScrollPanel(), 70, Unit.PX, 10, Unit.PX);
 			this.userActionPanel.setWidgetLeftRight(getTableScrollPanel(), 25, Unit.PX, 25, Unit.PX);
@@ -139,6 +148,7 @@ public class AdminPanel extends LayoutPanel {
 		if(this.userTable==null){
 			this.userTable = new CellTable<UserDto>();
 			this.userTable.setStyleName("cellTable");
+			userService.getUsers(this);
 			TextColumn<UserDto> nameColumn = new TextColumn<UserDto>() {
 
 				@Override
@@ -155,27 +165,19 @@ public class AdminPanel extends LayoutPanel {
 				}
 			};
 			fullNameColumn.setSortable(true);
-			this.userTable.addColumn(nameColumn,"User Name");
-			this.userTable.addColumn(fullNameColumn,"Full Name");
+			this.userTable.addColumn(nameColumn,"User");
+			this.userTable.addColumn(fullNameColumn,"Name");
 			
-			ListDataProvider<UserDto> dataProvider = new ListDataProvider<UserDto>();
 
 		    // Connect the table to the data provider.
-		    dataProvider.addDataDisplay(this.userTable);
+			getDataProvider().addDataDisplay(this.userTable);
 		    
-		    List<UserDto> list = dataProvider.getList();
-		    for (int i = 0; i < 100; i++) {
-		    	UserDto userDto = new UserDto();
-		    	userDto.setName(i+" Name");
-		    	userDto.setFullName(i+" FullName");
-		    	list.add(userDto);
-				
-			}
+		    List<UserDto> list = getDataProvider().getList();
 		    
 		    // Add a ColumnSortEvent.ListHandler to connect sorting to the
 		    // java.util.List.
 		    ListHandler<UserDto> columnSortHandler = new ListHandler<UserDto>(
-		        list);
+		    		list);
 		    columnSortHandler.setComparator(nameColumn,
 		        new Comparator<UserDto>() {
 		          public int compare(UserDto o1, UserDto o2) {
@@ -211,9 +213,14 @@ public class AdminPanel extends LayoutPanel {
 		}
 		return this.userTable;
 	}
-
-
-
+	
+	private VerticalPanel getButtonsPanel(){
+		if(this.buttonsPanel==null){
+			this.buttonsPanel = new VerticalPanel();
+			this.buttonsPanel.add(getCreateUserButton());
+		}
+		return this.buttonsPanel;
+	}
 
 	private Button getCreateUserButton(){
 		if(this.createUserButton == null){
@@ -231,5 +238,27 @@ public class AdminPanel extends LayoutPanel {
 		}
 		return this.createUserButton;
 	}
+	
+	private ListDataProvider<UserDto> getDataProvider(){
+		if(this.dataProvider == null){
+			this.dataProvider = new ListDataProvider<UserDto>();
+		}
+		return this.dataProvider;
+	}
 
+	@Override
+	public void onFailure(Throwable ex) {
+		ErrorMessageUtil.getErrorDialogBox("Error loading the users");
+	}
+
+	@Override
+	public void onSuccess(List users) {
+	    getDataProvider().getList().addAll(users);
+	}
+
+	
+	public void refresh(){
+		 getDataProvider().getList().clear();
+		 userService.getUsers(this);
+	}
 }
