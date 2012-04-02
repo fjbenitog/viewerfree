@@ -7,17 +7,22 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -45,6 +50,10 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 
 	private Button createUserButton;
 
+	private Button refreshButton;
+
+	private MenuBar actionsMenu;
+
 	private CellTable<UserDto> userTable;
 
 	private SimplePager pager;
@@ -53,7 +62,8 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 
 	private VerticalPanel tablePanel;
 
-	private VerticalPanel buttonsPanel;
+	private HorizontalPanel buttonsPanel;
+
 
 	ListDataProvider<UserDto> dataProvider;
 
@@ -105,7 +115,7 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 		if(this.userActionPanel == null){
 			this.userActionPanel = new LayoutPanel();
 			this.userActionPanel.add(getButtonsPanel());
-			this.userActionPanel.setWidgetTopHeight(getButtonsPanel(), 20, Unit.PX, 30, Unit.PX);
+			this.userActionPanel.setWidgetTopHeight(getButtonsPanel(), 20, Unit.PX, 40, Unit.PX);
 			this.userActionPanel.setWidgetLeftWidth(getButtonsPanel(), 25, Unit.PX, 100, Unit.PCT);
 			this.userActionPanel.add(getTableScrollPanel());
 			this.userActionPanel.setWidgetTopBottom(getTableScrollPanel(), 70, Unit.PX, 10, Unit.PX);
@@ -159,54 +169,6 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 		return this.userTable;
 	}
 
-//	private void addColumns(List<UserDto> list){
-//		ListHandler<UserDto> columnSortHandler = new ListHandler<UserDto>(
-//				list);
-//		getUserTable().addColumnSortHandler(columnSortHandler);
-//		Method[] methods = UserDto.class.getDeclaredMethods();
-//		for (final Method method : methods) {
-//			if(method.getName().startsWith("get")){
-//				TextColumn<UserDto> nameColumn = new TextColumn<UserDto>() {
-//
-//					@Override
-//					public String getValue(UserDto userDto) {
-//						try{
-//							return (String) method.invoke(userDto);
-//						}catch (Exception e) {
-//							return "N/A";
-//						}
-//					}
-//				};
-//				nameColumn.setSortable(true);
-//				getUserTable().addColumn(nameColumn,method.getName().substring(3));
-//				
-//				columnSortHandler.setComparator(nameColumn,
-//						new Comparator<UserDto>() {
-//					public int compare(UserDto o1, UserDto o2) {
-//						if (o1 == o2) {
-//							return 0;
-//						}
-//
-//						// Compare the name columns.
-//						if (o1 != null) {
-//							String value1="";
-//							String value2="";
-//							try {
-//								value1 = (String) method.invoke(o1);
-//								value2 = (String) method.invoke(o1);
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//							return (o2 != null) ? value1.compareTo(value2) : 1;
-//						}
-//						return -1;
-//					}
-//				});
-//			}
-//
-//		}
-//		getUserTable().getColumnSortList().push(getUserTable().getColumn(0));
-//	}
 
 	private void addColumns(List<UserDto> list) {
 		// Add a ColumnSortEvent.ListHandler to connect sorting to the
@@ -223,9 +185,9 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 			}
 		};
 		nameColumn.setSortable(true);
-		getUserTable().addColumn(nameColumn,"User");
+		getUserTable().addColumn(nameColumn,messages.user());
 		getUserTable().setColumnWidth(nameColumn, "20%");
-		
+
 		TextColumn<UserDto> fullNameColumn = new TextColumn<UserDto>() {
 
 			@Override
@@ -234,7 +196,7 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 			}
 		};
 		fullNameColumn.setSortable(true);
-		getUserTable().addColumn(fullNameColumn,"Name");
+		getUserTable().addColumn(fullNameColumn,messages.name());
 		getUserTable().setColumnWidth(fullNameColumn, "30%");
 
 		TextColumn<UserDto> surnameColumn = new TextColumn<UserDto>() {
@@ -245,9 +207,9 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 			}
 		};
 		surnameColumn.setSortable(true);
-		getUserTable().addColumn(surnameColumn,"Surname");
+		getUserTable().addColumn(surnameColumn,messages.surname());
 		getUserTable().setColumnWidth(surnameColumn, "30%");
-		
+
 		TextColumn<UserDto> emailColumn = new TextColumn<UserDto>() {
 
 			@Override
@@ -256,7 +218,7 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 			}
 		};
 		emailColumn.setSortable(true);
-		getUserTable().addColumn(emailColumn,"Email");
+		getUserTable().addColumn(emailColumn,messages.email());
 		getUserTable().setColumnWidth(emailColumn, "20%");
 
 		TextColumn<UserDto> profileColumn = new TextColumn<UserDto>() {
@@ -267,9 +229,9 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 			}
 		};
 		profileColumn.setSortable(true);
-		getUserTable().addColumn(profileColumn,"Profile");
+		getUserTable().addColumn(profileColumn,messages.profile());
 		getUserTable().setColumnWidth(profileColumn, "5%");
-		
+
 		columnSortHandler.setComparator(nameColumn,
 				new Comparator<UserDto>() {
 			public int compare(UserDto o1, UserDto o2) {
@@ -345,10 +307,13 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 		getUserTable().getColumnSortList().push(fullNameColumn);
 	}
 
-	private VerticalPanel getButtonsPanel(){
+	private HorizontalPanel getButtonsPanel(){
 		if(this.buttonsPanel==null){
-			this.buttonsPanel = new VerticalPanel();
+			this.buttonsPanel = new HorizontalPanel();
+			this.buttonsPanel.setSpacing(10);
 			this.buttonsPanel.add(getCreateUserButton());
+			this.buttonsPanel.add(getActionsMenu());
+			this.buttonsPanel.add(getRefreshButton());
 		}
 		return this.buttonsPanel;
 	}
@@ -368,6 +333,49 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 			});
 		}
 		return this.createUserButton;
+	}
+
+
+
+	private MenuBar getActionsMenu(){
+		if(this.actionsMenu == null){
+			this.actionsMenu = new MenuBar();
+			MenuBar actions = new MenuBar(true);
+			this.actionsMenu.addItem(new MenuItem("Mas Acciones", actions));
+			actions.addItem(new MenuItem("Modificar Usuario", new Command() {
+
+				@Override
+				public void execute() {
+					// TODO Auto-generated method stub
+
+				}
+			}));
+			actions.addItem(new MenuItem("Suprimir Usuarios", new Command() {
+
+				@Override
+				public void execute() {
+					// TODO Auto-generated method stub
+
+				}
+			}));
+		}
+		return this.actionsMenu;
+	}
+
+
+	private Button getRefreshButton(){
+		if(this.refreshButton == null){
+			this.refreshButton = new Button(messages.refresh());
+			this.refreshButton.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent clickevent) {
+					refresh();
+
+				}
+			});
+		}
+		return this.refreshButton;
 	}
 
 	private ListDataProvider<UserDto> getDataProvider(){
