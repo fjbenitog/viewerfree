@@ -7,8 +7,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -34,7 +32,7 @@ import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
-public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
+public class AdminPanel extends LayoutPanel implements AsyncCallback<List<UserDto>>{
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 
@@ -391,7 +389,7 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List>{
 	}
 
 	@Override
-	public void onSuccess(List users) {
+	public void onSuccess(List<UserDto> users) {
 		getDataProvider().getList().addAll(users);
 	}
 
