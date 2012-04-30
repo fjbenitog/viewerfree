@@ -3,11 +3,15 @@ package es.viewerfree.gwt.client.admin;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
@@ -24,7 +28,11 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionModel;
 
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.service.UserService;
@@ -51,6 +59,10 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List<UserDt
 	private Button refreshButton;
 
 	private MenuBar actionsMenu;
+	
+	private MenuItem modifyUserItem;
+	
+	private MenuItem deleteUsersItem;
 
 	private CellTable<UserDto> userTable;
 
@@ -174,6 +186,43 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List<UserDt
 		ListHandler<UserDto> columnSortHandler = new ListHandler<UserDto>(
 				list);
 		getUserTable().addColumnSortHandler(columnSortHandler);
+
+		final SelectionModel<UserDto> selectionModel = new MultiSelectionModel<UserDto>(
+				new ProvidesKey<UserDto>() {
+					@Override
+					public Object getKey(UserDto dto) {
+						return dto.getId();
+					}
+				});
+		getUserTable().setSelectionModel(selectionModel,
+				DefaultSelectionEventManager.<UserDto> createCheckboxManager());
+
+		Column<UserDto, Boolean> checkColumn = new Column<UserDto, Boolean>(
+				new CheckboxCell(true, false)) {
+			@Override
+			public Boolean getValue(UserDto object) {
+				// Get the value from the selection model.
+				return selectionModel.isSelected(object);
+			}
+		};
+		checkColumn.setFieldUpdater(new FieldUpdater<UserDto, Boolean>() {
+			
+			@Override
+			public void update(int index, UserDto dto, Boolean value) {
+				getUserTable().getSelectionModel().setSelected(dto, value);
+				int count = 0;
+				List<UserDto> items = getDataProvider().getList();
+				for (UserDto userDto : items) {
+					if(getUserTable().getSelectionModel().isSelected(userDto)){
+						count++;
+					}
+				}
+				getModifyUserItem().setEnabled(count==1);
+				getDeleteUsersItem().setEnabled(count > 0);
+			}
+		});
+		getUserTable().addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+		getUserTable().setColumnWidth(checkColumn, 40, Unit.PX);
 
 		TextColumn<UserDto> nameColumn = new TextColumn<UserDto>() {
 
@@ -340,24 +389,38 @@ public class AdminPanel extends LayoutPanel implements AsyncCallback<List<UserDt
 			this.actionsMenu = new MenuBar();
 			MenuBar actions = new MenuBar(true);
 			this.actionsMenu.addItem(new MenuItem("Mas Acciones", actions));
-			actions.addItem(new MenuItem("Modificar Usuario", new Command() {
-
-				@Override
-				public void execute() {
-					// TODO Auto-generated method stub
-
-				}
-			}));
-			actions.addItem(new MenuItem("Suprimir Usuarios", new Command() {
-
-				@Override
-				public void execute() {
-					// TODO Auto-generated method stub
-
-				}
-			}));
+			
+			actions.addItem(getModifyUserItem());
+			actions.addItem(getDeleteUsersItem());
 		}
 		return this.actionsMenu;
+	}
+	
+	private MenuItem getModifyUserItem(){
+		if(this.modifyUserItem==null){
+			this.modifyUserItem = new MenuItem("Modificar Usuario", new Command() {
+
+				@Override
+				public void execute() {
+				}
+			});
+			this.modifyUserItem.setEnabled(false);
+		}
+		return this.modifyUserItem;
+	}
+	
+	private MenuItem getDeleteUsersItem(){
+		if(this.deleteUsersItem==null){
+			deleteUsersItem = new MenuItem("Suprimir Usuarios", new Command() {
+
+				@Override
+				public void execute() {
+
+				}
+			});
+			this.deleteUsersItem.setEnabled(false);
+		}
+		return this.deleteUsersItem;
 	}
 
 
