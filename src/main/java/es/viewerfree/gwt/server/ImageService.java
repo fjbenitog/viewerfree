@@ -115,7 +115,7 @@ public class ImageService implements HttpRequestHandler {
 
 	private void sendPicture(HttpServletResponse response, String album,
 			String picture, Action action, UserDto userDto,
-			ServletOutputStream outputStream) throws IOException,
+			ServletOutputStream outputStream) throws Exception,
 			UnsupportedEncodingException {
 		switch (action) {
 		case SHOW_THUMBNAIL:

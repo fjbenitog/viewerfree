@@ -3,20 +3,17 @@ package es.viewerfree.gwt.server.viewer.impl;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
-import java.awt.image.renderable.ParameterBlock;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.media.jai.ImageLayout;
-import javax.media.jai.JAI;
 import javax.media.jai.PlanarImage;
-import javax.media.jai.RenderedOp;
-import javax.media.jai.operator.SubsampleAverageDescriptor;
 
-import com.sun.media.jai.codec.FileSeekableStream;
+import magick.ImageInfo;
+import magick.MagickImage;
+
 import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageEncoder;
 import com.sun.media.jai.codec.JPEGEncodeParam;
@@ -26,26 +23,16 @@ import es.viewerfree.gwt.server.viewer.ManageImage;
 
 public class ManageImageImpl implements ManageImage {
 
-	
 	private float _memoryLimit;
 	
-	public synchronized  void resize(String file,int height,OutputStream out) throws IOException {
-		
-		RenderedOp loaded = JAI.create("stream", new ParameterBlock().add(new FileSeekableStream(file)));
-		 
-        RenderingHints qualityHints = new RenderingHints(null);
-        qualityHints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        
-        ImageLayout imgLayout = new ImageLayout();
-        setTileSizeForSubsampleAverage(imgLayout, loaded, Math.max(1,  loaded.getHeight() / height), getMemoryLimit());
-        qualityHints.put(JAI.KEY_IMAGE_LAYOUT, imgLayout);
-
-		int width = loaded.getWidth();
-		float scale = (float)height/(float)width;
-		if(scale>1) scale=1;
-        
-        RenderedOp transformed = SubsampleAverageDescriptor.create(loaded, new Double(scale), new Double(scale), qualityHints);
-        JAI.create("encode", new ParameterBlock().addSource(transformed).add(out).add("JPEG"), qualityHints);
+	public synchronized  void resize(String inImage,String outImage,int height) throws Exception {
+		ImageInfo origInfo = new ImageInfo(inImage); //load image info
+		MagickImage image = new MagickImage(origInfo); //load image
+		int width = (int) (image.getDimension().getWidth()*(height/image.getDimension().getHeight()));
+		image = image.scaleImage(width, height); //to Scale image
+		image.setFileName(outImage); //give new location
+		image.writeImage(origInfo);
+		image.destroyImages();
 	}
 	
 	/**
@@ -96,6 +83,35 @@ public class ManageImageImpl implements ManageImage {
 		JPEGEncodeParam encodeParam = new JPEGEncodeParam();
 		ImageEncoder encoder = ImageCodec.createImageEncoder("JPEG", out, encodeParam);
 		encoder.encode(planarimage);
+	}
+
+	@Override
+	public void rotate(String inImage,String outImage,int angle) throws Exception {
+			ImageInfo origInfo = new ImageInfo(inImage); //load image info
+			MagickImage image = new MagickImage(origInfo); //load image
+			image = image.rotateImage(angle);
+			image.setFileName(outImage); //give new location
+			image.writeImage(origInfo);
+			image.destroyImages();
+		
+	}
+	
+	public static void main(String arg[]) throws Exception{
+		ImageInfo origInfo = new ImageInfo("./pictures/DSC_9869.jpg"); //load image info
+		MagickImage image = new MagickImage(origInfo); //load image
+		int height = 500;
+		int width = (int) (image.getDimension().getWidth()*(height/image.getDimension().getHeight()));
+		image = image.scaleImage(width, height); //to Scale image
+		image.setFileName("./pictures/DSC_9869-rotate.jpg"); //give new location
+		image.writeImage(origInfo); //save
+
+//		FileOutputStream outputStream = new FileOutputStream(new File("./pictures/DSC_9869-rotate-2.png"));
+//		ManageImageImpl manageImage = new ManageImageImpl();
+//		manageImage.setMemoryLimit(1024);
+//		manageImage.rotate("./pictures/DSC_9869.jpg", 90, outputStream);
+//		manageImage.resize("./pictures/DSC_9869.jpg", 100, outputStream);
+//		manageImage.resize("./pictures/DSC_9869-rotate.png", 1000, outputStream);
+		
 	}
 
 

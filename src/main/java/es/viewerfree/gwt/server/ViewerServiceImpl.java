@@ -10,6 +10,27 @@ import es.viewerfree.gwt.shared.dto.UserDto;
 
 @SuppressWarnings("serial")
 public class ViewerServiceImpl extends SpringRemoteServiceServlet implements ViewerService {
+	
+	private String thumbnailCachedPath;
+	
+	private String cachedPath;
+
+	public String getCachedPath() {
+		return cachedPath;
+	}
+
+	public void setCachedPath(String cachedPath) {
+		this.cachedPath = cachedPath;
+	}
+
+	public String getThumbnailCachedPath() {
+		return thumbnailCachedPath;
+	}
+
+	public void setThumbnailCachedPath(String thumbnailCachedPath) {
+		this.thumbnailCachedPath = thumbnailCachedPath;
+	}
+
 
 	private AlbumManager albumManager;
 	
@@ -38,6 +59,13 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 		albumDto.setCryptedName(CryptoUtil.encrypt(albumName, userDto.getName()));
 		albumDto.setCryptedPictures(cryptedPics);
 		return albumDto;
+	}
+
+	@Override
+	public void rotatePicture(int angle,String albumName, String pictureName) throws Exception {
+		albumManager.rotateCachedPicture((UserDto) getSession(ParamKey.USER), albumName, 
+				new String[]{thumbnailCachedPath,cachedPath}, pictureName,angle);
+		
 	}
 
 
