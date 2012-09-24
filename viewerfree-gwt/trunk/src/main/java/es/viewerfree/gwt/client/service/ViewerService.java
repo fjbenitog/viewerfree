@@ -11,4 +11,6 @@ public interface ViewerService extends RemoteService{
 	String[] getAlbums();
 	
 	AlbumDto getPictures(String albumName);
+	
+	void rotatePicture(int angle,String albumName,String pictureName) throws Exception;
 }

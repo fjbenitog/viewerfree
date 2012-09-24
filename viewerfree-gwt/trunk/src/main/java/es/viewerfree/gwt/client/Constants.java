@@ -164,6 +164,14 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("imageFileDownload")
   String imageFileDownload();
   
+  @DefaultStringValue("object_rotate_right.png")
+  @Key("imageRightRotate")
+  String imageRightRotate();
+  
+  @DefaultStringValue("object_rotate_left.png")
+  @Key("imageLeftRotate")
+  String imageLeftRotate();
+  
   @DefaultStringValue("dialog_close.png")
   @Key("imageCloseButton")
   String imageCloseButton();

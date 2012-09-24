@@ -1,21 +1,11 @@
 package es.viewerfree.gwt.server.viewer.impl;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-
-import javax.media.jai.PlanarImage;
-
-import com.sun.media.jai.codec.ImageCodec;
-import com.sun.media.jai.codec.ImageEncoder;
-import com.sun.media.jai.codec.JPEGEncodeParam;
 
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.server.viewer.ManageImage;
@@ -54,14 +44,13 @@ public class AlbumManagerImpl implements AlbumManager {
 	
 	public void getCachedPicture(UserDto user, String albumName,
 			String pictureName, String cachedPath, int height,OutputStream out)
-			throws IOException {
+			throws Exception {
 		File fotoCacheada = new File(getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName);
 		if(!fotoCacheada.exists()){
 			File path = new File(getApplicationPath()+"/"+cachedPath+"/"+albumName);
 			path.mkdirs();
-			FileOutputStream fileOutputStream = new FileOutputStream(getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName);
-			createCachedPicture(user,albumName,pictureName,height,fileOutputStream);
-			fileOutputStream.close();
+			manageImage.resize(getPathUser(user)+"/"+albumName+"/"+pictureName,
+					getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName,height);
 		}
 
 		getPicture(new File(getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName), out);
@@ -89,29 +78,9 @@ public class AlbumManagerImpl implements AlbumManager {
 	}
 	
 	
-	//TODO: Cached Image
-	public void getDefaultImage(OutputStream out) throws IOException{
-
-		int width = 300; int height = 300;
-		BufferedImage bi = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
-		PlanarImage planarimage = PlanarImage.wrapRenderedImage(bi);
-		// We need a sample model. The most appropriate is created as shown:
-		Font font = new Font("SansSerif",Font.BOLD,40);
-		Graphics graphics = bi.getGraphics();
-		graphics.setFont(font);
-		graphics.setColor(Color.LIGHT_GRAY);
-		graphics.fillRect(0, 0, width, height);
-		graphics.setColor(Color.BLACK);
-		graphics.drawRect(0, 0, width-1, height-1);
-		graphics.drawString("Imagen", 90, 130);
-		graphics.drawString("No Disponible", 25, 190);
-		JPEGEncodeParam encodeParam = new JPEGEncodeParam();
-		ImageEncoder encoder = ImageCodec.createImageEncoder("JPEG", out, encodeParam);
-		encoder.encode(planarimage);
-	}
-	
-	private void createCachedPicture(UserDto user,String albumName,String pictureName, int height,OutputStream out) throws IOException{
-		manageImage.resize(getPathUser(user)+"/"+albumName+"/"+pictureName, height,out);
+	private void createCachedPicture(String inImage,String outImage,int height) throws Exception{
+		manageImage.resize(inImage, outImage,height);
+//				manageImage.resize(getPathUser(user)+"/"+albumName+"/"+pictureName, height,out);
 	}
 
 	public FilenameFilter getDirfilenameFilter() {
@@ -148,6 +117,27 @@ public class AlbumManagerImpl implements AlbumManager {
 
 	public void setApplicationPath(String applicationPath) {
 		this.applicationPath = applicationPath;
+	}
+
+	@Override
+	public void getDefaultImage(OutputStream out) throws IOException {
+		manageImage.getDefaultImage(out);
+		
+	}
+
+	@Override
+	public void rotateCachedPicture(UserDto user, String albumName,String[] cachedPaths,
+			String pictureName,int angle)
+			throws Exception {
+		for(String cachedPath:cachedPaths){
+		String pathname = getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName;
+		File fotoCacheada = new File(pathname);
+		if(fotoCacheada.exists()){
+			manageImage.rotate(pathname, pathname,angle);
+		}
+			
+			
+		}
 	}
 
 

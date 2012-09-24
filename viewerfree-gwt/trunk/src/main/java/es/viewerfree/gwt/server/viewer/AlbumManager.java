@@ -12,7 +12,7 @@ public interface AlbumManager {
 	
 	public String[] getPictures(UserDto user,String albumName);
 	
-	public void getCachedPicture(UserDto user,String albumName, String fotoName,String cachedPath,int height,OutputStream out) throws IOException;
+	public void getCachedPicture(UserDto user,String albumName, String fotoName,String cachedPath,int height,OutputStream out) throws Exception;
 
 	public void getPicture(File file, OutputStream out) throws IOException;
 	
@@ -20,4 +20,6 @@ public interface AlbumManager {
 	
 	public void getPicture(UserDto user,String albumName, String fotoName,
 			OutputStream out) throws IOException;
+	
+	public void rotateCachedPicture(UserDto user,String albumName,String[] cachedPaths, String fotoName,int angle) throws Exception;
 }

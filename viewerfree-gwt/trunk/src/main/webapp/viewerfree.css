@@ -6,9 +6,9 @@
 	left: 50%;
 	text-align: center;
 	margin-left: -100px;
-	font-family: arial, sans-serif;
-	font-size: 15px;
-	font-weight: bold;
+	font-family: arial,sans-serif;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .footerPanel a {
@@ -204,7 +204,7 @@
 	text-align: right;
 }
 
-.barLink a,a:visited {
+.barLink a, a:visited {
 	color: #A8A88D;
 	cursor: pointer;
 	padding: 5px 10px;
@@ -363,7 +363,7 @@
 
 .gwt-PopupPanel .popupContent .arrows {
 	zoom: 1;
-	filter: alpha(opacity =               0);
+	filter: alpha(opacity =             0);
 	opacity: 0.0;
 }
 
@@ -373,7 +373,7 @@
 
 .gwt-PopupPanel .popupContent .arrows:hover {
 	zoom: 1;
-	filter: alpha(opacity =               50);
+	filter: alpha(opacity =             50);
 	opacity: 0.6;
 }
 
@@ -441,10 +441,6 @@
 	cursor: default;
 }
 
-.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent .cellTable {
-	width: 100%;
-}
-
 .adminForm {
 	padding: 20px;
 	width: 450px;
@@ -510,8 +506,10 @@
 	font-family: arial, sans-serif;
 	border: 1px solid #CC6600;
 	background: #FF8000;
+	border: 1px solid #CC6600;
 	color: white;
-	padding: 3px 10px;
+	padding-left: 10px;
+	padding-right: 10px;
 	cursor: auto;
 }
 
@@ -532,26 +530,3 @@
 	border: 1px solid #A8A88D;
 	border-radius: 5px;
 }
-
-.gwt-MenuBar-horizontal .gwt-MenuItem {
-	font-family: arial, sans-serif;
-	background: #FF8000;
-	font-weight: normal;
-	color: white;
-	cursor: default;
-}
-
-.gwt-MenuBar-horizontal {
-	background: none repeat scroll 0 0 #FF8000;
-	border: 1px solid #CC6600;
-	color: white;
-	cursor: default;
-	font-family: arial, sans-serif;
-	padding: 2px 10px;
-}
-
-.gwt-MenuBar-vertical .gwt-MenuItem-selected {
-	background: #FF8000; color : white;
-	color: white;
-}
-

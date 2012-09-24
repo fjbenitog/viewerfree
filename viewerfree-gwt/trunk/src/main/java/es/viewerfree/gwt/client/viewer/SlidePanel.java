@@ -6,8 +6,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -20,9 +22,16 @@ import com.reveregroup.gwt.imagepreloader.FitImageLoadHandler;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.service.UserService;
+import es.viewerfree.gwt.client.service.UserServiceAsync;
+import es.viewerfree.gwt.client.service.ViewerService;
+import es.viewerfree.gwt.client.service.ViewerServiceAsync;
+import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.client.util.ViewerHelper;
 import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
+import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.dto.UserProfile;
 
 public class SlidePanel extends PopupPanel {
 
@@ -36,7 +45,11 @@ public class SlidePanel extends PopupPanel {
 
 	private final Constants constants = GWT.create(Constants.class);
 
-	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+	private static final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+
+	private static final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
+
+	private static final UserServiceAsync userService = GWT.create(UserService.class);
 
 	private HorizontalPanel imagePanel;
 
@@ -62,6 +75,10 @@ public class SlidePanel extends PopupPanel {
 
 	private Image imagePrevious;
 
+	private Image imageRightRotate;
+
+	private Image imageLeftRotate;
+
 	private HTML imageFileDownload;
 
 	private HorizontalPanel buttonsPanel;
@@ -81,6 +98,7 @@ public class SlidePanel extends PopupPanel {
 		getImagePanel().add(getImageLoader());
 		getFitImage();
 		addCloseHandler(new HandlerStopSlideshow());
+		userService.getUser(new UserCallback());
 		center();
 	}
 
@@ -150,6 +168,7 @@ public class SlidePanel extends PopupPanel {
 		return this.leftArrowPanel;
 	}
 
+
 	private Image getLeftArrow(){
 		if(this.leftArrow == null){
 			this.leftArrow = new Image(constants.viewerImagesPath()+constants.imageLeftArrow());
@@ -190,6 +209,26 @@ public class SlidePanel extends PopupPanel {
 			this.imagePlay.addClickHandler(new ClickHandlerStartSlideshow());
 		}
 		return this.imagePlay;
+	}
+
+	private Image getImageRightRotate(){
+		if(this.imageRightRotate == null){
+			this.imageRightRotate = new Image(constants.viewerImagesPath()+constants.imageRightRotate());
+			this.imageRightRotate.setStyleName("buttons");
+			this.imageRightRotate.setTitle(messages.rotatePicture());
+			this.imageRightRotate.addClickHandler(new ClickHandlerRoatePic(90));
+		}
+		return this.imageRightRotate;
+	}
+
+	private Image getImageLeftRotate(){
+		if(this.imageLeftRotate == null){
+			this.imageLeftRotate = new Image(constants.viewerImagesPath()+constants.imageLeftRotate());
+			this.imageLeftRotate.setStyleName("buttons");
+			this.imageLeftRotate.setTitle(messages.rotatePicture());
+			this.imageLeftRotate.addClickHandler(new ClickHandlerRoatePic(-90));
+		}
+		return this.imageLeftRotate;
 	}
 
 	private Image getImageNext(){
@@ -234,7 +273,7 @@ public class SlidePanel extends PopupPanel {
 
 	private String createDownloadImageLink() {
 		return "<a target='_blank' href='"+ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_REAL_PICTURE)+
-		"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/></a>";
+				"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/></a>";
 	}
 
 	private HorizontalPanel getButtonsPanel(){
@@ -303,7 +342,7 @@ public class SlidePanel extends PopupPanel {
 	private String getSelectedImage() {
 		return albumDto.getPictures()[albumDto.getSelectedPic()];
 	}
-	
+
 	private String getSelectedCriptedImage() {
 		return albumDto.getCryptedPictures()[albumDto.getSelectedPic()];
 	}
@@ -350,6 +389,31 @@ public class SlidePanel extends PopupPanel {
 		getImagePlay().setUrl(constants.viewerImagesPath()+constants.imagePlay());
 	}
 
+	private class ClickHandlerRoatePic implements ClickHandler{
+
+		private int angle;
+
+		public ClickHandlerRoatePic(int angle) {
+			super();
+			this.angle = angle;
+		}
+
+		public void onClick(ClickEvent clickevent) {
+			viewerService.rotatePicture(angle, albumDto.getName(), albumDto.getPictures()[albumDto.getSelectedPic()], new AsyncCallback<Void>() {
+
+				@Override
+				public void onSuccess(Void arg0) {
+					Window.Location.replace(GWT.getHostPageBaseURL()+constants.viewerAppPath()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName());
+				}
+
+				@Override
+				public void onFailure(Throwable arg0) {
+					ErrorMessageUtil.getErrorDialogBox(messages.serverError());
+				}
+			});
+		}
+	}
+
 	private class ClickHandlerNextPic implements ClickHandler{
 
 		public void onClick(ClickEvent clickevent) {
@@ -359,7 +423,7 @@ public class SlidePanel extends PopupPanel {
 			update();
 		}
 	}
-	
+
 	private class ClickHandlerPreviousPic implements ClickHandler{
 
 		public void onClick(ClickEvent clickevent) {
@@ -369,7 +433,7 @@ public class SlidePanel extends PopupPanel {
 			update();
 		}
 	}
-	
+
 	private class ClickHandlerStartSlideshow implements ClickHandler{
 
 		@Override
@@ -381,7 +445,7 @@ public class SlidePanel extends PopupPanel {
 			getPicTimer().scheduleRepeating(constants.slideTime());
 		}
 	}
-	
+
 	private class HandlerStopSlideshow implements ClickHandler,CloseHandler<PopupPanel>{
 
 		public void onClick(ClickEvent clickevent) {
@@ -397,6 +461,25 @@ public class SlidePanel extends PopupPanel {
 		public void onClose(CloseEvent<PopupPanel> event) {
 			stop();
 		}
+	}
+
+	private class UserCallback implements AsyncCallback<UserDto>{
+
+		@Override
+		public void onFailure(Throwable ex) {
+			ErrorMessageUtil.getErrorDialogBox(messages.serverError());
+
+		}
+
+		@Override
+		public void onSuccess(UserDto user) {
+			if(user.getProfile()==UserProfile.ADMIN){
+				getUtilityPanel().add(getImageLeftRotate());
+				getUtilityPanel().add(getImageRightRotate());
+			}
+
+		}
+
 	}
 
 }
