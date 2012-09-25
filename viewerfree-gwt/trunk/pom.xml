@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<!-- POM file generated with GWT webAppCreator -->
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.viewerfree.gwt</groupId>
 	<artifactId>viewerfree-gwt</artifactId>
 	<packaging>war</packaging>
-	<version>4.0.0</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<name>GWT Maven Archetype</name>
 
 	<properties>
@@ -28,9 +29,9 @@
                 <url>http://hudson.viewerfree.es</url>
         </ciManagement>
         <scm>
-                <connection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/tags/viewerfree-gwt-4.0.0</connection>
-                <developerConnection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-web/tags/viewerfree-gwt-4.0.0</developerConnection>
-                <url>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-web/tags/viewerfree-gwt-4.0.0</url>
+                <connection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/trunk/</connection>
+                <developerConnection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/trunk/</developerConnection>
+                <url>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/trunk/</url>
         </scm>
 
 	<dependencies>
@@ -303,5 +304,19 @@
 			</plugin>
 		</plugins>
 	</build>
+		<distributionManagement>
+                <repository>
+                        <id>internal</id>
+                        <url>
+                                http://apollo:8081/archiva/repository/internal/
+                        </url>
+                </repository>
+                <snapshotRepository>
+                        <id>snapshots</id>
+                        <url>
+                                http://apollo:8081/archiva/repository/snapshots/
+                        </url>
+                </snapshotRepository>
+        </distributionManagement>
 
 </project>
