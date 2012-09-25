@@ -6,7 +6,7 @@
 	<groupId>es.viewerfree.gwt</groupId>
 	<artifactId>viewerfree-gwt</artifactId>
 	<packaging>war</packaging>
-	<version>4.0.0</version>
+	<version>4.0.1-SNAPSHOT</version>
 	<name>GWT Maven Archetype</name>
 
 	<properties>
@@ -28,9 +28,9 @@
                 <url>http://hudson.viewerfree.es</url>
         </ciManagement>
         <scm>
-                <connection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/tags/viewerfree-gwt-4.0.0</connection>
-                <developerConnection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-web/tags/viewerfree-gwt-4.0.0</developerConnection>
-                <url>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-web/tags/viewerfree-gwt-4.0.0</url>
+                <connection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/trunk/</connection>
+                <developerConnection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-web/trunk/</developerConnection>
+                <url>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-web/trunk/</url>
         </scm>
 
 	<dependencies>
