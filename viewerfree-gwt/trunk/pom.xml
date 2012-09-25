@@ -25,6 +25,14 @@
 		</org.springframework.version>
 		<hiberante.version>3.2.5.GA</hiberante.version>
 	</properties>
+		 <ciManagement>
+                <url>http://hudson.viewerfree.es</url>
+        </ciManagement>
+        <scm>
+                <connection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/trunk/</connection>
+                <developerConnection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-web/trunk/</developerConnection>
+                <url>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-web/trunk/</url>
+        </scm>
 
 	<dependencies>
 		<dependency>
