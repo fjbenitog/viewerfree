@@ -1,11 +1,12 @@
 package es.viewerfree.gwt.server.viewer.impl;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.server.viewer.ManageImage;
@@ -19,6 +20,8 @@ public class AlbumManagerImpl implements AlbumManager {
 	private String applicationPath;
 	private FilenameFilter filenameFilter;	
 	private ManageImage manageImage;
+	
+	private static  Comparator<String> comparatorPics = new ComparatorPics();
 
 	public ManageImage getManageImage() {
 		return manageImage;
@@ -39,7 +42,9 @@ public class AlbumManagerImpl implements AlbumManager {
 	public String[] getPictures(UserDto user,String albumName){
 
 		File pictures = new File(getPathUser(user)+"/"+albumName);
-		return pictures.list(filenameFilter);
+		String[] pics = pictures.list(filenameFilter);
+		Arrays.sort(pics,comparatorPics);
+		return pics;
 	}
 	
 	public void getCachedPicture(UserDto user, String albumName,
@@ -138,6 +143,17 @@ public class AlbumManagerImpl implements AlbumManager {
 			
 			
 		}
+	}
+	
+	private static class ComparatorPics implements Comparator<String>{
+
+		@Override
+		public int compare(String s1, String s2) {
+			return s1.toLowerCase().compareTo(s2.toLowerCase());
+		}
+
+		
+		
 	}
 
 
