@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
 public class ViewerPanel extends SplitLayoutPanel {
@@ -16,12 +17,22 @@ public class ViewerPanel extends SplitLayoutPanel {
 
 	private LayoutPanel rightPanel;
 	
+	private ScrollPanel scrollAlbumPanel;
+	
 	public ViewerPanel() {
 		super(7);
-		addWest(getFoldersListPanel(), 200);
+		addWest(getScrollImagesPanel(), 200);
 		add(getRightPanel());
 	}
 
+	private ScrollPanel getScrollImagesPanel(){
+		if(this.scrollAlbumPanel == null){
+			this.scrollAlbumPanel = new ScrollPanel();
+			this.scrollAlbumPanel.add(getFoldersListPanel());
+		}
+		return this.scrollAlbumPanel;
+	}
+	
 	private LayoutPanel getRightPanel(){
 		if(this.rightPanel == null){
 			this.rightPanel = new LayoutPanel();
