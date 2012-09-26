@@ -21,7 +21,7 @@ public class AlbumManagerImpl implements AlbumManager {
 	private FilenameFilter filenameFilter;	
 	private ManageImage manageImage;
 	
-	private static  Comparator<String> comparatorPics = new ComparatorPics();
+	private static  Comparator<String> comparatorAlphanumeric = new ComparatorAlphanumeric();
 
 	public ManageImage getManageImage() {
 		return manageImage;
@@ -36,14 +36,16 @@ public class AlbumManagerImpl implements AlbumManager {
 		if(!albumsPath.exists()){
 			albumsPath.mkdirs();
 		}
-		return  albumsPath.list(dirfilenameFilter);
+		String[] albums = albumsPath.list(dirfilenameFilter);
+		Arrays.sort(albums,comparatorAlphanumeric);
+		return  albums;
 	}
 	
 	public String[] getPictures(UserDto user,String albumName){
 
 		File pictures = new File(getPathUser(user)+"/"+albumName);
 		String[] pics = pictures.list(filenameFilter);
-		Arrays.sort(pics,comparatorPics);
+		Arrays.sort(pics,comparatorAlphanumeric);
 		return pics;
 	}
 	
@@ -145,7 +147,7 @@ public class AlbumManagerImpl implements AlbumManager {
 		}
 	}
 	
-	private static class ComparatorPics implements Comparator<String>{
+	private static class ComparatorAlphanumeric implements Comparator<String>{
 
 		@Override
 		public int compare(String s1, String s2) {
