@@ -113,7 +113,7 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 		if(this.actionsMenu == null){
 			this.actionsMenu = new MenuBar();
 			MenuBar actions = new MenuBar(true);
-			this.actionsMenu.addItem(new MenuItem(messages.moreActions(), actions));
+			this.actionsMenu.addItem(new MenuItem( messages.moreActions(), true, actions));
 			
 			actions.addItem(getModifyUserItem());
 			actions.addItem(getDeleteUsersItem());
