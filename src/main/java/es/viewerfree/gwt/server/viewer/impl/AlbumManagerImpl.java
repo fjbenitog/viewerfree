@@ -83,12 +83,6 @@ public class AlbumManagerImpl implements AlbumManager {
 	public void getPicture(UserDto user,String albumName,String pictureName,OutputStream out) throws IOException{
 		getPicture(new File(getPathUser(user)+"/"+albumName+"/"+pictureName),out);
 	}
-	
-	
-	private void createCachedPicture(String inImage,String outImage,int height) throws Exception{
-		manageImage.resize(inImage, outImage,height);
-//				manageImage.resize(getPathUser(user)+"/"+albumName+"/"+pictureName, height,out);
-	}
 
 	public FilenameFilter getDirfilenameFilter() {
 		return dirfilenameFilter;
