@@ -203,7 +203,7 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 				DefaultSelectionEventManager.<UserDto> createCheckboxManager());
 
 		Column<UserDto, Boolean> checkColumn = new Column<UserDto, Boolean>(
-				new CheckboxCell(true, false)) {
+				new CheckboxCell(true, true)) {
 			@Override
 			public Boolean getValue(UserDto object) {
 				// Get the value from the selection model.

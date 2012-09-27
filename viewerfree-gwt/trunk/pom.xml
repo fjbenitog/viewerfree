@@ -28,9 +28,9 @@
                 <url>http://hudson.viewerfree.es</url>
         </ciManagement>
         <scm>
-                <connection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/tags/viewerfree-gwt-4.0.0</connection>
-                <developerConnection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/tags/viewerfree-gwt-4.0.0</developerConnection>
-                <url>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/tags/viewerfree-gwt-4.0.0</url>
+                <connection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/tags/</connection>
+                <developerConnection>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/tags/</developerConnection>
+                <url>scm:svn:https://viewerfree.svn.sourceforge.net/svnroot/viewerfree/viewerfree-gwt/tags/</url>
         </scm>
 
 	<dependencies>
