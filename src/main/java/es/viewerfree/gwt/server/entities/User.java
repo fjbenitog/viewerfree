@@ -1,5 +1,9 @@
 package es.viewerfree.gwt.server.entities;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,20 +11,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name="vf_users")
 @NamedQueries({@NamedQuery(name="findUserByUserAndPassword",query="SELECT u from User u where u.user = ? AND u.password = ?"),
 	@NamedQuery(name="findUserByUser",query="SELECT u from User u where u.user = ?"),
 	@NamedQuery(name="findAllUsers",query="SELECT u from User u")})
-public class User {
-	@Override
-	public String toString() {
-		return "User [_id=" + _id + ", user=" + user + ", password=" + password
-				+ ", name=" + name + ", surname=" + surname + ", email="
-				+ email + ", profile=" + profile + "]";
-	}
+public class User implements Serializable{ 
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -39,6 +40,9 @@ public class User {
 	private String email;
 	
 	private String profile;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Album> albums;
 	
 
 	public String getProfile() {
@@ -96,6 +100,7 @@ public class User {
 	public void setId(long id) {
 		_id = id;
 	}
+	
 
 	@Override
 	public int hashCode() {
@@ -155,4 +160,13 @@ public class User {
 			return false;
 		return true;
 	}
+
+	public List<Album> getAlbums() {
+		return albums;
+	}
+
+	public void setAlbums(List<Album> albums) {
+		this.albums = albums;
+	}
+
 }

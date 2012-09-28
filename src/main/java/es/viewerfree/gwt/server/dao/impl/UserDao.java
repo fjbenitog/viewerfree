@@ -7,6 +7,7 @@ import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.IUserDao;
+import es.viewerfree.gwt.server.entities.Album;
 import es.viewerfree.gwt.server.entities.User;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
@@ -31,6 +32,7 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 	
 	public void createUser(UserDto userDto)throws DaoException {
 		try{
+			
 			getJpaTemplate().persist(toUser(userDto));
 		}catch (Exception e) {
 			throw new DaoException("Unanabled to create a User",e);
@@ -47,6 +49,14 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 		user.setName(userDto.getFullName());
 		user.setSurname(userDto.getSurname());
 		user.setEmail(userDto.getEmail());
+		List<Album> albums = new ArrayList<Album>();
+		for(String albumName:userDto.getAlbums()){
+			Album album = new Album();
+			album.setName(albumName);
+			album.setLogin(user);
+			albums.add(album);
+		}
+		user.setAlbums(albums);
 		return user;
 	}
 	
@@ -57,6 +67,11 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 		userDto.setFullName(user.getName());
 		userDto.setSurname(user.getSurname());
 		userDto.setEmail(user.getEmail());
+		List<String> albums = new ArrayList<String>();
+		for(Album album :user.getAlbums()){
+			albums.add(album.getName());
+		}
+		userDto.setAlbums(albums);
 		return userDto;
 	}
 
