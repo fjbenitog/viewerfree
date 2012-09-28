@@ -28,11 +28,18 @@ public class InitializeDB implements ApplicationContextAware {
 		try {
 			UserDto user = _userService.getUser(ADMIN);
 			if(user==null){
+				System.err.println("--------------------------------------------");
 				UserDto userDto = new UserDto(ADMIN, ADMIN);
 				userDto.setProfile(UserProfile.ADMIN);
+//				List<String> albums = new ArrayList<String>();
+//				albums.add("Australia_1");
+//				albums.add("Australia_2");
+//				userDto.setAlbums(albums);
 //				userDto.setFullName("Francisco Javier");
 //				userDto.setSurname("Benito Gómez");
 				_userService.createUser(userDto);
+				UserDto user2 = _userService.getUser(ADMIN);
+				System.err.println(user2);
 			}
 		} catch (ServiceException e) {
 			e.printStackTrace();

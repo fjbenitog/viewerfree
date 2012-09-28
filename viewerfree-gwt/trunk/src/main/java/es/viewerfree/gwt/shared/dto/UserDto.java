@@ -1,6 +1,8 @@
 package es.viewerfree.gwt.shared.dto;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 
 
@@ -30,6 +32,8 @@ public class UserDto implements Serializable {
 	private String _surname;
 	
 	private String _email;
+	
+	private List<String> albums;
 	
 	public String getFullName() {
 		return _fullName;
@@ -135,6 +139,7 @@ public class UserDto implements Serializable {
 				+ ((_profile == null) ? 0 : _profile.hashCode());
 		result = prime * result
 				+ ((_surname == null) ? 0 : _surname.hashCode());
+		result = prime * result + ((albums == null) ? 0 : albums.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result
 				+ ((language == null) ? 0 : language.hashCode());
@@ -184,6 +189,11 @@ public class UserDto implements Serializable {
 				return false;
 		} else if (!_surname.equals(other._surname))
 			return false;
+		if (albums == null) {
+			if (other.albums != null)
+				return false;
+		} else if (!albums.equals(other.albums))
+			return false;
 		if (id != other.id)
 			return false;
 		if (language == null) {
@@ -203,9 +213,18 @@ public class UserDto implements Serializable {
 	public String toString() {
 		return "UserDto [id=" + id + ", _name=" + _name + ", _fullName="
 				+ _fullName + ", _surname=" + _surname + ", _email=" + _email
-				+ ", password=" + password + ", _gmailUser=" + _gmailUser
-				+ ", _gmailPassword=" + _gmailPassword + ", language="
-				+ language + ", _profile=" + _profile + "]";
+				+ ", albums=" + albums + ", password=" + password
+				+ ", _gmailUser=" + _gmailUser + ", _gmailPassword="
+				+ _gmailPassword + ", language=" + language + ", _profile="
+				+ _profile + "]";
+	}
+
+	public List<String> getAlbums() {
+		return albums;
+	}
+
+	public void setAlbums(List<String> albums) {
+		this.albums = albums;
 	}
 
 }
