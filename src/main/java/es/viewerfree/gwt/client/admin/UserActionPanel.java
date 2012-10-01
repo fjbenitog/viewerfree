@@ -93,8 +93,8 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 				@Override
 				public void onClick(ClickEvent clickevent) {
 					CreateUserForm createUserForm = newCreateUserForm();
-					createUserForm.show();
-					createUserForm.center();
+//					createUserForm.show();
+//					createUserForm.center();
 
 				}
 			});
