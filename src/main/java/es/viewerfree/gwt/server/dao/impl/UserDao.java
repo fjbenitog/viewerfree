@@ -16,10 +16,10 @@ import es.viewerfree.gwt.shared.dto.UserProfile;
 
 public class UserDao extends JpaDaoSupport implements IUserDao{
 
-	
+
 	public UserDto getUser(String user) throws DaoException {
 		try{
-			
+
 			List<User> users = getJpaTemplate().findByNamedQuery("findUserByUser", new Object[]{user});
 			if(users.size()==1){
 				return toUserDto(users.get(0));
@@ -29,10 +29,10 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 			throw new DaoException("Unanabled to find a User",e);
 		}
 	}
-	
+
 	public void createUser(UserDto userDto)throws DaoException {
 		try{
-			
+
 			getJpaTemplate().persist(toUser(userDto));
 		}catch (Exception e) {
 			throw new DaoException("Unanabled to create a User",e);
@@ -50,16 +50,20 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 		user.setSurname(userDto.getSurname());
 		user.setEmail(userDto.getEmail());
 		List<Album> albums = new ArrayList<Album>();
-		for(String albumName:userDto.getAlbums()){
-			Album album = new Album();
-			album.setName(albumName);
-			album.setLogin(user);
-			albums.add(album);
+
+		List<String> albumsArr = userDto.getAlbums();
+		if(albumsArr!=null){
+			for(String albumName:albumsArr){
+				Album album = new Album();
+				album.setName(albumName);
+				album.setLogin(user);
+				albums.add(album);
+			}
+			user.setAlbums(albums);
 		}
-		user.setAlbums(albums);
 		return user;
 	}
-	
+
 	private UserDto toUserDto(User user){
 		UserDto userDto = new UserDto(user.getUser(), user.getPassword());
 		userDto.setId(user.getId());
@@ -68,8 +72,11 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 		userDto.setSurname(user.getSurname());
 		userDto.setEmail(user.getEmail());
 		List<String> albums = new ArrayList<String>();
-		for(Album album :user.getAlbums()){
-			albums.add(album.getName());
+		List<Album> albumsList = user.getAlbums();
+		if(albumsList!=null){
+			for(Album album :albumsList){
+				albums.add(album.getName());
+			}
 		}
 		userDto.setAlbums(albums);
 		return userDto;
@@ -77,7 +84,7 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 
 	public List<UserDto> findAllUsers() throws DaoException {
 		try{
-			
+
 			List<User> users = getJpaTemplate().findByNamedQuery("findAllUsers");
 			List<UserDto> usersDto = new ArrayList<UserDto>();
 			for (User userEntity : users) {

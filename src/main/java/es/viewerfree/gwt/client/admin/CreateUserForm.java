@@ -1,11 +1,15 @@
 package es.viewerfree.gwt.client.admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -14,12 +18,15 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.common.DialogBoxExt;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
+import es.viewerfree.gwt.client.service.ViewerService;
+import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
@@ -27,35 +34,44 @@ import es.viewerfree.gwt.shared.dto.UserProfile;
 public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCallback<Void>{
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
-	
+
 	private static final Constants constants = GWT.create(Constants.class);
-	
+
 	private final UserServiceAsync userService = GWT.create(UserService.class);
-	
+
+	private final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
+
 	private Button createButton;
-	
+
 	private TextBox userField;
-	
+
 	private PasswordTextBox passwordField;
-	
+
 	private PasswordTextBox confirmPasswordField;
-	
+
 	private TextBox nameField;
-	
+
 	private TextBox surnameField;
-	
+
 	private TextBox emailField;
-	
+
 	private ListBox listProfile;
-	
+
 	private FlexTable formPanel;
-	
+
 	private LayoutPanel buttonCreatePanel;
-	
+
 	private Image loaderImage;
-	
+
 	private UserActionPanel usersTablePanel;
 	
+	private int column;
+	
+	private int row = 1;
+	
+	private List<CheckBox> albumsChecks = new ArrayList<CheckBox>();
+
+
 	public CreateUserForm(UserActionPanel usersTablePanel) {
 		super();
 		this.usersTablePanel = usersTablePanel;
@@ -64,6 +80,54 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		setCloseWidget(image);
 		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+messages.createUser()+"</div>");
 		add(getFormPanel());
+		viewerService.getAlbums(new AsyncCallback<String[]>() {
+
+			@Override
+			public void onSuccess(String[] albums) {
+				 addAlbumsField(albums);
+				
+				addCreateButton();
+			}
+
+
+			private FlexCellFormatter addAlbumsField(String[] albums) {
+				row++;
+				FlexCellFormatter cellFormatter = getFormPanel().getFlexCellFormatter();
+				getFormPanel().setHTML(row, 0, "<HR/>");
+				cellFormatter.setColSpan(row, 0, 4);
+				cellFormatter.setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+				row++;
+				getFormPanel().setHTML(row, 0, messages.albumsLabel());
+				row++;
+				column = 0;
+				for (String album : albums) {
+					CheckBox albumCheck = new CheckBox(album);
+					albumsChecks.add(albumCheck);
+					getFormPanel().setWidget(row, column, albumCheck);
+					cellFormatter.setHorizontalAlignment(row, column, HasHorizontalAlignment.ALIGN_LEFT);
+					column++;
+					if(column>3) {
+						column=0;
+						row++;
+					}
+				}
+				return cellFormatter;
+			}
+
+
+			@Override
+			public void onFailure(Throwable arg0) {
+				ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
+			}
+		});
+	}
+	
+	private void addCreateButton() {
+		row++;
+		FlexCellFormatter cellFormatter = getFormPanel().getFlexCellFormatter();
+		getFormPanel().setWidget(row, 0, getButtonCreatePanel());
+		cellFormatter.setColSpan(row, 0, 4);
+		cellFormatter.setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
 	private FlexTable getFormPanel(){
@@ -72,27 +136,29 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 			this.formPanel.setCellSpacing(6);
 			this.formPanel.addStyleName("adminForm");
 			this.formPanel.setSize("700px", "300px");
-			FlexCellFormatter cellFormatter = this.formPanel.getFlexCellFormatter();
-			this.formPanel.setHTML(1, 0, messages.user());
-			this.formPanel.setWidget(1, 1, getUserField());
-			this.formPanel.setHTML(2, 0, messages.password());
-			this.formPanel.setWidget(2, 1, getPasswordField());
-			this.formPanel.setHTML(3, 0, messages.confirmPassword());
-			this.formPanel.setWidget(3, 1, getConfirmPasswordField());
-			this.formPanel.setHTML(4, 0, messages.email());
-			this.formPanel.setWidget(4, 1, getEmailField());
-			this.formPanel.setHTML(1, 2, messages.name());
-			this.formPanel.setWidget(1, 3, getNameField());
-			this.formPanel.setHTML(2, 2, messages.surname());
-			this.formPanel.setWidget(2, 3, getSurnameField());
-			this.formPanel.setHTML(3, 2, messages.profile());
-			this.formPanel.setWidget(3, 3, getListProfile());
-			this.formPanel.setWidget(5, 0, getButtonCreatePanel());
-			cellFormatter.setColSpan(5, 0, 4);
-			cellFormatter.setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+			addField(messages.user(), getUserField());
+			addField(messages.name(), getNameField());
+			addField(messages.password(), getPasswordField());
+			addField(messages.surname(), getSurnameField());
+			addField(messages.confirmPassword(), getConfirmPasswordField());
+			addField(messages.profile(), getListProfile());
+			addField(messages.email(), getEmailField());
 		}
 		return this.formPanel;
 	}
+
+	private void addField(String label, Widget field) {
+		this.formPanel.setHTML(row, column, label);
+		this.formPanel.setWidget(row, column+1, field);
+		column+=2;
+		if(column>2){
+			column=0;
+			row++;
+		}
+	}
+	
+	
 	private Button getCreateButton(){
 		if(this.createButton == null){
 			this.createButton = new Button();
@@ -101,7 +167,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		}
 		return this.createButton;
 	}
-	
+
 	private TextBox getUserField(){
 		if(this.userField == null){
 			this.userField = new TextBox();
@@ -110,7 +176,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		}
 		return this.userField;
 	}
-	
+
 	private PasswordTextBox getPasswordField(){
 		if(this.passwordField == null){
 			this.passwordField = new PasswordTextBox();
@@ -119,7 +185,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		}
 		return this.passwordField;
 	}
-	
+
 	private PasswordTextBox getConfirmPasswordField(){
 		if(this.confirmPasswordField == null){
 			this.confirmPasswordField = new PasswordTextBox();
@@ -128,7 +194,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		}
 		return this.confirmPasswordField;
 	}
-	
+
 	private TextBox getEmailField(){
 		if(this.emailField == null){
 			this.emailField = new TextBox();
@@ -136,7 +202,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		}
 		return this.emailField;
 	}
-	
+
 	private TextBox getNameField(){
 		if(this.nameField == null){
 			this.nameField = new TextBox();
@@ -144,7 +210,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		}
 		return this.nameField;
 	}
-	
+
 	private TextBox getSurnameField(){
 		if(this.surnameField == null){
 			this.surnameField = new TextBox();
@@ -152,7 +218,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		}
 		return this.surnameField;
 	}
-	
+
 	private ListBox getListProfile(){
 		if(this.listProfile == null){
 			this.listProfile = new ListBox();
@@ -162,8 +228,8 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		}
 		return this.listProfile;
 	}
-	
-	
+
+
 	private LayoutPanel getButtonCreatePanel(){
 		if(this.buttonCreatePanel == null){
 			this.buttonCreatePanel = new LayoutPanel();
@@ -219,12 +285,18 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		getButtonCreatePanel().add(getLoaderImage());
 		getButtonCreatePanel().setWidgetLeftRight(getLoaderImage(), 372, Unit.PX, 238, Unit.PX);
 		getButtonCreatePanel().setWidgetTopBottom(getLoaderImage(), 6, Unit.PX, 6, Unit.PX);
-		
+		List<String> albums = new ArrayList<String>();
+		for (CheckBox albumCheck : albumsChecks) {
+			if(albumCheck.getValue()){
+				albums.add(albumCheck.getText());
+			}
+		}
+		userDto.setAlbums(albums);
 		setEnabled(false);
 		userService.createUser(userDto, this);
-		
+
 	}
-	
+
 	public void setEnabled(boolean enabled){
 		super.setEnabled(enabled);
 		getUserField().setEnabled(enabled);

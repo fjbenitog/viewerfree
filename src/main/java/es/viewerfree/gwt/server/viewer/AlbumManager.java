@@ -4,22 +4,20 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import es.viewerfree.gwt.shared.dto.UserDto;
 
 public interface AlbumManager {
 
-	public String[] getAlbums(UserDto user);
+	public String[] getAlbums();
 	
-	public String[] getPictures(UserDto user,String albumName);
+	public String[] getPictures(String albumName);
 	
-	public void getCachedPicture(UserDto user,String albumName, String fotoName,String cachedPath,int height,OutputStream out) throws Exception;
+	public void getCachedPicture(String albumName,String fotoName, String cachedPath,int height,OutputStream out) throws Exception;
 
 	public void getPicture(File file, OutputStream out) throws IOException;
 	
 	public void getDefaultImage(OutputStream out) throws IOException;
 	
-	public void getPicture(UserDto user,String albumName, String fotoName,
-			OutputStream out) throws IOException;
+	public void getPicture(String albumName,String fotoName, OutputStream out) throws IOException;
 	
-	public void rotateCachedPicture(UserDto user,String albumName,String[] cachedPaths, String fotoName,int angle) throws Exception;
+	public void rotateCachedPicture(String albumName,String[] cachedPaths,String fotoName, int angle) throws Exception;
 }
