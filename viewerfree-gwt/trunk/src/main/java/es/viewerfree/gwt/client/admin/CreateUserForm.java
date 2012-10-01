@@ -87,6 +87,9 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 				 addAlbumsField(albums);
 				
 				addCreateButton();
+				
+				show();
+				center();
 			}
 
 
@@ -135,7 +138,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 			this.formPanel = new FlexTable();
 			this.formPanel.setCellSpacing(6);
 			this.formPanel.addStyleName("adminForm");
-			this.formPanel.setSize("700px", "300px");
+			this.formPanel.setSize("750px", "300px");
 
 			addField(messages.user(), getUserField());
 			addField(messages.name(), getNameField());
