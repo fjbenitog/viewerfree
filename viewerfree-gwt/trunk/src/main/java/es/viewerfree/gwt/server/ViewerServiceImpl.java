@@ -1,5 +1,9 @@
 package es.viewerfree.gwt.server;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.server.service.SpringRemoteServiceServlet;
 import es.viewerfree.gwt.server.util.CryptoUtil;
@@ -43,14 +47,25 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	}
 
 	@Override
-	public String[] getAlbums() {
-		return this.albumManager.getAlbums((UserDto) getSession(ParamKey.USER)) ;
+	public String[] getUserAlbums() {
+		return getUserAlbums((UserDto)getSession(ParamKey.USER), this.albumManager.getAlbums());
+	}
+
+	private String[] getUserAlbums(UserDto userDto, String[] albums) {
+		List<String> albumsList = new ArrayList<String>();
+		for (String album : userDto.getAlbums()) {
+			int index = Arrays.binarySearch(albums, album);
+			if(index>=0){
+				albumsList.add(albums[index]);
+			}
+		}
+		return (String[]) albumsList.toArray(new String[albumsList.size()]) ;
 	}
 
 	@Override
 	public AlbumDto getPictures(String albumName) {
 		UserDto userDto =(UserDto)getSession(ParamKey.USER);
-		String[] pictures = albumManager.getPictures((UserDto) getSession(ParamKey.USER), albumName);
+		String[] pictures = albumManager.getPictures(albumName);
 		String[] cryptedPics = new String[pictures.length];
 		for (int i = 0; i < cryptedPics.length; i++) {
 			cryptedPics[i] = CryptoUtil.encrypt(pictures[i], userDto.getName());
@@ -63,9 +78,14 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 
 	@Override
 	public void rotatePicture(int angle,String albumName, String pictureName) throws Exception {
-		albumManager.rotateCachedPicture((UserDto) getSession(ParamKey.USER), albumName, 
-				new String[]{thumbnailCachedPath,cachedPath}, pictureName,angle);
+		albumManager.rotateCachedPicture(albumName, new String[]{thumbnailCachedPath,cachedPath}, 
+				pictureName, angle);
 		
+	}
+
+	@Override
+	public String[] getAlbums() {
+		return this.albumManager.getAlbums();
 	}
 
 

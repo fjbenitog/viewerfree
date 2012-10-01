@@ -63,7 +63,7 @@ public class Viewer extends BaseEntryPoint {
 
 		});
 		
-		viewerService.getAlbums(new AsyncCallback<String[]>() {
+		viewerService.getUserAlbums(new AsyncCallback<String[]>() {
 			
 			@Override
 			public void onSuccess(String[] albums) {

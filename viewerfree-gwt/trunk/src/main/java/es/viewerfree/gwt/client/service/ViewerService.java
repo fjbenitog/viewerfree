@@ -8,6 +8,8 @@ import es.viewerfree.gwt.shared.dto.AlbumDto;
 @RemoteServiceRelativePath("springGwtServices/viewer")
 public interface ViewerService extends RemoteService{
 
+	String[] getUserAlbums();
+	
 	String[] getAlbums();
 	
 	AlbumDto getPictures(String albumName);

@@ -119,15 +119,15 @@ public class ImageService implements HttpRequestHandler {
 			UnsupportedEncodingException {
 		switch (action) {
 		case SHOW_THUMBNAIL:
-			getAlbumManager().getCachedPicture(userDto,album, picture,getThumbnailCachedPath(),getThumbnailHeight(),outputStream);
+			getAlbumManager().getCachedPicture(album,picture, getThumbnailCachedPath(),getThumbnailHeight(),outputStream);
 			break;
 		case SHOW_PICTURE:
-			getAlbumManager().getCachedPicture(userDto,album, picture,getCachedPath(),getHeight(),outputStream);
+			getAlbumManager().getCachedPicture(album,picture, getCachedPath(),getHeight(),outputStream);
 			break;
 		case SHOW_REAL_PICTURE:
 			response.setContentType("image/jpeg");
 			response.setHeader("Content-Disposition","inline; filename="+URLEncoder.encode(picture,"utf-8"));
-			getAlbumManager().getPicture(userDto,album, picture,outputStream);
+			getAlbumManager().getPicture(album,picture, outputStream);
 			break;
 		}
 	}
