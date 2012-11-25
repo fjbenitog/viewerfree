@@ -2,7 +2,6 @@ package es.viewerfree.gwt.shared.dto;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 
 

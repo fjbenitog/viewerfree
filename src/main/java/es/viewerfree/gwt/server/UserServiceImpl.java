@@ -54,7 +54,17 @@ public class UserServiceImpl extends SpringRemoteServiceServlet implements UserS
 
 	@Override
 	public List<UserDto> getUsers() throws ServiceException {
-		// TODO Auto-generated method stub
 		return userService.getAllUsers();
+	}
+
+	@Override
+	public UserDto getUser(String name) throws ServiceException {
+		return userService.getUser(name);
+	}
+
+	@Override
+	public void modifyUser(UserDto user) throws ServiceException {
+		userService.modifyUser(user);
+		
 	}
 }

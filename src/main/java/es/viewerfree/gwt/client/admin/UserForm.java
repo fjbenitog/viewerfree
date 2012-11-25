@@ -31,7 +31,9 @@ import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 
-public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCallback<Void>{
+public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback<Void>{
+
+
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 
@@ -41,7 +43,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 
 	private final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
 
-	private Button createButton;
+	private Button actionButton;
 
 	private TextBox userField;
 
@@ -59,76 +61,70 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 
 	private FlexTable formPanel;
 
-	private LayoutPanel buttonCreatePanel;
+	private LayoutPanel buttonActionPanel;
 
 	private Image loaderImage;
 
 	private UserActionPanel usersTablePanel;
-	
+
 	private int column;
-	
+
 	private int row = 1;
-	
+
 	private List<CheckBox> albumsChecks = new ArrayList<CheckBox>();
 
+	private UserAction userAction;
 
-	public CreateUserForm(UserActionPanel usersTablePanel) {
+
+	public UserForm(UserActionPanel usersTablePanel, UserAction userAction) {
 		super();
 		this.usersTablePanel = usersTablePanel;
+		this.userAction = userAction;
 		Image image = new Image(constants.imagesPath()+constants.imageCloseButton());
 		image.setStyleName("close");
 		setCloseWidget(image);
-		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+messages.createUser()+"</div>");
+		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+userAction.getLabel()+"</div>");
 		add(getFormPanel());
-		viewerService.getAlbums(new AsyncCallback<String[]>() {
+		switch(userAction){
+		case CREATE:
+			viewerService.getAlbums(new AlbumsCallback());
+			break;
+		case MODIFY:
+			addUserValues();
+			break;
+		}
 
-			@Override
-			public void onSuccess(String[] albums) {
-				 addAlbumsField(albums);
-				
-				addCreateButton();
-				
-				show();
-				center();
-			}
+	}
 
+	private void addUserValues() {
+		userService.getUser(usersTablePanel.getSelectedUser().getName(),new AsyncCallback<UserDto>() {
 
-			private FlexCellFormatter addAlbumsField(String[] albums) {
-				row++;
-				FlexCellFormatter cellFormatter = getFormPanel().getFlexCellFormatter();
-				getFormPanel().setHTML(row, 0, "<HR/>");
-				cellFormatter.setColSpan(row, 0, 4);
-				cellFormatter.setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-				row++;
-				getFormPanel().setHTML(row, 0, messages.albumsLabel());
-				row++;
-				column = 0;
-				for (String album : albums) {
-					CheckBox albumCheck = new CheckBox(album);
-					albumsChecks.add(albumCheck);
-					getFormPanel().setWidget(row, column, albumCheck);
-					cellFormatter.setHorizontalAlignment(row, column, HasHorizontalAlignment.ALIGN_LEFT);
-					column++;
-					if(column>3) {
-						column=0;
-						row++;
-					}
-				}
-				return cellFormatter;
-			}
 
 
 			@Override
-			public void onFailure(Throwable arg0) {
+			public void onFailure(Throwable ex) {
 				ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
+			}
+
+			@Override
+			public void onSuccess(UserDto userDto) {
+				getUserField().setValue(userDto.getName());
+				getUserField().setEnabled(false);
+				getNameField().setValue(userDto.getFullName());
+				getSurnameField().setValue(userDto.getSurname());
+				getPasswordField().setValue("****");
+				getConfirmPasswordField().setValue("****");
+				getEmailField().setValue(userDto.getEmail());
+				getListProfile().setSelectedIndex(userDto.getProfile().ordinal());
+				viewerService.getAlbums(new AlbumsCallback(userDto.getAlbums()));
 			}
 		});
 	}
-	
-	private void addCreateButton() {
+
+	private void addActionButton() {
 		row++;
 		FlexCellFormatter cellFormatter = getFormPanel().getFlexCellFormatter();
-		getFormPanel().setWidget(row, 0, getButtonCreatePanel());
+		getFormPanel().setWidget(row, 0, getButtonActionPanel());
 		cellFormatter.setColSpan(row, 0, 4);
 		cellFormatter.setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	}
@@ -160,15 +156,15 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 			row++;
 		}
 	}
-	
-	
-	private Button getCreateButton(){
-		if(this.createButton == null){
-			this.createButton = new Button();
-			this.createButton.setText(messages.createUser());
-			this.createButton.addClickHandler(this);
+
+
+	private Button getActionButton(){
+		if(this.actionButton == null){
+			this.actionButton = new Button();
+			this.actionButton.setText(userAction.getLabel());
+			this.actionButton.addClickHandler(this);
 		}
-		return this.createButton;
+		return this.actionButton;
 	}
 
 	private TextBox getUserField(){
@@ -233,14 +229,14 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 	}
 
 
-	private LayoutPanel getButtonCreatePanel(){
-		if(this.buttonCreatePanel == null){
-			this.buttonCreatePanel = new LayoutPanel();
-			this.buttonCreatePanel.setHeight("30px");
-			this.buttonCreatePanel.add(getCreateButton());
-			this.buttonCreatePanel.setWidgetLeftRight(getCreateButton(), 260, Unit.PX, 260, Unit.PX);
+	private LayoutPanel getButtonActionPanel(){
+		if(this.buttonActionPanel == null){
+			this.buttonActionPanel = new LayoutPanel();
+			this.buttonActionPanel.setHeight("30px");
+			this.buttonActionPanel.add(getActionButton());
+			this.buttonActionPanel.setWidgetLeftRight(getActionButton(), 260, Unit.PX, 260, Unit.PX);
 		}
-		return this.buttonCreatePanel;
+		return this.buttonActionPanel;
 	}
 
 	private Image getLoaderImage(){
@@ -285,9 +281,9 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		userDto.setFullName(getNameField().getText());
 		userDto.setProfile(UserProfile.valueOf(getListProfile().getValue(getListProfile().getSelectedIndex())));
 		userDto.setSurname(getSurnameField().getText());
-		getButtonCreatePanel().add(getLoaderImage());
-		getButtonCreatePanel().setWidgetLeftRight(getLoaderImage(), 372, Unit.PX, 238, Unit.PX);
-		getButtonCreatePanel().setWidgetTopBottom(getLoaderImage(), 6, Unit.PX, 6, Unit.PX);
+		getButtonActionPanel().add(getLoaderImage());
+		getButtonActionPanel().setWidgetLeftRight(getLoaderImage(), 372, Unit.PX, 238, Unit.PX);
+		getButtonActionPanel().setWidgetTopBottom(getLoaderImage(), 6, Unit.PX, 6, Unit.PX);
 		List<String> albums = new ArrayList<String>();
 		for (CheckBox albumCheck : albumsChecks) {
 			if(albumCheck.getValue()){
@@ -296,7 +292,31 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		}
 		userDto.setAlbums(albums);
 		setEnabled(false);
-		userService.createUser(userDto, this);
+		switch(userAction){
+		case CREATE:
+			userService.createUser(userDto, this);
+			break;
+		case MODIFY:
+			userService.modifyUser(userDto, new AsyncCallback<Void>() {
+
+				@Override
+				public void onFailure(Throwable throwable) {
+					getFormPanel().remove(getLoaderImage());
+					ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
+					setErrorMessage("");
+					setEnabled(true);
+					hide();
+				}
+
+				@Override
+				public void onSuccess(Void arg0) {
+					getFormPanel().remove(getLoaderImage());
+					hide();
+					usersTablePanel.refresh();
+				}
+			});
+			break;
+		}
 
 	}
 
@@ -309,7 +329,7 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		getConfirmPasswordField().setEnabled(enabled);
 		getEmailField().setEnabled(enabled);
 		getListProfile().setEnabled(enabled);
-		getCreateButton().setEnabled(enabled);
+		getActionButton().setEnabled(enabled);
 	}
 
 	private void setErrorMessage(String message) {
@@ -334,5 +354,66 @@ public class CreateUserForm extends DialogBoxExt implements ClickHandler,AsyncCa
 		getFormPanel().remove(getLoaderImage());
 		this.hide();
 		this.usersTablePanel.refresh();
+	}
+
+	private final class AlbumsCallback implements AsyncCallback<String[]> {
+
+		private List<String> selectedAlbums;
+
+		public AlbumsCallback() {
+			super();
+		}
+
+		public AlbumsCallback(List<String> selectedAlbums) {
+			super();
+			this.selectedAlbums = selectedAlbums;
+		}
+
+		@Override
+		public void onSuccess(String[] albums) {
+			addAlbumsField(albums);
+
+			addActionButton();
+
+			show();
+			center();
+		}
+
+		private FlexCellFormatter addAlbumsField(String[] albums) {
+			row++;
+			FlexCellFormatter cellFormatter = getFormPanel().getFlexCellFormatter();
+			getFormPanel().setHTML(row, 0, "<HR/>");
+			cellFormatter.setColSpan(row, 0, 4);
+			cellFormatter.setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+			row++;
+			getFormPanel().setHTML(row, 0, messages.albumsLabel());
+			row++;
+			column = 0;
+			for (String album : albums) {
+				CheckBox albumCheck = new CheckBox(album);
+				albumCheck.setValue(isAlbumSelected(album, selectedAlbums));
+				albumsChecks.add(albumCheck);
+				getFormPanel().setWidget(row, column, albumCheck);
+				cellFormatter.setHorizontalAlignment(row, column, HasHorizontalAlignment.ALIGN_LEFT);
+				column++;
+				if(column>3) {
+					column=0;
+					row++;
+				}
+			}
+			return cellFormatter;
+		}
+
+		@Override
+		public void onFailure(Throwable arg0) {
+			ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
+		}
+	}
+
+	private boolean isAlbumSelected(String album,List<String> albums){
+		if(albums==null){
+			return false;
+		}
+		return albums.contains(album);
 	}
 }
