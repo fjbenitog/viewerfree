@@ -12,10 +12,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -92,21 +92,17 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 
 				@Override
 				public void onClick(ClickEvent clickevent) {
-					CreateUserForm createUserForm = newCreateUserForm();
-//					createUserForm.show();
-//					createUserForm.center();
-
+					newUserForm(UserAction.CREATE);
 				}
 			});
 		}
 		return this.createUserButton;
 	}
 	
-	private CreateUserForm newCreateUserForm(){
-		CreateUserForm createUserForm = new CreateUserForm(this);
+	private void newUserForm(UserAction userAction){
+		UserForm createUserForm = new UserForm(this,userAction);
 		createUserForm.setAnimationEnabled(true);
 		createUserForm.setGlassEnabled(true);
-		return createUserForm;
 	}
 	
 	private MenuBar getActionsMenu(){
@@ -127,6 +123,7 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 
 				@Override
 				public void execute() {
+					newUserForm(UserAction.MODIFY);
 				}
 			});
 			this.modifyUserItem.setEnabled(false);
@@ -403,5 +400,10 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 			this.pager.setPageSize(15);
 		}
 		return this.pager;
+	}
+	
+	public UserDto getSelectedUser(){
+		MultiSelectionModel<UserDto> selectionModel= (MultiSelectionModel<UserDto>)getUserTable().getSelectionModel();
+		return selectionModel.getSelectedSet().iterator().next();
 	}
 }

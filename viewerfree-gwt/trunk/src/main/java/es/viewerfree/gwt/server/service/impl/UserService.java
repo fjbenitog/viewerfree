@@ -74,6 +74,9 @@ public class UserService implements IUserService {
 
 	public void modifyUser(UserDto userDto) throws ServiceException {
 		try {
+			if(!userDto.getPassword().equals("****")){
+				userDto.setPassword(BCrypt.hashpw(userDto.getPassword(),BCrypt.gensalt()));
+			}
 			_userDao.modifyUser(userDto);
 		} catch (DaoException e) {
 			throw new ServiceException("Error modifying User",e);

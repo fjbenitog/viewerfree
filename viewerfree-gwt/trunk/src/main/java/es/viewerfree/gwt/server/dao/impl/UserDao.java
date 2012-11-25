@@ -19,31 +19,39 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 
 	public UserDto getUser(String user) throws DaoException {
 		try{
-
-			List<User> users = getJpaTemplate().findByNamedQuery("findUserByUser", new Object[]{user});
-			if(users.size()==1){
-				return toUserDto(users.get(0));
-			}
-			return null;
+			return toUserDto(getOneUser(user));
 		}catch (Exception e) {
 			throw new DaoException("Unanabled to find a User",e);
 		}
 	}
 
+	private User getOneUser(String user) {
+		List<User> users = getJpaTemplate().findByNamedQuery("findUserByUser", new Object[]{user});
+		User userEntity = null;
+		if(users.size()==1){
+			userEntity = users.get(0);
+		}
+		return userEntity;
+	}
+
 	public void createUser(UserDto userDto)throws DaoException {
 		try{
 
-			getJpaTemplate().persist(toUser(userDto));
+			getJpaTemplate().persist(toUser(new User(),userDto));
 		}catch (Exception e) {
 			throw new DaoException("Unanabled to create a User",e);
 		}
 
 	}
-	private User toUser(UserDto userDto) {
-		User user = new User();
-		user.setId(userDto.getId());
+	private User toUser(User user,UserDto userDto) {
+		if(user==null || userDto==null){
+			return null;
+		}
+//		user.setId(userDto.getId());
 		user.setUser(userDto.getName());
-		user.setPassword(userDto.getPassword());
+		if(!userDto.getPassword().equals("****")){
+			user.setPassword(userDto.getPassword());
+		}
 		UserProfile profile = userDto.getProfile();
 		user.setProfile(profile!=null?profile.toString():UserProfile.NORMAL.toString());
 		user.setName(userDto.getFullName());
@@ -65,6 +73,9 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 	}
 
 	private UserDto toUserDto(User user){
+		if(user==null){
+			return null;
+		}
 		UserDto userDto = new UserDto(user.getUser(), user.getPassword());
 		userDto.setId(user.getId());
 		userDto.setProfile(UserProfile.valueOf(user.getProfile()));
@@ -101,13 +112,7 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 	}
 
 	public void modifyUser(UserDto userDto) throws DaoException {
-		User user = getJpaTemplate().find(User.class, userDto.getId());		
-		user.setPassword(userDto.getPassword());
-		UserProfile profile = userDto.getProfile();
-		user.setProfile(profile!=null?profile.toString():UserProfile.NORMAL.toString());
-		user.setName(userDto.getFullName());
-		user.setSurname(userDto.getSurname());
-		user.setEmail(userDto.getEmail());
+		toUser(getOneUser(userDto.getName()), userDto);
 	}
 
 }
