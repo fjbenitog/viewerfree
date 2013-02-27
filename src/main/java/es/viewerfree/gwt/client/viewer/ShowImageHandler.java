@@ -10,8 +10,11 @@ public class ShowImageHandler implements ClickHandler {
 	private AlbumDto albumDto;
 
 	private int selectedPic;
+	
+	private ImagesPanel imagesPanel;
 
-	public ShowImageHandler(AlbumDto albumDto,int selectedPic) {
+	public ShowImageHandler(ImagesPanel imagesPanel, AlbumDto albumDto,int selectedPic) {
+		this.imagesPanel = imagesPanel;
 		this.albumDto = albumDto;
 		this.selectedPic = selectedPic;
 	}
@@ -23,7 +26,7 @@ public class ShowImageHandler implements ClickHandler {
 
 	private SlidePanel getSlidePanel(){
 		albumDto.setSelectedPic(selectedPic);
-		return new SlidePanel(albumDto);
+		return new SlidePanel(imagesPanel,albumDto);
 	}
 
 }

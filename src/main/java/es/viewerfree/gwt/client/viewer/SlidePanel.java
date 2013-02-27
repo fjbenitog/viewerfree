@@ -6,7 +6,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -86,9 +85,14 @@ public class SlidePanel extends PopupPanel {
 	private HorizontalPanel utilityPanel;
 
 	private Timer picTimer;
+	
+	private ImagesPanel imagesPanel;
+	
+	private boolean isImageLoaded;
 
 
-	public SlidePanel(AlbumDto albumDto) {
+	public SlidePanel(ImagesPanel imagesPanel, AlbumDto albumDto) {
+		this.imagesPanel = imagesPanel;
 		this.albumDto = albumDto;
 		setSize(constants.imageLoaderSize()+"px", constants.imageLoaderSize()+"px");
 		setGlassEnabled(true);
@@ -108,8 +112,10 @@ public class SlidePanel extends PopupPanel {
 
 				@Override
 				public void run() {
-					nextPicture();
-					update();
+					if(isImageLoaded){
+						nextPicture();
+						update();
+					}
 				}
 			};
 		}
@@ -326,6 +332,7 @@ public class SlidePanel extends PopupPanel {
 
 
 	private void getFitImage() {
+		isImageLoaded = false;
 		FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_PICTURE),
 				constants.imageSize(),constants.imageSize(),
 				new FitImageLoadHandler() {
@@ -334,6 +341,7 @@ public class SlidePanel extends PopupPanel {
 				getImagePanel().remove(getImageLoader());
 				getImagePanel().add(event.getFitImage());
 				resize(event.getFitImage());
+				isImageLoaded = true;
 			}
 		});
 		fitImage.setTitle(getSelectedImage());
@@ -403,7 +411,8 @@ public class SlidePanel extends PopupPanel {
 
 				@Override
 				public void onSuccess(Void arg0) {
-					Window.Location.replace(GWT.getHostPageBaseURL()+constants.viewerAppPath()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName());
+
+					update();
 				}
 
 				@Override
@@ -460,6 +469,8 @@ public class SlidePanel extends PopupPanel {
 		@Override
 		public void onClose(CloseEvent<PopupPanel> event) {
 			stop();
+			imagesPanel.clear();
+			imagesPanel.init(albumDto.getName());
 		}
 	}
 
