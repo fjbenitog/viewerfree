@@ -83,4 +83,13 @@ public class UserService implements IUserService {
 		}
 	}
 
+	@Override
+	public void delete(List<String> users) throws ServiceException {
+		try {
+			_userDao.delete(users);
+		} catch (DaoException e) {
+			throw new ServiceException("Error deleting user",e);
+		}
+	}
+
 }

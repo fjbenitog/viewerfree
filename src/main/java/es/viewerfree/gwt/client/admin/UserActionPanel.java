@@ -1,6 +1,8 @@
 package es.viewerfree.gwt.client.admin;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.cell.client.CheckboxCell;
@@ -137,7 +139,18 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 
 				@Override
 				public void execute() {
-
+					userService.delete(getSelectedUsers(), new AsyncCallback<Void>() {
+						
+						@Override
+						public void onSuccess(Void ex) {
+							refresh();
+						}
+						
+						@Override
+						public void onFailure(Throwable ex) {
+							ErrorMessageUtil.getErrorDialogBox("Error deleting the users");
+						}
+					});
 				}
 			});
 			this.deleteUsersItem.setEnabled(false);
@@ -405,5 +418,14 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 	public UserDto getSelectedUser(){
 		MultiSelectionModel<UserDto> selectionModel= (MultiSelectionModel<UserDto>)getUserTable().getSelectionModel();
 		return selectionModel.getSelectedSet().iterator().next();
+	}
+	
+	public List<String> getSelectedUsers(){
+		MultiSelectionModel<UserDto> selectionModel= (MultiSelectionModel<UserDto>)getUserTable().getSelectionModel();
+		List<String> users = new ArrayList<String>();
+		for (Iterator<UserDto> iterator = selectionModel.getSelectedSet().iterator(); iterator.hasNext();) {
+			users.add(iterator.next().getName());
+		}
+		return users;
 	}
 }

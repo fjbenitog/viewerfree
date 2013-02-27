@@ -26,4 +26,6 @@ public interface UserService extends RemoteService {
   UserDto getUser(String name) throws ServiceException;
   
   void modifyUser(UserDto user) throws ServiceException;
+  
+  void delete(List<String> users) throws ServiceException;
 }

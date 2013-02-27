@@ -19,5 +19,7 @@ public interface IUserService {
 	public List<UserDto> getAllUsers() throws ServiceException;
 	
 	public void modifyUser(UserDto userDto) throws ServiceException;
+	
+	public void delete(List<String> users) throws ServiceException;
 
 }
