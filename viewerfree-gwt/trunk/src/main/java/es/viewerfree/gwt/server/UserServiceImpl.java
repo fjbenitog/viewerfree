@@ -67,4 +67,9 @@ public class UserServiceImpl extends SpringRemoteServiceServlet implements UserS
 		userService.modifyUser(user);
 		
 	}
+
+	@Override
+	public void delete(List<String> users) throws ServiceException {
+		userService.delete(users);
+	}
 }

@@ -108,7 +108,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 
 			@Override
 			public void onSuccess(UserDto userDto) {
-				getUserField().setValue(userDto.getName());
+ 				getUserField().setValue(userDto.getName());
 				getUserField().setEnabled(false);
 				getNameField().setValue(userDto.getFullName());
 				getSurnameField().setValue(userDto.getSurname());

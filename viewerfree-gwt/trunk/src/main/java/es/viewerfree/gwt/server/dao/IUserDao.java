@@ -17,4 +17,6 @@ public interface IUserDao {
 	
 	public void modifyUser(UserDto userDto) throws DaoException;
 
+	public void delete(List<String> user) throws DaoException;
+
 }

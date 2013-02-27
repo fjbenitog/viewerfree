@@ -25,6 +25,7 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private User getOneUser(String user) {
 		List<User> users = getJpaTemplate().findByNamedQuery("findUserByUser", new Object[]{user});
 		User userEntity = null;
@@ -93,6 +94,7 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 		return userDto;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<UserDto> findAllUsers() throws DaoException {
 		try{
 
@@ -113,6 +115,13 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 
 	public void modifyUser(UserDto userDto) throws DaoException {
 		toUser(getOneUser(userDto.getName()), userDto);
+	}
+
+	@Override
+	public void delete(List<String> users) throws DaoException {
+		for (String user : users) {
+			getJpaTemplate().remove(getOneUser(user));
+		}
 	}
 
 }
