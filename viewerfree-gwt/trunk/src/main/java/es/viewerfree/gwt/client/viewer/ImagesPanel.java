@@ -83,7 +83,7 @@ public class ImagesPanel extends LayoutPanel {
 
 	public void init(final String albumName){
 		getAlbumTitleLabel().setText(albumName);
-		viewerService.getPictures(albumName, new CallGetPictures());
+		viewerService.getPictures(albumName, new CallGetPictures(this));
 	}
 
 	public void clear(){
@@ -92,10 +92,17 @@ public class ImagesPanel extends LayoutPanel {
 
 	private final class CallGetPictures implements AsyncCallback<AlbumDto> {
 
+		 private ImagesPanel imagesPanel;
+		 
+		
+		public CallGetPictures(ImagesPanel imagesPanel) {
+			this.imagesPanel = imagesPanel;
+		}
+
 		@Override
 		public void onSuccess(AlbumDto album) {
 			for (int i = 0; i<album.getPictures().length ; i++){
-				ShowImageHandler handler = new ShowImageHandler(album,i);
+				ShowImageHandler handler = new ShowImageHandler(imagesPanel,album,i);
 				final Image loaderImage = new Image(constants.viewerImagesPath()+constants.imageLoader());
 				final HorizontalPanel imagePanel = createImagePanel(loaderImage);
 				final FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(album.getCryptedName(), album.getCryptedPictures()[i], Action.SHOW_THUMBNAIL),

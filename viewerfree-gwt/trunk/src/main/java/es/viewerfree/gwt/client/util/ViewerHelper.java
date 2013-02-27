@@ -15,7 +15,9 @@ public class ViewerHelper {
 		urlImage.append(GWT.getModuleBaseURL()).append(constants.imageService()+"?")
 		.append(ParamKey.ALBUM_NAME).append("=").append(albumName)
 		.append("&").append(ParamKey.PICTURE_NAME).append("=").append(imageName)
-		.append("&").append(ParamKey.ACTION).append("=").append(action);
+		.append("&").append(ParamKey.ACTION).append("=").append(action)
+		.append("&").append(ParamKey.TIMESTAMP).append("=").append(System.currentTimeMillis())
+		;
 		return urlImage.toString();
 	}
 }
