@@ -1,4 +1,4 @@
-package es.viewerfree.gwt.client.admin;
+package es.viewerfree.gwt.client.admin.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -22,6 +23,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.admin.UserAction;
+import es.viewerfree.gwt.client.admin.UserActionPanel;
 import es.viewerfree.gwt.client.common.DialogBoxExt;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
@@ -31,9 +34,7 @@ import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 
-public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback<Void>{
-
-
+public class AdminForm extends DialogBoxExt implements ClickHandler,AsyncCallback<Void>{
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 
@@ -76,15 +77,20 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 	private UserAction userAction;
 
 
-	public UserForm(UserActionPanel usersTablePanel, UserAction userAction) {
+	public AdminForm(UserActionPanel usersTablePanel, UserAction userAction) {
 		super();
 		this.usersTablePanel = usersTablePanel;
 		this.userAction = userAction;
 		Image image = new Image(constants.imagesPath()+constants.imageCloseButton());
 		image.setStyleName("close");
 		setCloseWidget(image);
-		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+userAction.getLabel()+"</div>");
 		add(getFormPanel());
+		initValues(userAction);
+
+	}
+
+	private void initValues(UserAction userAction) {
+		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+userAction.getLabel()+"</div>");
 		switch(userAction){
 		case CREATE:
 			viewerService.getAlbums(new AlbumsCallback());
@@ -93,7 +99,6 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 			addUserValues();
 			break;
 		}
-
 	}
 
 	private void addUserValues() {
@@ -135,14 +140,6 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 			this.formPanel.setCellSpacing(6);
 			this.formPanel.addStyleName("adminForm");
 			this.formPanel.setSize("750px", "300px");
-
-			addField(messages.user(), getUserField());
-			addField(messages.name(), getNameField());
-			addField(messages.password(), getPasswordField());
-			addField(messages.surname(), getSurnameField());
-			addField(messages.confirmPassword(), getConfirmPasswordField());
-			addField(messages.profile(), getListProfile());
-			addField(messages.email(), getEmailField());
 		}
 		return this.formPanel;
 	}
@@ -155,6 +152,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 			column=0;
 			row++;
 		}
+		getFormPanel().setSize((getFormPanel().getCellCount(row)*150)+"px", (row*40)+"px");
 	}
 
 

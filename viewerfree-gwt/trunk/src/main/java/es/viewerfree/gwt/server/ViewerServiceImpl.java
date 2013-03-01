@@ -47,28 +47,28 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	}
 
 	@Override
-	public String[] getUserAlbums() {
+	public List<String> getUserAlbums() {
 		return getUserAlbums((UserDto)getSession(ParamKey.USER), this.albumManager.getAlbums());
 	}
 
-	private String[] getUserAlbums(UserDto userDto, String[] albums) {
+	private List<String> getUserAlbums(UserDto userDto, List<String> albums) {
 		List<String> albumsList = new ArrayList<String>();
 		for (String album : userDto.getAlbums()) {
-			int index = Arrays.binarySearch(albums, album);
+			int index = Arrays.binarySearch((String[]) albums.toArray(new String[albums.size()]), album);
 			if(index>=0){
-				albumsList.add(albums[index]);
+				albumsList.add(albums.get(index));
 			}
 		}
-		return (String[]) albumsList.toArray(new String[albumsList.size()]) ;
+		return albumsList ;
 	}
 
 	@Override
 	public AlbumDto getPictures(String albumName) {
 		UserDto userDto =(UserDto)getSession(ParamKey.USER);
-		String[] pictures = albumManager.getPictures(albumName);
-		String[] cryptedPics = new String[pictures.length];
-		for (int i = 0; i < cryptedPics.length; i++) {
-			cryptedPics[i] = CryptoUtil.encrypt(pictures[i], userDto.getName());
+		List<String> pictures = albumManager.getPictures(albumName);
+		List<String> cryptedPics = new ArrayList<String>();
+		for (String pic : pictures) {
+			cryptedPics.add(CryptoUtil.encrypt(pic, userDto.getName()));
 		}
 		AlbumDto albumDto = new AlbumDto(albumName, pictures);
 		albumDto.setCryptedName(CryptoUtil.encrypt(albumName, userDto.getName()));
@@ -84,8 +84,14 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	}
 
 	@Override
-	public String[] getAlbums() {
+	public List<String> getAlbums() {
 		return this.albumManager.getAlbums();
+	}
+
+	@Override
+	public void createAlbum(String albumName) {
+		this.albumManager.createAlbum(albumName);
+		
 	}
 
 

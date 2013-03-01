@@ -1,6 +1,7 @@
 package es.viewerfree.gwt.shared.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class AlbumDto implements Serializable{
 
@@ -10,13 +11,13 @@ public class AlbumDto implements Serializable{
 	
 	private String cryptedName;
 	
-	private String[] pictures;
+	private List<String> pictures;
 	
-	private String[] cryptedPictures;
+	private List<String> cryptedPictures;
 	
 	private int selectedPic;
 
-	public AlbumDto(String name, String[] pictures) {
+	public AlbumDto(String name, List<String> pictures) {
 		super();
 		this.name = name;
 		this.pictures = pictures;
@@ -34,11 +35,11 @@ public class AlbumDto implements Serializable{
 		this.name = name;
 	}
 
-	public String[] getPictures() {
+	public List<String> getPictures() {
 		return pictures;
 	}
 
-	public void setPictures(String[] pictures) {
+	public void setPictures(List<String> pictures) {
 		this.pictures = pictures;
 	}
 
@@ -58,11 +59,11 @@ public class AlbumDto implements Serializable{
 		this.cryptedName = cryptedName;
 	}
 
-	public String[] getCryptedPictures() {
+	public List<String> getCryptedPictures() {
 		return cryptedPictures;
 	}
 
-	public void setCryptedPictures(String[] cryptedPictures) {
+	public void setCryptedPictures(List<String> cryptedPictures) {
 		this.cryptedPictures = cryptedPictures;
 	}
 	

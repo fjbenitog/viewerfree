@@ -1,5 +1,7 @@
 package es.viewerfree.gwt.client.viewer;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
@@ -63,7 +65,7 @@ public class ViewerPanel extends SplitLayoutPanel {
 		return this.imagesPanel;
 	}
 	
-	public void setAlbumsList(String[] albums){
+	public void setAlbumsList(List<String>  albums){
 		AlbumClickHandler albumClickHandler = new AlbumClickHandler(this);
 		for (String album : albums) {
 			getFolderPanel().addFolder(album,albumClickHandler);

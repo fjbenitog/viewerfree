@@ -12,40 +12,26 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
-import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 
-import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.admin.ui.ActionPanel;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
-public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<UserDto>>{
-
-	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
-	
-	private final UserServiceAsync userService = GWT.create(UserService.class);
-	
-	private HorizontalPanel buttonsPanel;
+public class UserActionPanel  extends ActionPanel<UserDto>{
 	
 	private Button createUserButton;
 	
@@ -57,36 +43,15 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 	
 	private Button refreshButton;
 	
-	private ListDataProvider<UserDto> dataProvider;
-	
-	private CellTable<UserDto> userTable;
-	
-	private ScrollPanel tableScrollPanel;
-	
-	private VerticalPanel tablePanel;
-	
-	private SimplePager pager;
+	private static final UserServiceAsync userService = GWT.create(UserService.class);
 	
 	public UserActionPanel() {
-		add(getButtonsPanel());
-		setWidgetTopHeight(getButtonsPanel(), 20, Unit.PX, 40, Unit.PX);
-		setWidgetLeftWidth(getButtonsPanel(), 25, Unit.PX, 100, Unit.PCT);
-		add(getTableScrollPanel());
-		setWidgetTopBottom(getTableScrollPanel(), 70, Unit.PX, 10, Unit.PX);
-		setWidgetLeftRight(getTableScrollPanel(), 25, Unit.PX, 25, Unit.PX);
+		super();
+		getButtonsPanel().add(getCreateUserButton());
+		getButtonsPanel().add(getActionsMenu());
+		getButtonsPanel().add(getRefreshButton());
 	}
 
-	private HorizontalPanel getButtonsPanel(){
-		if(this.buttonsPanel==null){
-			this.buttonsPanel = new HorizontalPanel();
-			this.buttonsPanel.setSpacing(10);
-			this.buttonsPanel.add(getCreateUserButton());
-			this.buttonsPanel.add(getActionsMenu());
-			this.buttonsPanel.add(getRefreshButton());
-		}
-		return this.buttonsPanel;
-	}
-	
 	private Button getCreateUserButton(){
 		if(this.createUserButton == null){
 			this.createUserButton = new Button(messages.createUser());
@@ -173,34 +138,9 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 		return this.refreshButton;
 	}
 	
-	private ListDataProvider<UserDto> getDataProvider(){
-		if(this.dataProvider == null){
-			this.dataProvider = new ListDataProvider<UserDto>();
-		}
-		return this.dataProvider;
-	}
-	
-	private CellTable<UserDto> getUserTable(){
-		if(this.userTable==null){
-			this.userTable = new CellTable<UserDto>();
-			this.userTable.setStyleName("cellTable");
-			userService.getUsers(this);
-			// Connect the table to the data provider.
-			getDataProvider().addDataDisplay(this.userTable);
 
-			List<UserDto> list = getDataProvider().getList();
-
-			addColumns(list);
-		}
-		return this.userTable;
-	}
 	
-	private void addColumns(List<UserDto> list) {
-		// Add a ColumnSortEvent.ListHandler to connect sorting to the
-		// java.util.List.
-		ListHandler<UserDto> columnSortHandler = new ListHandler<UserDto>(
-				list);
-		getUserTable().addColumnSortHandler(columnSortHandler);
+	protected void addColumns(ListHandler<UserDto> columnSortHandler) {
 
 		final SelectionModel<UserDto> selectionModel = new MultiSelectionModel<UserDto>(
 				new ProvidesKey<UserDto>() {
@@ -209,7 +149,7 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 						return dto.getId();
 					}
 				});
-		getUserTable().setSelectionModel(selectionModel,
+		getTable().setSelectionModel(selectionModel,
 				DefaultSelectionEventManager.<UserDto> createCheckboxManager());
 
 		Column<UserDto, Boolean> checkColumn = new Column<UserDto, Boolean>(
@@ -224,11 +164,11 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 			
 			@Override
 			public void update(int index, UserDto dto, Boolean value) {
-				getUserTable().getSelectionModel().setSelected(dto, value);
+				getTable().getSelectionModel().setSelected(dto, value);
 				int count = 0;
 				List<UserDto> items = getDataProvider().getList();
 				for (UserDto userDto : items) {
-					if(getUserTable().getSelectionModel().isSelected(userDto)){
+					if(getTable().getSelectionModel().isSelected(userDto)){
 						count++;
 					}
 				}
@@ -236,8 +176,8 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 				getDeleteUsersItem().setEnabled(count > 0);
 			}
 		});
-		getUserTable().addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
-		getUserTable().setColumnWidth(checkColumn, 40, Unit.PX);
+		getTable().addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+		getTable().setColumnWidth(checkColumn, 40, Unit.PX);
 
 		TextColumn<UserDto> nameColumn = new TextColumn<UserDto>() {
 
@@ -247,8 +187,8 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 			}
 		};
 		nameColumn.setSortable(true);
-		getUserTable().addColumn(nameColumn,messages.user());
-		getUserTable().setColumnWidth(nameColumn, "20%");
+		getTable().addColumn(nameColumn,messages.user());
+		getTable().setColumnWidth(nameColumn, "20%");
 
 		TextColumn<UserDto> fullNameColumn = new TextColumn<UserDto>() {
 
@@ -258,8 +198,8 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 			}
 		};
 		fullNameColumn.setSortable(true);
-		getUserTable().addColumn(fullNameColumn,messages.name());
-		getUserTable().setColumnWidth(fullNameColumn, "30%");
+		getTable().addColumn(fullNameColumn,messages.name());
+		getTable().setColumnWidth(fullNameColumn, "30%");
 
 		TextColumn<UserDto> surnameColumn = new TextColumn<UserDto>() {
 
@@ -269,8 +209,8 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 			}
 		};
 		surnameColumn.setSortable(true);
-		getUserTable().addColumn(surnameColumn,messages.surname());
-		getUserTable().setColumnWidth(surnameColumn, "30%");
+		getTable().addColumn(surnameColumn,messages.surname());
+		getTable().setColumnWidth(surnameColumn, "30%");
 
 		TextColumn<UserDto> emailColumn = new TextColumn<UserDto>() {
 
@@ -280,8 +220,8 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 			}
 		};
 		emailColumn.setSortable(true);
-		getUserTable().addColumn(emailColumn,messages.email());
-		getUserTable().setColumnWidth(emailColumn, "20%");
+		getTable().addColumn(emailColumn,messages.email());
+		getTable().setColumnWidth(emailColumn, "20%");
 
 		TextColumn<UserDto> profileColumn = new TextColumn<UserDto>() {
 
@@ -291,8 +231,8 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 			}
 		};
 		profileColumn.setSortable(true);
-		getUserTable().addColumn(profileColumn,messages.profile());
-		getUserTable().setColumnWidth(profileColumn, "5%");
+		getTable().addColumn(profileColumn,messages.profile());
+		getTable().setColumnWidth(profileColumn, "5%");
 
 		columnSortHandler.setComparator(nameColumn,
 				new Comparator<UserDto>() {
@@ -366,66 +306,26 @@ public class UserActionPanel  extends LayoutPanel implements AsyncCallback<List<
 		});
 
 		// We know that the data is sorted alphabetically by default.
-		getUserTable().getColumnSortList().push(fullNameColumn);
+		getTable().getColumnSortList().push(fullNameColumn);
 	}
 	
-	@Override
-	public void onFailure(Throwable ex) {
-		ErrorMessageUtil.getErrorDialogBox("Error loading the users");
-	}
 
-	@Override
-	public void onSuccess(List<UserDto> users) {
-		getDataProvider().getList().addAll(users);
-	}
-	
-	public void refresh(){
-		getDataProvider().getList().clear();
-		userService.getUsers(this);
-		getUserTable().getColumnSortList().push(getUserTable().getColumn(0));
-	}
-	
-	private ScrollPanel getTableScrollPanel(){
-		if(this.tableScrollPanel == null){
-			this.tableScrollPanel = new ScrollPanel();
-			this.tableScrollPanel.add(getTablePanel());
-		}
-		return this.tableScrollPanel;
-	}
-	
-	private VerticalPanel getTablePanel(){
-		if(this.tablePanel==null){
-			this.tablePanel = new VerticalPanel();
-			this.tablePanel.setWidth("100%");
-			this.tablePanel.add(getUserTable());
-			this.tablePanel.setCellHorizontalAlignment(getUserTable(), HorizontalPanel.ALIGN_CENTER);
-			this.tablePanel.add(getPager());
-			this.tablePanel.setCellHorizontalAlignment(getPager(), HorizontalPanel.ALIGN_CENTER);
-		}
-		return this.tablePanel;
-	}
-	
-	private SimplePager getPager(){
-		if(this.pager==null){
-			SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-			this.pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-			this.pager.setDisplay(getUserTable());
-			this.pager.setPageSize(15);
-		}
-		return this.pager;
-	}
-	
-	public UserDto getSelectedUser(){
-		MultiSelectionModel<UserDto> selectionModel= (MultiSelectionModel<UserDto>)getUserTable().getSelectionModel();
-		return selectionModel.getSelectedSet().iterator().next();
-	}
 	
 	public List<String> getSelectedUsers(){
-		MultiSelectionModel<UserDto> selectionModel= (MultiSelectionModel<UserDto>)getUserTable().getSelectionModel();
+		MultiSelectionModel<UserDto> selectionModel= (MultiSelectionModel<UserDto>)getTable().getSelectionModel();
 		List<String> users = new ArrayList<String>();
 		for (Iterator<UserDto> iterator = selectionModel.getSelectedSet().iterator(); iterator.hasNext();) {
 			users.add(iterator.next().getName());
 		}
 		return users;
 	}
+
+	@Override
+	protected void getResults(AsyncCallback<List<UserDto>> asyncCallback) {
+		userService.getUsers(asyncCallback);
+	}
+
+
+	
+
 }
