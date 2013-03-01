@@ -1,5 +1,7 @@
 package es.viewerfree.gwt.client;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -63,10 +65,10 @@ public class Viewer extends BaseEntryPoint {
 
 		});
 		
-		viewerService.getUserAlbums(new AsyncCallback<String[]>() {
+		viewerService.getUserAlbums(new AsyncCallback<List<String>>() {
 			
 			@Override
-			public void onSuccess(String[] albums) {
+			public void onSuccess(List<String>  albums) {
 				getViewerPanel().setAlbumsList(albums);
 			}
 			

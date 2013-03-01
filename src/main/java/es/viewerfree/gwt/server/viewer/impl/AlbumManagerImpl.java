@@ -7,19 +7,20 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.server.viewer.ManageImage;
 
 
 public class AlbumManagerImpl implements AlbumManager {
-	
+
 	private  FilenameFilter dirfilenameFilter;
 	private String albumPath;
 	private String applicationPath;
 	private FilenameFilter filenameFilter;	
 	private ManageImage manageImage;
-	
+
 	private static  Comparator<String> comparatorAlphanumeric = new ComparatorAlphanumeric();
 
 	public ManageImage getManageImage() {
@@ -30,27 +31,24 @@ public class AlbumManagerImpl implements AlbumManager {
 		this.manageImage = manageImage;
 	}
 
-	public String[] getAlbums(){
-		File albumsPath = new File(getPath());
-		if(!albumsPath.exists()){
-			albumsPath.mkdirs();
-		}
-		String[] albums = albumsPath.list(dirfilenameFilter);
+	public List<String> getAlbums(){
+		String[] albums = getAlbumsPath().list(dirfilenameFilter);
 		Arrays.sort(albums,comparatorAlphanumeric);
-		return  albums;
+		return  Arrays.asList(albums);
 	}
-	
-	public String[] getPictures(String albumName){
+
+
+	public List<String> getPictures(String albumName){
 
 		File pictures = new File(getPath()+"/"+albumName);
 		String[] pics = pictures.list(filenameFilter);
 		Arrays.sort(pics,comparatorAlphanumeric);
-		return pics;
+		return Arrays.asList(pics);
 	}
-	
+
 	public void getCachedPicture(String albumName, String pictureName,
 			String cachedPath, int height, OutputStream out)
-			throws Exception {
+					throws Exception {
 		File fotoCacheada = new File(getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName);
 		if(!fotoCacheada.exists()){
 			File path = new File(getApplicationPath()+"/"+cachedPath+"/"+albumName);
@@ -60,9 +58,9 @@ public class AlbumManagerImpl implements AlbumManager {
 		}
 
 		getPicture(new File(getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName), out);
-		
+
 	}
-	
+
 	public void getPicture(File file,OutputStream out) throws IOException{
 		RandomAccessFile fileReader = new RandomAccessFile(file,"r");
 		byte[]  temp = new byte[256];
@@ -78,7 +76,7 @@ public class AlbumManagerImpl implements AlbumManager {
 		out.write(temp);
 		fileReader.close();
 	}
-	
+
 	public void getPicture(String albumName,String pictureName,OutputStream out) throws IOException{
 		getPicture(new File(getPath()+"/"+albumName+"/"+pictureName),out);
 	}
@@ -122,24 +120,35 @@ public class AlbumManagerImpl implements AlbumManager {
 	@Override
 	public void getDefaultImage(OutputStream out) throws IOException {
 		manageImage.getDefaultImage(out);
-		
+
 	}
 
 	@Override
 	public void rotateCachedPicture(String albumName, String[] cachedPaths,String pictureName,
-			int angle)
-			throws Exception {
+			int angle) throws Exception {
 		for(String cachedPath:cachedPaths){
-		String pathname = getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName;
-		File fotoCacheada = new File(pathname);
-		if(fotoCacheada.exists()){
-			manageImage.rotate(pathname, pathname,angle);
-		}
-			
-			
+			String pathname = getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName;
+			File fotoCacheada = new File(pathname);
+			if(fotoCacheada.exists()){
+				manageImage.rotate(pathname, pathname,angle);
+			}
 		}
 	}
-	
+
+	@Override
+	public void createAlbum(String albumName) {
+		File album = new File(getAlbumsPath(), albumName) ;
+		album.mkdir();
+	}
+
+	private File getAlbumsPath() {
+		File albumsPath = new File(getPath());
+		if(!albumsPath.exists()){
+			albumsPath.mkdirs();
+		}
+		return albumsPath;
+	}
+
 	private static class ComparatorAlphanumeric implements Comparator<String>{
 
 		@Override
@@ -147,9 +156,10 @@ public class AlbumManagerImpl implements AlbumManager {
 			return s1.toLowerCase().compareTo(s2.toLowerCase());
 		}
 
-		
-		
+
+
 	}
+
 
 
 }

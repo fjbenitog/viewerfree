@@ -308,7 +308,7 @@ public class SlidePanel extends PopupPanel {
 	}
 
 	private void nextPicture() {
-		if(albumDto.getSelectedPic()<albumDto.getPictures().length-1){
+		if(albumDto.getSelectedPic()<albumDto.getPictures().size()-1){
 			albumDto.setSelectedPic(albumDto.getSelectedPic()+1);
 		}else{
 			albumDto.setSelectedPic(0);
@@ -319,7 +319,7 @@ public class SlidePanel extends PopupPanel {
 		if(albumDto.getSelectedPic()>0){
 			albumDto.setSelectedPic(albumDto.getSelectedPic()-1);
 		}else{
-			albumDto.setSelectedPic(albumDto.getPictures().length-1);
+			albumDto.setSelectedPic(albumDto.getPictures().size()-1);
 		}
 	}
 
@@ -348,11 +348,11 @@ public class SlidePanel extends PopupPanel {
 	}
 
 	private String getSelectedImage() {
-		return albumDto.getPictures()[albumDto.getSelectedPic()];
+		return albumDto.getPictures().get(albumDto.getSelectedPic());
 	}
 
 	private String getSelectedCriptedImage() {
-		return albumDto.getCryptedPictures()[albumDto.getSelectedPic()];
+		return albumDto.getCryptedPictures().get(albumDto.getSelectedPic());
 	}
 
 
@@ -407,7 +407,7 @@ public class SlidePanel extends PopupPanel {
 		}
 
 		public void onClick(ClickEvent clickevent) {
-			viewerService.rotatePicture(angle, albumDto.getName(), albumDto.getPictures()[albumDto.getSelectedPic()], new AsyncCallback<Void>() {
+			viewerService.rotatePicture(angle, albumDto.getName(), albumDto.getPictures().get(albumDto.getSelectedPic()), new AsyncCallback<Void>() {
 
 				@Override
 				public void onSuccess(Void arg0) {

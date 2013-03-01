@@ -20,6 +20,8 @@ public class AdminPanel extends LayoutPanel {
 	private TabLayoutPanel adminTabs;
 
 	private UserActionPanel userActionPanel;
+	
+	private AlbumActionPanel albumActionPanel;
 
 
 	public AdminPanel() {
@@ -54,7 +56,7 @@ public class AdminPanel extends LayoutPanel {
 		if(this.adminTabs == null){
 			this.adminTabs = new TabLayoutPanel(30, Unit.PX);
 			this.adminTabs.add(getUserActionPanel(), messages.users(), true);
-			this.adminTabs.add(new HTML("CREAR GRUPOS"), messages.groups(), true);
+			this.adminTabs.add(getAlbumActionPanel(), messages.albumsLabel(), true);
 		}		return this.adminTabs;
 	}
 
@@ -68,5 +70,11 @@ public class AdminPanel extends LayoutPanel {
 	}
 
 
+	private AlbumActionPanel getAlbumActionPanel(){
+		if(this.albumActionPanel == null){
+			this.albumActionPanel = new AlbumActionPanel();
+		}
+		return this.albumActionPanel;
+	}
 
 }

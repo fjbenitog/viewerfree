@@ -47,18 +47,15 @@ public class ImagesPanel extends LayoutPanel {
 	private int total;
 
 	private AlbumDto albumDto;
+	
+	private static final int MAX_SIZE_PIC = 150;
 
 	public ImagesPanel() {
 		add(getAlbumTitlePanel());
 		setWidgetTopHeight(getAlbumTitlePanel(), 0, Unit.PX, 70, Unit.PX);
 		add(getScrollImagesPanel());
 		setWidgetTopBottom(getScrollImagesPanel(), 70, Unit.PX, 0, Unit.PX);
-		Window.addResizeHandler( new ResizeHandler() {
-			@Override
-			public void onResize(ResizeEvent event) {
-				addPictureIfisNecessary();
-			}
-		});
+		Window.addResizeHandler(new ResizeHandlerPic());
 	}
 
 	private LayoutPanel getAlbumTitlePanel(){
@@ -86,35 +83,14 @@ public class ImagesPanel extends LayoutPanel {
 			this.scrollImagesPanel.setStyleName("pictures");
 			this.scrollImagesPanel.add(getImagesFlowPanel());
 			this.scrollImagesPanel.setAlwaysShowScrollBars(true);
-			this.scrollImagesPanel.addScrollHandler(new ScrollHandler() {
-				
-				private int lastScrollPos = 0;
-				@Override
-				public void onScroll(ScrollEvent event) {
-					// If scrolling up, ignore the event.
-					int oldScrollPos = lastScrollPos;
-					lastScrollPos = scrollImagesPanel.getVerticalScrollPosition();
-					if (oldScrollPos >= lastScrollPos && albumDto.getPictures().length-total<=0) {
-						return;
-					}
-					int maxScrollTop = scrollImagesPanel.getWidget().getOffsetHeight()
-							- scrollImagesPanel.getOffsetHeight();
-					if (lastScrollPos >= maxScrollTop) {
-						addPictureIfisNecessary();
-					}
-				}
-				
-			});
-			
-
-			
+			this.scrollImagesPanel.addScrollHandler(new ScrollHandlerPic());
 		}
 		return this.scrollImagesPanel;
 	}
 	
 	private void addPictureIfisNecessary() {
-		int picByRow = getOffsetWidth()/150;
-		int diffPics = albumDto.getPictures().length-total;
+		int picByRow = getOffsetWidth()/MAX_SIZE_PIC;
+		int diffPics = albumDto.getPictures().size()-total;
 		int initcount = total;
 		for (int j = initcount; j < (Math.min(picByRow, diffPics)+initcount); j++) {
 			total++;
@@ -139,11 +115,10 @@ public class ImagesPanel extends LayoutPanel {
 	}
 
 	private void addPictureToPanel(AlbumDto album, int i) {
-		System.err.println("Siguiente Foto:"+album.getPictures()[i]);
 		ShowImageHandler handler = new ShowImageHandler(this,album,i);
 		final Image loaderImage = new Image(constants.viewerImagesPath()+constants.imageLoader());
 		final HorizontalPanel imagePanel = createImagePanel(loaderImage);
-		final FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(album.getCryptedName(), album.getCryptedPictures()[i], Action.SHOW_THUMBNAIL),
+		final FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(album.getCryptedName(), album.getCryptedPictures().get(i), Action.SHOW_THUMBNAIL),
 				constants.imageThumbnailSize(),constants.imageThumbnailSize() ,
 				new FitImageLoadHandler() {
 
@@ -153,7 +128,7 @@ public class ImagesPanel extends LayoutPanel {
 				imagePanel.add(event.getFitImage());
 			}
 		});
-		fitImage.setTitle(album.getPictures()[i]);
+		fitImage.setTitle(album.getPictures().get(i));
 		fitImage.addClickHandler(handler);
 		getImagesFlowPanel().add(imagePanel);
 
@@ -178,26 +153,46 @@ public class ImagesPanel extends LayoutPanel {
 			this.imagesPanel = imagesPanel;
 		}
 
-
-
 		@Override
 		public void onSuccess(AlbumDto album) {
 			albumDto = album; 
-			total = (imagesPanel.getOffsetWidth()/150)*(imagesPanel.getOffsetHeight()/150);
-			int maxNum = total<=album.getPictures().length?total:album.getPictures().length;
+			total = (imagesPanel.getOffsetWidth()/MAX_SIZE_PIC)*(imagesPanel.getOffsetHeight()/MAX_SIZE_PIC);
+			int maxNum = total<=album.getPictures().size()?total:album.getPictures().size();
 			for (int i = 0; i<maxNum ; i++){
 				addPictureToPanel(album, i);
 			}
 		}
-
-		
 
 		@Override
 		public void onFailure(Throwable arg0) {
 			ErrorMessageUtil.getErrorDialogBox(messages.serverError());
 		}
 
-
-
+	}
+	
+	private final class  ScrollHandlerPic implements ScrollHandler {
+		
+		private int lastScrollPos = 0;
+		@Override
+		public void onScroll(ScrollEvent event) {
+			// If scrolling up, ignore the event.
+			int oldScrollPos = lastScrollPos;
+			lastScrollPos = scrollImagesPanel.getVerticalScrollPosition();
+			if (oldScrollPos >= lastScrollPos && albumDto.getPictures().size()-total<=0) {
+				return;
+			}
+			int maxScrollTop = scrollImagesPanel.getWidget().getOffsetHeight()
+					- scrollImagesPanel.getOffsetHeight();
+			if (lastScrollPos >= maxScrollTop) {
+				addPictureIfisNecessary();
+			}
+		}
+	}
+	
+	private final class ResizeHandlerPic implements ResizeHandler {
+		@Override
+		public void onResize(ResizeEvent event) {
+			addPictureIfisNecessary();
+		}
 	}
 }
