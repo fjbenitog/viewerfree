@@ -11,6 +11,8 @@ import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
@@ -35,6 +37,10 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 	
 	private ListDataProvider<T> dataProvider;
 	
+	private MenuBar actionsMenu;
+	
+	private MenuBar menuBarActions;
+	
 	protected AsyncCallbackList asyncCallbackList= new AsyncCallbackList();
 	
 	public ActionPanel() {
@@ -44,6 +50,7 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 		add(getTableScrollPanel());
 		setWidgetTopBottom(getTableScrollPanel(), 70, Unit.PX, 10, Unit.PX);
 		setWidgetLeftRight(getTableScrollPanel(), 25, Unit.PX, 25, Unit.PX);
+
 	}
 
 	protected HorizontalPanel getButtonsPanel(){
@@ -52,6 +59,21 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 			this.buttonsPanel.setSpacing(10);
 		}
 		return this.buttonsPanel;
+	}
+	
+	protected MenuBar getActionsMenu(){
+		if(this.actionsMenu == null){
+			this.actionsMenu = new MenuBar();
+			this.actionsMenu.addItem(new MenuItem( messages.moreActions(), true, getMenuBarActions()));
+		}
+		return this.actionsMenu;
+	}
+	
+	protected MenuBar getMenuBarActions(){
+		if(this.menuBarActions == null){
+			this.menuBarActions = new MenuBar(true);
+		}
+		return this.menuBarActions;
 	}
 	
 	

@@ -18,7 +18,6 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -35,8 +34,6 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 	
 	private Button createUserButton;
 	
-	private MenuBar actionsMenu;
-	
 	private MenuItem modifyUserItem;
 	
 	private MenuItem deleteUsersItem;
@@ -49,6 +46,8 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 		super();
 		getButtonsPanel().add(getCreateUserButton());
 		getButtonsPanel().add(getActionsMenu());
+		getMenuBarActions().addItem(getModifyUserItem());
+		getMenuBarActions().addItem(getDeleteUsersItem());
 		getButtonsPanel().add(getRefreshButton());
 	}
 
@@ -72,17 +71,6 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 		createUserForm.setGlassEnabled(true);
 	}
 	
-	private MenuBar getActionsMenu(){
-		if(this.actionsMenu == null){
-			this.actionsMenu = new MenuBar();
-			MenuBar actions = new MenuBar(true);
-			this.actionsMenu.addItem(new MenuItem( messages.moreActions(), true, actions));
-			
-			actions.addItem(getModifyUserItem());
-			actions.addItem(getDeleteUsersItem());
-		}
-		return this.actionsMenu;
-	}
 	
 	private MenuItem getModifyUserItem(){
 		if(this.modifyUserItem==null){

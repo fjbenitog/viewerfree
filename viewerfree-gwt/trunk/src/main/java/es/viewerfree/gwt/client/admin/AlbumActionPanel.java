@@ -12,8 +12,10 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
@@ -29,9 +31,15 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	
 	private Button createAlbumButton;
 	
+	private MenuItem uploadPicturerItem;
+	
+
+	
 	public AlbumActionPanel() {
 		super();
 		getButtonsPanel().add(getCreateAlbumButton());
+		getButtonsPanel().add(getActionsMenu());
+		getMenuBarActions().addItem(getUploadPicturerItem());
 	}
 
 	private Button getCreateAlbumButton(){
@@ -48,12 +56,33 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		return this.createAlbumButton;
 	}
 	
+	private MenuItem getUploadPicturerItem(){
+		if(this.uploadPicturerItem==null){
+			this.uploadPicturerItem = new MenuItem(messages.uploadPicture(), new Command() {
+
+				@Override
+				public void execute() {
+					uploadPicForm();
+				}
+			});
+			this.uploadPicturerItem.setEnabled(false);
+		}
+		return this.uploadPicturerItem;
+	}
+	
 	private void newAlbumForm(){
 		AlbumForm createAlbumForm = new AlbumForm(this);
 		createAlbumForm.setAnimationEnabled(true);
 		createAlbumForm.setGlassEnabled(true);
 	}
+	
+	private void uploadPicForm(){
+		UploadPicForm UploadPicForm = new UploadPicForm();
+		UploadPicForm.setAnimationEnabled(true);
+		UploadPicForm.setGlassEnabled(true);
+	}
 
+	
 	@Override
 	protected void addColumns(ListHandler<String> columnSortHandler) {
 		final SelectionModel<String> selectionModel = new MultiSelectionModel<String>(
@@ -86,6 +115,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 						count++;
 					}
 				}
+				getUploadPicturerItem().setEnabled(count==1);
 
 			}
 		});
