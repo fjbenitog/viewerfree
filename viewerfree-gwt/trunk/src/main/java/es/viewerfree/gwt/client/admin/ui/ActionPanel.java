@@ -20,6 +20,7 @@ import com.google.gwt.view.client.MultiSelectionModel;
 
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.shared.dto.UserDto;
 
 public abstract class ActionPanel<T>  extends LayoutPanel {
 
@@ -125,6 +126,7 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 	}
 	
 	public void refresh(){
+		((MultiSelectionModel<T>)getTable().getSelectionModel()).clear();
 		getDataProvider().getList().clear();
 		getResults(asyncCallbackList);
 		getTable().getColumnSortList().push(getTable().getColumn(0));
