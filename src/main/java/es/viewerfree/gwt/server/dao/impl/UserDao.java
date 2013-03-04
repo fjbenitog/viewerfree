@@ -37,8 +37,7 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 
 	public void createUser(UserDto userDto)throws DaoException {
 		try{
-
-			getJpaTemplate().persist(toUser(new User(),userDto));
+			merge(toUser(new User(),userDto));
 		}catch (Exception e) {
 			throw new DaoException("Unanabled to create a User",e);
 		}
@@ -48,7 +47,7 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 		if(user==null || userDto==null){
 			return null;
 		}
-//		user.setId(userDto.getId());
+		//		user.setId(userDto.getId());
 		user.setUser(userDto.getName());
 		if(!userDto.getPassword().equals("****")){
 			user.setPassword(userDto.getPassword());
@@ -58,6 +57,7 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 		user.setName(userDto.getFullName());
 		user.setSurname(userDto.getSurname());
 		user.setEmail(userDto.getEmail());
+
 		List<Album> albums = new ArrayList<Album>();
 
 		List<String> albumsArr = userDto.getAlbums();
@@ -65,7 +65,6 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 			for(String albumName:albumsArr){
 				Album album = new Album();
 				album.setName(albumName);
-				album.setLogin(user);
 				albums.add(album);
 			}
 			user.setAlbums(albums);
@@ -114,7 +113,11 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 	}
 
 	public void modifyUser(UserDto userDto) throws DaoException {
-		toUser(getOneUser(userDto.getName()), userDto);
+		merge(toUser(getOneUser(userDto.getName()), userDto));
+	}
+
+	private void merge(User user){
+		getJpaTemplate().merge(user);
 	}
 
 	@Override
