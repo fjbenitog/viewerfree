@@ -66,31 +66,25 @@ public class ViewerPanel extends SplitLayoutPanel {
 	}
 	
 	public void setAlbumsList(List<String>  albums){
-		AlbumClickHandler albumClickHandler = new AlbumClickHandler(this);
+		AlbumClickHandler albumClickHandler = new AlbumClickHandler();
 		for (String album : albums) {
 			getFolderPanel().addFolder(album,albumClickHandler);
 			getFoldersListPanel().addFolder(album,albumClickHandler);
 		}
 	}
 	
-	private static class AlbumClickHandler implements ClickHandler{
-
-		private ViewerPanel viewerPanel;
-		
-		public AlbumClickHandler(ViewerPanel viewerPanel) {
-			this.viewerPanel = viewerPanel;
-		}
+	private class AlbumClickHandler implements ClickHandler{
 
 		@Override
 		public void onClick(ClickEvent clickevent) {
 			if(clickevent.getSource() instanceof HTML){
-				viewerPanel.getRightPanel().clear();
-				viewerPanel.getImagesPanel().clear();
+				getRightPanel().clear();
+				getImagesPanel().clear();
 				HTML albumLink = (HTML) clickevent.getSource();
 				String albumName = albumLink.getText();
-				viewerPanel.getFoldersListPanel().markFolder(albumName);
-				viewerPanel.getImagesPanel().init(albumName);
-				viewerPanel.getRightPanel().add(viewerPanel.getImagesPanel());
+				getFoldersListPanel().markFolder(albumName);
+				getImagesPanel().init(albumName);
+				getRightPanel().add(getImagesPanel());
 			}
 			
 		}

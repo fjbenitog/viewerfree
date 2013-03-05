@@ -1,7 +1,6 @@
 package es.viewerfree.gwt.server;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,6 +25,8 @@ import es.viewerfree.gwt.shared.ParamKey;
 
 public class FileUploadService implements HttpRequestHandler{
 
+	private static final int MAX_FILE_SIZE = 5242880;
+
 	private String albumPath;
 
 	private String applicationPath;
@@ -36,6 +37,10 @@ public class FileUploadService implements HttpRequestHandler{
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
+		if(getFileSize(request)>MAX_FILE_SIZE){
+			writer.println("Error: Image File size too big(10Mb max)");
+			return;
+		}
 		FileItemFactory factory = new DiskFileItemFactory();
 		((DiskFileItemFactory) factory).setSizeThreshold(1000);
 		ServletFileUpload upload = new ServletFileUpload(factory); 
@@ -52,6 +57,11 @@ public class FileUploadService implements HttpRequestHandler{
 			e.printStackTrace();
 			writer.println("Error processing upload image");
 		}
+	}
+
+	private int getFileSize(HttpServletRequest request) {
+		String contentLength = request.getHeader("content-length");
+		return StringUtils.hasText(contentLength)?Integer.parseInt(contentLength):0;
 	}
 
 	private List<FileItem> validateFileItem(List<FileItem> items)throws FileUploadException {

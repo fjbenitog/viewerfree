@@ -56,7 +56,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>uploadFileService</servlet-name>
-        <url-pattern>/Admin/uploadFileService</url-pattern>
+        <url-pattern>/uploadFileService</url-pattern>
     </servlet-mapping>
     
     <servlet>
@@ -94,6 +94,10 @@
 	<filter-mapping>
 		<filter-name>login</filter-name>
 		<url-pattern>/Admin.html</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>login</filter-name>
+		<url-pattern>/uploadFileService</url-pattern>
 	</filter-mapping>
 
 </web-app>

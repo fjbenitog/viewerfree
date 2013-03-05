@@ -2,12 +2,15 @@ package es.viewerfree.gwt.client.viewer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -21,6 +24,8 @@ import com.reveregroup.gwt.imagepreloader.FitImageLoadHandler;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.common.RefreshWidgetListener;
+import es.viewerfree.gwt.client.common.UploadPicForm;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
@@ -48,6 +53,8 @@ public class ImagesPanel extends LayoutPanel {
 
 	private AlbumDto albumDto;
 	
+	private Button uploadImage;
+	
 	private static final int MAX_SIZE_PIC = 150;
 
 	public ImagesPanel() {
@@ -64,9 +71,33 @@ public class ImagesPanel extends LayoutPanel {
 			this.albumTitlePanel.add(getAlbumTitleLabel());
 			this.albumTitlePanel.setWidgetLeftRight(getAlbumTitleLabel(), 50, Unit.PX, 100, Unit.PX);
 			this.albumTitlePanel.setWidgetTopBottom(getAlbumTitleLabel(), 2, Unit.PX, 15, Unit.PX);
+			this.albumTitlePanel.add(getCreateUserButton());
+			this.albumTitlePanel.setWidgetRightWidth(getCreateUserButton(), 60, Unit.PX, 150, Unit.PX);
+			this.albumTitlePanel.setWidgetTopBottom(getCreateUserButton(), 23, Unit.PX, 23, Unit.PX);
 			this.albumTitlePanel.setStyleName("titlePanel");
 		}
 		return this.albumTitlePanel;
+	}
+	
+	private Button getCreateUserButton(){
+		if(this.uploadImage == null){
+			this.uploadImage = new Button(messages.uploadPicture());
+			this.uploadImage.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent clickevent) {
+					uploadPicForm(albumDto.getName());
+				}
+			});
+		}
+		return this.uploadImage;
+	}
+	
+	private void uploadPicForm(final String albumName){
+		UploadPicForm uploadPicForm = new UploadPicForm(albumName);
+		uploadPicForm.setRefreshWidgetListener(new RefreshImagesPanelListener(albumName));
+		uploadPicForm.setAnimationEnabled(true);
+		uploadPicForm.setGlassEnabled(true);
 	}
 
 	private Label getAlbumTitleLabel(){
@@ -115,7 +146,7 @@ public class ImagesPanel extends LayoutPanel {
 	}
 
 	private void addPictureToPanel(AlbumDto album, int i) {
-		ShowImageHandler handler = new ShowImageHandler(this,album,i);
+		ShowImageHandler handler = new ShowImageHandler(album,i);
 		final Image loaderImage = new Image(constants.viewerImagesPath()+constants.imageLoader());
 		final HorizontalPanel imagePanel = createImagePanel(loaderImage);
 		final FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(album.getCryptedName(), album.getCryptedPictures().get(i), Action.SHOW_THUMBNAIL),
@@ -144,6 +175,21 @@ public class ImagesPanel extends LayoutPanel {
 		return imagePanel;
 	}
 	
+	private final class RefreshImagesPanelListener implements
+			RefreshWidgetListener {
+		private final String albumName;
+
+		private RefreshImagesPanelListener(String albumName) {
+			this.albumName = albumName;
+		}
+
+		@Override
+		public void refresh() {
+			clear();
+			init(albumName);
+		}
+	}
+
 	private final class CallGetPictures implements AsyncCallback<AlbumDto> {
 
 		private ImagesPanel imagesPanel;
@@ -194,5 +240,30 @@ public class ImagesPanel extends LayoutPanel {
 		public void onResize(ResizeEvent event) {
 			addPictureIfisNecessary();
 		}
+	}
+	
+	private class ShowImageHandler implements ClickHandler {
+
+		private AlbumDto albumDto;
+
+		private int selectedPic;
+		
+		public ShowImageHandler(AlbumDto albumDto,int selectedPic) {
+			this.albumDto = albumDto;
+			this.selectedPic = selectedPic;
+		}
+		@Override
+
+		public void onClick(ClickEvent event) {
+			getSlidePanel().show();
+		}
+
+		private SlidePanel getSlidePanel(){
+			albumDto.setSelectedPic(selectedPic);
+			SlidePanel slidePanel = new SlidePanel(albumDto);
+			slidePanel.setRefreshWidgetListener(new RefreshImagesPanelListener(albumDto.getName()));
+			return slidePanel;
+		}
+
 	}
 }

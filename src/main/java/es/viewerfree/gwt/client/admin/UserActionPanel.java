@@ -58,7 +58,7 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 
 				@Override
 				public void onClick(ClickEvent clickevent) {
-					newUserForm(UserAction.CREATE);
+					
 				}
 			});
 		}
