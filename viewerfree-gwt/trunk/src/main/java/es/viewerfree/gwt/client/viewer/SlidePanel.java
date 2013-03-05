@@ -21,6 +21,7 @@ import com.reveregroup.gwt.imagepreloader.FitImageLoadHandler;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.common.RefreshWidgetListener;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.service.ViewerService;
@@ -86,13 +87,11 @@ public class SlidePanel extends PopupPanel {
 
 	private Timer picTimer;
 	
-	private ImagesPanel imagesPanel;
-	
 	private boolean isImageLoaded;
+	
+	private RefreshWidgetListener refreshWidgetListener;
 
-
-	public SlidePanel(ImagesPanel imagesPanel, AlbumDto albumDto) {
-		this.imagesPanel = imagesPanel;
+	public SlidePanel(AlbumDto albumDto) {
 		this.albumDto = albumDto;
 		setSize(constants.imageLoaderSize()+"px", constants.imageLoaderSize()+"px");
 		setGlassEnabled(true);
@@ -469,8 +468,9 @@ public class SlidePanel extends PopupPanel {
 		@Override
 		public void onClose(CloseEvent<PopupPanel> event) {
 			stop();
-			imagesPanel.clear();
-			imagesPanel.init(albumDto.getName());
+			if(refreshWidgetListener!=null){
+				refreshWidgetListener.refresh();
+			}
 		}
 	}
 
@@ -491,6 +491,14 @@ public class SlidePanel extends PopupPanel {
 
 		}
 
+	}
+
+	public RefreshWidgetListener getRefreshWidgetListener() {
+		return refreshWidgetListener;
+	}
+
+	public void setRefreshWidgetListener(RefreshWidgetListener refreshWigetListener) {
+		this.refreshWidgetListener = refreshWigetListener;
 	}
 
 }

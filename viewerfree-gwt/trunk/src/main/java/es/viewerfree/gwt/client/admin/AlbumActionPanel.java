@@ -22,6 +22,7 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 
 import es.viewerfree.gwt.client.admin.ui.ActionPanel;
+import es.viewerfree.gwt.client.common.UploadPicForm;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 

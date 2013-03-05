@@ -1,4 +1,4 @@
-package es.viewerfree.gwt.client.admin;
+package es.viewerfree.gwt.client.common;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
-import es.viewerfree.gwt.client.common.DialogBoxExt;
 import es.viewerfree.gwt.shared.ParamKey;
 
 public class UploadPicForm extends DialogBoxExt {
@@ -48,6 +47,9 @@ public class UploadPicForm extends DialogBoxExt {
 	private VerticalPanel mainPanel;
 	
 	private String albumName;
+	
+	private RefreshWidgetListener refreshWidgetListener;
+
 
 	public UploadPicForm(String albumName) {
 		super();
@@ -76,7 +78,7 @@ public class UploadPicForm extends DialogBoxExt {
 	private FormPanel getForm(){
 		if(this.form==null){
 			this.form = new FormPanel();
-			this.form.setAction(GWT.getModuleBaseURL()+constants.uploadService());
+			this.form.setAction(GWT.getHostPageBaseURL()+constants.uploadService());
 			this.form.setEncoding(FormPanel.ENCODING_MULTIPART);
 			this.form.setMethod(FormPanel.METHOD_POST);
 			this.form.addSubmitCompleteHandler(new SubmitCompleteUploadHandler(this));
@@ -192,6 +194,8 @@ public class UploadPicForm extends DialogBoxExt {
 		
 	}
 	
+	
+	
 	private class SubmitCompleteUploadHandler implements SubmitCompleteHandler{
 
 		private UploadPicForm form;
@@ -207,13 +211,24 @@ public class UploadPicForm extends DialogBoxExt {
 		public void onSubmitComplete(SubmitCompleteEvent event) {
 			getButtonActionPanel().remove(getLoaderImage());
 			String results = event.getResults();
-			if(results.contains("Error")){
+			if(!results.contains("OK")){
 				setErrorMessage("<div>"+results+"</div>");
 				return;
+			}
+			if(refreshWidgetListener!=null){
+				refreshWidgetListener.refresh();
 			}
 			form.hide();
 		}
 		
+	}
+	
+	public RefreshWidgetListener getRefreshWidgetListener() {
+		return refreshWidgetListener;
+	}
+
+	public void setRefreshWidgetListener(RefreshWidgetListener refreshWigetListener) {
+		this.refreshWidgetListener = refreshWigetListener;
 	}
 	
 
