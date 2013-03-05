@@ -79,7 +79,7 @@ public class UserDaoTest {
 		user.setUser(USER);
 		user.setPassword(PASSWORD);
 		user.setProfile(UserProfile.NORMAL.toString());
-		Mockito.verify(jpaTemplateMock).persist(user);
+		Mockito.verify(jpaTemplateMock).merge(user);
 	}
 	
 	@Test(expected=DaoException.class)
@@ -88,7 +88,7 @@ public class UserDaoTest {
 		user.setUser(USER);
 		user.setPassword(PASSWORD);
 		user.setProfile(UserProfile.NORMAL.toString());
-		Mockito.doThrow(new DataAccessExceptionImpl("TEST")).when(jpaTemplateMock).persist(user);
+		Mockito.doThrow(new DataAccessExceptionImpl("TEST")).when(jpaTemplateMock).merge(user);
 		UserDto userDto = new UserDto(USER,PASSWORD);
 		userDao.createUser(userDto);
 		
