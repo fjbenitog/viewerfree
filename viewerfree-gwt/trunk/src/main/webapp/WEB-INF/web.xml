@@ -51,6 +51,15 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>uploadFileService</servlet-name>
+        <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>uploadFileService</servlet-name>
+        <url-pattern>/Admin/uploadFileService</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>logoutService</servlet-name>
         <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
     </servlet>

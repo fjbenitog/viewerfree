@@ -20,7 +20,6 @@ import com.google.gwt.view.client.MultiSelectionModel;
 
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
-import es.viewerfree.gwt.shared.dto.UserDto;
 
 public abstract class ActionPanel<T>  extends LayoutPanel {
 
