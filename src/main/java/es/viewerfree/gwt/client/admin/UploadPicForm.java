@@ -12,13 +12,16 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.common.DialogBoxExt;
+import es.viewerfree.gwt.shared.ParamKey;
 
 public class UploadPicForm extends DialogBoxExt {
 
@@ -42,26 +45,30 @@ public class UploadPicForm extends DialogBoxExt {
 	
 	private FormPanel form;
 	
-	private LayoutPanel mainPanel;
+	private VerticalPanel mainPanel;
+	
+	private String albumName;
 
-	public UploadPicForm() {
+	public UploadPicForm(String albumName) {
 		super();
+		this.albumName = albumName;
 		Image image = new Image(constants.imagesPath()+constants.imageCloseButton());
 		image.setStyleName("close");
 		setCloseWidget(image);
 		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+messages.uploadPicture()+"</div>");
-		add(getMainPanel());
-		getMainPanel().add(getForm());
-		getMainPanel().add(getFormPanel());
+		getForm().setWidget(getMainPanel());
 		addActionButton();
+		add(getForm());
 		show();
 		center();
 	}
 
-	private LayoutPanel getMainPanel(){
+	private VerticalPanel getMainPanel(){
 		if(this.mainPanel==null){
-			this.mainPanel = new LayoutPanel();
+			this.mainPanel = new VerticalPanel();
 			this.mainPanel.setSize("375px", "150px");
+			this.mainPanel.add(new Hidden(ParamKey.ALBUM_NAME.toString(), this.albumName));
+			this.mainPanel.add(getFormPanel());
 		}
 		return this.mainPanel;
 	}
@@ -69,9 +76,10 @@ public class UploadPicForm extends DialogBoxExt {
 	private FormPanel getForm(){
 		if(this.form==null){
 			this.form = new FormPanel();
-			this.form.setAction("#");
+			this.form.setAction(GWT.getModuleBaseURL()+constants.uploadService());
 			this.form.setEncoding(FormPanel.ENCODING_MULTIPART);
 			this.form.setMethod(FormPanel.METHOD_POST);
+			this.form.addSubmitCompleteHandler(new SubmitCompleteUploadHandler(this));
 
 		}
 		return this.form;
@@ -97,7 +105,7 @@ public class UploadPicForm extends DialogBoxExt {
 		}
 		return this.formPanel;
 	}
-
+	
 	private void addField(String label, Widget field) {
 		this.formPanel.setHTML(row, column, label);
 		this.formPanel.setWidget(row, column+1, field);
@@ -112,7 +120,7 @@ public class UploadPicForm extends DialogBoxExt {
 	private Button getActionButton(){
 		if(this.actionButton == null){
 			this.actionButton = new Button();
-			this.actionButton.setText(messages.createAlbum());
+			this.actionButton.setText(messages.uploadPicture());
 			this.actionButton.addClickHandler(new UploadClickHandler());
 		}
 		return this.actionButton;
@@ -121,6 +129,7 @@ public class UploadPicForm extends DialogBoxExt {
 	private FileUpload getPicField(){
 		if(this.picField == null){
 			this.picField = new FileUpload();
+			this.picField.setName("imageFile");
 			this.picField.setWidth("100%");
 		}
 		return this.picField;
@@ -179,6 +188,30 @@ public class UploadPicForm extends DialogBoxExt {
 			getButtonActionPanel().setWidgetLeftRight(getLoaderImage(), 230, Unit.PX, 0, Unit.PX);
 			getButtonActionPanel().setWidgetTopBottom(getLoaderImage(), 6, Unit.PX, 6, Unit.PX);
 			getForm().submit();
+		}
+		
+	}
+	
+	private class SubmitCompleteUploadHandler implements SubmitCompleteHandler{
+
+		private UploadPicForm form;
+
+
+		public SubmitCompleteUploadHandler(UploadPicForm form) {
+			super();
+			this.form = form;
+		}
+
+
+		@Override
+		public void onSubmitComplete(SubmitCompleteEvent event) {
+			getButtonActionPanel().remove(getLoaderImage());
+			String results = event.getResults();
+			if(results.contains("Error")){
+				setErrorMessage("<div>"+results+"</div>");
+				return;
+			}
+			form.hide();
 		}
 		
 	}

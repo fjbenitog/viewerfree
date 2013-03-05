@@ -62,7 +62,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 
 				@Override
 				public void execute() {
-					uploadPicForm();
+					uploadPicForm(getSelectedItem());
 				}
 			});
 			this.uploadPicturerItem.setEnabled(false);
@@ -76,8 +76,8 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		createAlbumForm.setGlassEnabled(true);
 	}
 	
-	private void uploadPicForm(){
-		UploadPicForm UploadPicForm = new UploadPicForm();
+	private void uploadPicForm(String albumName){
+		UploadPicForm UploadPicForm = new UploadPicForm(albumName);
 		UploadPicForm.setAnimationEnabled(true);
 		UploadPicForm.setGlassEnabled(true);
 	}

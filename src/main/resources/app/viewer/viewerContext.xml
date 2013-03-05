@@ -34,4 +34,18 @@
 		<property name="thumbnailHeight"><value>${thumbnail.max.height}</value></property>
 	</bean>
 	
+	<bean id="uploadFileService" class="es.viewerfree.gwt.server.FileUploadService">
+		<property name="albumPath"><value>${album.path}</value></property>
+		<property name="applicationPath"><value>${application.path}</value></property>
+		<property name="fileExtensions">
+        	<list>
+           		<value>jpeg</value>
+           		<value>jpg</value>
+           		<value>gif</value>
+           		<value>png</value>
+           		<value>bmp</value>
+        	</list>
+      </property>
+	</bean>
+	
 </beans>

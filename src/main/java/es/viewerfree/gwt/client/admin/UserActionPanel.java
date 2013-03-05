@@ -96,6 +96,8 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 						
 						@Override
 						public void onSuccess(Void ex) {
+							getModifyUserItem().setEnabled(false);
+							getDeleteUsersItem().setEnabled(false);
 							refresh();
 						}
 						

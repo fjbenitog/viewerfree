@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.HttpRequestHandler;
 
-import es.viewerfree.gwt.server.util.CryptoUtil;
+import es.viewerfree.gwt.server.util.ServletUtils;
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.ParamKey;
@@ -75,9 +75,10 @@ public class ImageService implements HttpRequestHandler {
 		ServletOutputStream outputStream = null;
 		try {
 			outputStream = response.getOutputStream();
-			sendPicture(response, getAlbumName(request), getPictureName(request),
-					getImageType(request),
-					getUserDto(request),
+			sendPicture(response, ServletUtils.getEncriptedParameter(request,ParamKey.ALBUM_NAME),
+					ServletUtils.getEncriptedParameter(request,ParamKey.PICTURE_NAME),
+					ServletUtils.getAction(request, ParamKey.ACTION),
+					ServletUtils.getUserDto(request),
 					outputStream);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,24 +94,6 @@ public class ImageService implements HttpRequestHandler {
 			}
 
 		}
-	}
-
-	private Action getImageType(HttpServletRequest request) {
-		return Action.valueOf(request.getParameter(ParamKey.ACTION.toString()));
-	}
-
-	private String getPictureName(HttpServletRequest request) {
-		String picName = request.getParameter(ParamKey.PICTURE_NAME.toString());
-		return CryptoUtil.decrypt(picName, getUserDto(request).getName());
-	}
-
-	private String getAlbumName(HttpServletRequest request) {
-		String albumName = request.getParameter(ParamKey.ALBUM_NAME.toString());
-		return CryptoUtil.decrypt(albumName, getUserDto(request).getName());
-	}
-
-	private UserDto getUserDto(HttpServletRequest request) {
-		return (UserDto) request.getSession().getAttribute(ParamKey.USER.toString());
 	}
 
 	private void sendPicture(HttpServletResponse response, String album,

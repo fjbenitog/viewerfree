@@ -120,6 +120,10 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("logoutService")
   String logoutService();
   
+  @DefaultStringValue("uploadService")
+  @Key("uploadService")
+  String uploadService();
+  
   @DefaultStringValue("left_arrow_icon.png")
   @Key("imageLeftArrow")
   String imageLeftArrow();
