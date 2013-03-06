@@ -14,12 +14,13 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 
 import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.common.RefreshWidgetListener;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.client.util.StringComparator;
 
 public abstract class ActionPanel<T>  extends LayoutPanel {
 
@@ -29,7 +30,7 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 	
 	private ScrollPanel tableScrollPanel;
 	
-	private VerticalPanel tablePanel;
+	private HorizontalPanel pagerPanel;
 	
 	private SimplePager pager;
 	
@@ -43,14 +44,27 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 	
 	protected AsyncCallbackList asyncCallbackList= new AsyncCallbackList();
 	
-	public ActionPanel() {
-		add(getButtonsPanel());
-		setWidgetTopHeight(getButtonsPanel(), 20, Unit.PX, 40, Unit.PX);
-		setWidgetLeftWidth(getButtonsPanel(), 25, Unit.PX, 100, Unit.PCT);
-		add(getTableScrollPanel());
-		setWidgetTopBottom(getTableScrollPanel(), 70, Unit.PX, 10, Unit.PX);
-		setWidgetLeftRight(getTableScrollPanel(), 25, Unit.PX, 25, Unit.PX);
+	private LayoutPanel mainPanel;
 
+	protected StringComparator stringComparator = new StringComparator();
+	
+	public ActionPanel() {
+		add(getMainPanel());
+	}
+	
+	protected LayoutPanel getMainPanel(){
+		if(this.mainPanel == null){
+			this.mainPanel = new LayoutPanel();
+			this.mainPanel.add(getButtonsPanel());
+			this.mainPanel.setWidgetTopHeight(getButtonsPanel(), 20, Unit.PX, 40, Unit.PCT);
+			this.mainPanel.setWidgetLeftWidth(getButtonsPanel(), 25, Unit.PX, 100, Unit.PCT);
+			this.mainPanel.add(getTableScrollPanel());
+			this.mainPanel.setWidgetTopBottom(getTableScrollPanel(), 70, Unit.PX, 55, Unit.PX);
+			this.mainPanel.setWidgetLeftRight(getTableScrollPanel(), 25, Unit.PX, 25, Unit.PX);
+			this.mainPanel.add(getPagerPanel());
+			this.mainPanel.setWidgetBottomHeight(getPagerPanel(),25,Unit.PX,25,Unit.PX);
+		}
+		return this.mainPanel;
 	}
 
 	protected HorizontalPanel getButtonsPanel(){
@@ -77,33 +91,30 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 	}
 	
 	
-	private ScrollPanel getTableScrollPanel(){
+	protected ScrollPanel getTableScrollPanel(){
 		if(this.tableScrollPanel == null){
 			this.tableScrollPanel = new ScrollPanel();
-			this.tableScrollPanel.add(getTablePanel());
+			this.tableScrollPanel.add(getTable());
 		}
 		return this.tableScrollPanel;
 	}
 	
-	private VerticalPanel getTablePanel(){
-		if(this.tablePanel==null){
-			this.tablePanel = new VerticalPanel();
-			this.tablePanel.setWidth("100%");
-			this.tablePanel.add(getTable());
-			this.tablePanel.setCellHorizontalAlignment(getTable(), HorizontalPanel.ALIGN_CENTER);
-			this.tablePanel.setCellWidth(getTable(), "100%");
-			this.tablePanel.add(getPager());
-			this.tablePanel.setCellHorizontalAlignment(getPager(), HorizontalPanel.ALIGN_CENTER);
+	protected HorizontalPanel getPagerPanel(){
+		if(this.pagerPanel == null){
+			this.pagerPanel = new HorizontalPanel();
+			this.pagerPanel.setWidth("100%");
+			this.pagerPanel.add(getPager());
+			this.pagerPanel.setCellHorizontalAlignment(getPager(), HorizontalPanel.ALIGN_CENTER);
 		}
-		return this.tablePanel;
+		return this.pagerPanel;
 	}
 	
-	private SimplePager getPager(){
+	protected SimplePager getPager(){
 		if(this.pager==null){
 			SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
 			this.pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
 			this.pager.setDisplay(getTable());
-			this.pager.setPageSize(15);
+			this.pager.setPageSize(10);
 		}
 		return this.pager;
 	}
@@ -124,7 +135,7 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 		return this.table;
 	}
 	
-	public void refresh(){
+	public void update(){
 		((MultiSelectionModel<T>)getTable().getSelectionModel()).clear();
 		getDataProvider().getList().clear();
 		getResults(asyncCallbackList);
@@ -162,6 +173,18 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 		@Override
 		public void onSuccess(List<T> results) {
 			getDataProvider().getList().addAll(results);
+		}
+		
+	}
+	
+	protected class RefreshPanelListener implements RefreshWidgetListener{
+
+		public RefreshPanelListener() {
+		}
+
+		@Override
+		public void refresh() {
+			update();
 		}
 		
 	}

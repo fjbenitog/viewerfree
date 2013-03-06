@@ -1,5 +1,6 @@
 package es.viewerfree.gwt.client.admin;
 
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.cell.client.CheckboxCell;
@@ -34,10 +35,9 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	
 	private MenuItem uploadPicturerItem;
 	
-
-	
 	public AlbumActionPanel() {
 		super();
+		setWidgetLeftWidth(getMainPanel(), 20, Unit.PX, 40, Unit.PCT);
 		getButtonsPanel().add(getCreateAlbumButton());
 		getButtonsPanel().add(getActionsMenu());
 		getMenuBarActions().addItem(getUploadPicturerItem());
@@ -72,7 +72,8 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	}
 	
 	private void newAlbumForm(){
-		AlbumForm createAlbumForm = new AlbumForm(this);
+		AlbumForm createAlbumForm = new AlbumForm();
+		createAlbumForm.setRefreshWidgetListener(new RefreshPanelListener());
 		createAlbumForm.setAnimationEnabled(true);
 		createAlbumForm.setGlassEnabled(true);
 	}
@@ -133,6 +134,13 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		nameColumn.setSortable(true);
 		getTable().addColumn(nameColumn,messages.albumLabel());
 		getTable().setColumnWidth(nameColumn, "100%");
+		
+		columnSortHandler.setComparator(nameColumn,
+				new Comparator<String>() {
+			public int compare(String o1, String o2) {
+				return stringComparator.compare(o1,o2);
+			}
+		});
 	}
 
 	@Override

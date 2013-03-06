@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.common.DialogBoxExt;
+import es.viewerfree.gwt.client.common.RefreshWidgetListener;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.ErrorMessageUtil;
@@ -39,15 +40,14 @@ public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallbac
 
 	private Image loaderImage;
 
-	private AlbumActionPanel AlbumTablePanel;
-
 	private int column;
 
 	private int row = 1;
+	
+	private RefreshWidgetListener refreshWidgetListener;
 
-	public AlbumForm(AlbumActionPanel albumTablePanel) {
+	public AlbumForm() {
 		super();
-		this.AlbumTablePanel = albumTablePanel;
 		Image image = new Image(constants.imagesPath()+constants.imageCloseButton());
 		image.setStyleName("close");
 		setCloseWidget(image);
@@ -168,10 +168,22 @@ public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallbac
 	}
 
 	@Override
-	public void onSuccess(Void arg0) {
+	public void onSuccess(Void value) {
 		getFormPanel().remove(getLoaderImage());
 		this.hide();
-		this.AlbumTablePanel.refresh();
+		if(refreshWidgetListener!=null){
+			refreshWidgetListener.refresh();
+		}
+	}
+
+
+	public RefreshWidgetListener getRefreshWidgetListener() {
+		return refreshWidgetListener;
+	}
+
+
+	public void setRefreshWidgetListener(RefreshWidgetListener refreshWidgetListener) {
+		this.refreshWidgetListener = refreshWidgetListener;
 	}
 
 	
