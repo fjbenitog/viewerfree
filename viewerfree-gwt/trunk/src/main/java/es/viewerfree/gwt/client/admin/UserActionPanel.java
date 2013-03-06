@@ -58,17 +58,22 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 
 				@Override
 				public void onClick(ClickEvent clickevent) {
-					
+					newUserForm(UserAction.CREATE);
 				}
 			});
 		}
 		return this.createUserButton;
 	}
 	
+	private void newUserForm(String userName,UserAction userAction){
+		UserForm userForm = new UserForm(userName,userAction);
+		userForm.setRefreshWidgetListener(new RefreshPanelListener());
+		userForm.setAnimationEnabled(true);
+		userForm.setGlassEnabled(true);
+	}
+	
 	private void newUserForm(UserAction userAction){
-		UserForm createUserForm = new UserForm(this,userAction);
-		createUserForm.setAnimationEnabled(true);
-		createUserForm.setGlassEnabled(true);
+		newUserForm(null,userAction);
 	}
 	
 	
@@ -78,7 +83,7 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 
 				@Override
 				public void execute() {
-					newUserForm(UserAction.MODIFY);
+					newUserForm(getSelectedItem().getName(),UserAction.MODIFY);
 				}
 			});
 			this.modifyUserItem.setEnabled(false);
@@ -98,7 +103,7 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 						public void onSuccess(Void ex) {
 							getModifyUserItem().setEnabled(false);
 							getDeleteUsersItem().setEnabled(false);
-							refresh();
+							update();
 						}
 						
 						@Override
@@ -120,7 +125,7 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 
 				@Override
 				public void onClick(ClickEvent clickevent) {
-					refresh();
+					update();
 
 				}
 			});
@@ -227,71 +232,31 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 		columnSortHandler.setComparator(nameColumn,
 				new Comparator<UserDto>() {
 			public int compare(UserDto o1, UserDto o2) {
-				if (o1 == o2) {
-					return 0;
-				}
-
-				// Compare the name columns.
-				if (o1 != null) {
-					return (o2 != null) ? o1.getName().compareTo(o2.getName()) : 1;
-				}
-				return -1;
+				return stringComparator.compare(o1.getName(),o2.getName());
 			}
 		});
 		columnSortHandler.setComparator(fullNameColumn,
 				new Comparator<UserDto>() {
 			public int compare(UserDto o1, UserDto o2) {
-				if (o1 == o2) {
-					return 0;
-				}
-
-				// Compare the name columns.
-				if (o1 != null) {
-					return (o2 != null) ? o1.getFullName().compareTo(o2.getFullName()) : 1;
-				}
-				return -1;
+				return stringComparator.compare(o1.getFullName(),o2.getFullName());
 			}
 		});
 		columnSortHandler.setComparator(surnameColumn,
 				new Comparator<UserDto>() {
 			public int compare(UserDto o1, UserDto o2) {
-				if (o1 == o2) {
-					return 0;
-				}
-
-				// Compare the name columns.
-				if (o1 != null) {
-					return (o2 != null) ? o1.getSurname().compareTo(o2.getSurname()) : 1;
-				}
-				return -1;
+				return stringComparator.compare(o1.getSurname(),o2.getSurname());
 			}
 		});
 		columnSortHandler.setComparator(emailColumn,
 				new Comparator<UserDto>() {
 			public int compare(UserDto o1, UserDto o2) {
-				if (o1 == o2) {
-					return 0;
-				}
-
-				// Compare the name columns.
-				if (o1 != null && o1.getEmail()!=null) {
-					return (o2 != null && o2.getEmail()!=null) ? o1.getEmail().compareTo(o2.getEmail()) : 1;
-				}
-				return -1;
+				return stringComparator.compare(o1.getEmail(),o2.getEmail());
 			}
 		});
 		columnSortHandler.setComparator(profileColumn,
 				new Comparator<UserDto>() {
 			public int compare(UserDto o1, UserDto o2) {
-				if (o1 == o2) {
-					return 0;
-				}
-
-				// Compare the name columns.
-				if (o1 != null) {
-					return (o2 != null) ? o1.getProfile().compareTo(o2.getProfile()) : 1;
-				}
-				return -1;
+				return stringComparator.compare(o1.getProfile().toString(),o2.getProfile().toString());
 			}
 		});
 

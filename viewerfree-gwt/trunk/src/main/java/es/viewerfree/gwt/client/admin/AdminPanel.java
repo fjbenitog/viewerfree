@@ -8,6 +8,8 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.admin.ui.ActionPanel;
+import es.viewerfree.gwt.shared.dto.UserDto;
 
 public class AdminPanel extends LayoutPanel {
 
@@ -19,7 +21,7 @@ public class AdminPanel extends LayoutPanel {
 
 	private TabLayoutPanel adminTabs;
 
-	private UserActionPanel userActionPanel;
+	private ActionPanel<UserDto> userActionPanel;
 	
 	private AlbumActionPanel albumActionPanel;
 
@@ -62,7 +64,7 @@ public class AdminPanel extends LayoutPanel {
 
 
 
-	private UserActionPanel getUserActionPanel(){
+	private ActionPanel<UserDto> getUserActionPanel(){
 		if(this.userActionPanel == null){
 			this.userActionPanel = new UserActionPanel();
 		}

@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.common.DialogBoxExt;
+import es.viewerfree.gwt.client.common.RefreshWidgetListener;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.service.ViewerService;
@@ -65,8 +66,6 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 
 	private Image loaderImage;
 
-	private UserActionPanel usersTablePanel;
-
 	private int column;
 
 	private int row = 1;
@@ -75,11 +74,14 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 
 	private UserAction userAction;
 
+	private RefreshWidgetListener refreshWidgetListener;
+	
+	private String userName;
 
-	public UserForm(UserActionPanel usersTablePanel, UserAction userAction) {
+	public UserForm(String userName, UserAction userAction) {
 		super();
-		this.usersTablePanel = usersTablePanel;
 		this.userAction = userAction;
+		this.userName = userName;
 		Image image = new Image(constants.imagesPath()+constants.imageCloseButton());
 		image.setStyleName("close");
 		setCloseWidget(image);
@@ -95,9 +97,13 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 		}
 
 	}
+	
+	public UserForm(UserAction userAction) {
+		this(null,userAction);
+	}
 
 	private void addUserValues() {
-		userService.getUser(usersTablePanel.getSelectedItem().getName(),new AsyncCallback<UserDto>() {
+		userService.getUser(userName,new AsyncCallback<UserDto>() {
 
 
 
@@ -310,9 +316,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 
 				@Override
 				public void onSuccess(Void arg0) {
-					getFormPanel().remove(getLoaderImage());
-					hide();
-					usersTablePanel.refresh();
+					refreshPanel();
 				}
 			});
 			break;
@@ -351,9 +355,15 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 
 	@Override
 	public void onSuccess(Void arg0) {
+		refreshPanel();
+	}
+
+	private void refreshPanel() {
 		getFormPanel().remove(getLoaderImage());
 		this.hide();
-		this.usersTablePanel.refresh();
+		if(refreshWidgetListener!=null){
+			refreshWidgetListener.refresh();
+		}
 	}
 
 	private final class AlbumsCallback implements AsyncCallback<List<String> > {
@@ -415,5 +425,13 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 			return false;
 		}
 		return albums.contains(album);
+	}
+
+	public RefreshWidgetListener getRefreshWidgetListener() {
+		return refreshWidgetListener;
+	}
+
+	public void setRefreshWidgetListener(RefreshWidgetListener refreshWidgetListener) {
+		this.refreshWidgetListener = refreshWidgetListener;
 	}
 }
