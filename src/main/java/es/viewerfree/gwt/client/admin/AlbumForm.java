@@ -20,7 +20,7 @@ import es.viewerfree.gwt.client.common.DialogBoxExt;
 import es.viewerfree.gwt.client.common.RefreshWidgetListener;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
-import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.client.util.MessageDialogUtil;
 
 public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallback<Void>{
 
@@ -161,7 +161,7 @@ public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallbac
 	@Override
 	public void onFailure(Throwable throwable) {
 		getFormPanel().remove(getLoaderImage());
-		ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
+		MessageDialogUtil.getErrorDialogBox(messages.adminCreatingUserError());
 		setErrorMessage("");
 		setEnabled(true);
 		this.hide();

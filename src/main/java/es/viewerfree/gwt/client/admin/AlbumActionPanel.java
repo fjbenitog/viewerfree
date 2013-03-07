@@ -37,7 +37,7 @@ import es.viewerfree.gwt.client.admin.ui.ActionPanel;
 import es.viewerfree.gwt.client.common.UploadPicForm;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
-import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.client.util.MessageDialogUtil;
 import es.viewerfree.gwt.client.util.ViewerHelper;
 import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
@@ -46,7 +46,7 @@ import es.viewerfree.gwt.shared.dto.PictureDto;
 public class AlbumActionPanel extends ActionPanel<String>{
 
 	private static final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
-	
+
 	private static Constants constants = GWT.create(Constants.class);
 
 	private Button createAlbumButton;
@@ -58,19 +58,19 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	private ScrollPanel listScrollPanel;
 
 	private HorizontalPanel imagePanel;
-	
+
 	private LayoutPanel rightPanel;
 
 	private AlbumDto albumDto;
-	
+
 	private Label picTitle;
-	
+
 	public AlbumActionPanel() {
 		super();
 		setWidgetLeftWidth(getMainPanel(), 20, Unit.PX, 45, Unit.PCT);
 		add(getRightPanel());
 		setWidgetRightWidth(getRightPanel(), 20, Unit.PX, 45, Unit.PCT);
-		
+
 		getButtonsPanel().add(getCreateAlbumButton());
 		getButtonsPanel().add(getActionsMenu());
 		getMenuBarActions().addItem(getUploadPicturerItem());
@@ -90,7 +90,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		}
 		return this.rightPanel;
 	}
-	
+
 	private Label getPicTitle(){
 		if(this.picTitle==null){
 			this.picTitle = new Label(messages.picturesLabel());
@@ -113,7 +113,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 			this.imagesList = new CellList<PictureDto>(new PictureCell());
 			final SingleSelectionModel<PictureDto> selectionModel = new SingleSelectionModel<PictureDto>();
 			this.imagesList.setSelectionModel(selectionModel);
-			    selectionModel.addSelectionChangeHandler(new SelectionPictureHandler());
+			selectionModel.addSelectionChangeHandler(new SelectionPictureHandler());
 
 		}
 		return this.imagesList;
@@ -146,6 +146,18 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		}
 		return this.uploadPicturerItem;
 	}
+	
+	private HorizontalPanel getImagePanel() {
+		if(this.imagePanel==null){
+			this.imagePanel = new HorizontalPanel();
+			this.imagePanel.setWidth("100%");
+			this.imagePanel.setHeight("100%");
+			this.imagePanel.setStyleName("image");
+			this.imagePanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+			this.imagePanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		}
+		return imagePanel;
+	}
 
 	private void newAlbumForm(){
 		AlbumForm createAlbumForm = new AlbumForm();
@@ -160,19 +172,8 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		UploadPicForm.setAnimationEnabled(true);
 		UploadPicForm.setGlassEnabled(true);
 	}
-	
-	private HorizontalPanel getImagePanel() {
-		if(this.imagePanel==null){
-			this.imagePanel = new HorizontalPanel();
-			this.imagePanel.setWidth("100%");
-			this.imagePanel.setHeight("100%");
-			this.imagePanel.setStyleName("image");
-			this.imagePanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-			this.imagePanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
-		}
-		return imagePanel;
-	}
-	
+
+
 	private String getSelectedItem(){
 		SingleSelectionModel<String> selectionModel= (SingleSelectionModel<String>)getTable().getSelectionModel();
 		return selectionModel.getSelectedObject();
@@ -214,7 +215,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		viewerService.getAlbums(asyncCallbackList);
 
 	}
-	
+
 	private void addPictureToPanel(PictureDto pictureDto) {
 		if(pictureDto==null){
 			return;
@@ -236,48 +237,21 @@ public class AlbumActionPanel extends ActionPanel<String>{
 
 	}
 
-	private final class SelectionPictureHandler implements
-			SelectionChangeEvent.Handler {
-		public void onSelectionChange(SelectionChangeEvent event) {
-			  addPictureToPanel(getSelectionModelPictures().getSelectedObject());
-		  }
-	}
-
-	private final class GetPicturesCallback implements Handler {
-		@Override
-		public void onSelectionChange(SelectionChangeEvent event) {
-			final String albumName = getSelectedItem();
-			unselectPicture();
-			getImagePanel().clear();
-			if(albumName!=null){
-				getUploadPicturerItem().setEnabled(true);
-				loadPictures(albumName);
-			}
-			else{
-				getUploadPicturerItem().setEnabled(false);
-				getImagesList().setRowCount(0,true);
-				getImagesList().setRowData(0,new ArrayList<PictureDto>());
-			}
-		}
-
-
-	}
-	
 	private void loadPictures(final String albumName) {
 		viewerService.getPictures(albumName, new AsyncCallback<AlbumDto>() {
-			
+
 			@Override
 			public void onSuccess(AlbumDto albumDto) {
 				setAlbumDto(albumDto);
 				getImagesList().setRowCount(albumDto.getPictures().size(),true);
 				getImagesList().setRowData(0,albumDto.getPictures());
-				
+
 			}
-			
+
 			@Override
 			public void onFailure(Throwable ex) {
-				ErrorMessageUtil.getErrorDialogBox("Error loading Pictures");
-				
+				MessageDialogUtil.getErrorDialogBox("Error loading Pictures");
+
 			}
 		});
 	}
@@ -288,24 +262,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 			getSelectionModelPictures().setSelected(selectedObject,false);
 		}
 	}
-	
-	private class PictureCell extends AbstractCell<PictureDto>{
 
-		@Override
-		public void render(com.google.gwt.cell.client.Cell.Context context,
-				PictureDto picture, SafeHtmlBuilder sb) {
-			if (picture == null) {
-				return;
-			}
-			sb.appendHtmlConstant("<table>");
-
-			// Add  image.
-			sb.appendHtmlConstant("<tr><td >");
-			sb.appendHtmlConstant(picture.getName());
-			sb.appendHtmlConstant("</td></tr></table>");
-		}
-
-	}
 
 	private AlbumDto getAlbumDto() {
 		return albumDto;
@@ -328,4 +285,48 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		getResults(asyncCallbackList);
 	}
 
+	private final class PictureCell extends AbstractCell<PictureDto>{
+
+		@Override
+		public void render(com.google.gwt.cell.client.Cell.Context context,
+				PictureDto picture, SafeHtmlBuilder sb) {
+			if (picture == null) {
+				return;
+			}
+			sb.appendHtmlConstant("<table>");
+
+			// Add  image.
+			sb.appendHtmlConstant("<tr><td >");
+			sb.appendHtmlConstant(picture.getName());
+			sb.appendHtmlConstant("</td></tr></table>");
+		}
+
+	}
+
+	private final class SelectionPictureHandler implements
+	SelectionChangeEvent.Handler {
+		public void onSelectionChange(SelectionChangeEvent event) {
+			addPictureToPanel(getSelectionModelPictures().getSelectedObject());
+		}
+	}
+
+	private final class GetPicturesCallback implements Handler {
+		@Override
+		public void onSelectionChange(SelectionChangeEvent event) {
+			final String albumName = getSelectedItem();
+			unselectPicture();
+			getImagePanel().clear();
+			if(albumName!=null){
+				getUploadPicturerItem().setEnabled(true);
+				loadPictures(albumName);
+			}
+			else{
+				getUploadPicturerItem().setEnabled(false);
+				getImagesList().setRowCount(0,true);
+				getImagesList().setRowData(0,new ArrayList<PictureDto>());
+			}
+		}
+
+
+	}
 }

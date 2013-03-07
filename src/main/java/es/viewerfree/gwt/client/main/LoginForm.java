@@ -19,7 +19,7 @@ import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
-import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.client.util.MessageDialogUtil;
 
 public class LoginForm extends FlexTable{
 
@@ -121,7 +121,7 @@ public class LoginForm extends FlexTable{
 					if(constants.debugMode()){
 						authenticationError+=throwable.getMessage();
 					}
-					ErrorMessageUtil.getErrorDialogBox(authenticationError);
+					MessageDialogUtil.getErrorDialogBox(authenticationError);
 					setMessageLogin("");
 					setEnable(true);
 				}

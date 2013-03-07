@@ -28,7 +28,7 @@ import es.viewerfree.gwt.client.common.RefreshWidgetListener;
 import es.viewerfree.gwt.client.common.UploadPicForm;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
-import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.client.util.MessageDialogUtil;
 import es.viewerfree.gwt.client.util.ViewerHelper;
 import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
@@ -211,7 +211,7 @@ public class ImagesPanel extends LayoutPanel {
 
 		@Override
 		public void onFailure(Throwable arg0) {
-			ErrorMessageUtil.getErrorDialogBox(messages.serverError());
+			MessageDialogUtil.getErrorDialogBox(messages.serverError());
 		}
 
 	}

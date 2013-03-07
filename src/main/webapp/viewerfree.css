@@ -191,6 +191,12 @@
 	padding: 30px;
 }
 
+.confirmDialog {
+	max-width: 250px;
+	min-width: 250px;
+	padding: 0px;
+}
+
 .barPanel {
 	background: none repeat scroll 0 0 black;
 	padding-right: 25px;
@@ -567,3 +573,4 @@
 	vertical-align: bottom;
 	text-shadow: 1px 1px 0 #DDDDFF;
 }
+
