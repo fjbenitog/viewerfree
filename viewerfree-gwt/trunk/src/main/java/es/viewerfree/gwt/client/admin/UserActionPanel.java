@@ -265,8 +265,12 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 	}
 	
 
+	private UserDto getSelectedItem(){
+		MultiSelectionModel<UserDto> selectionModel= (MultiSelectionModel<UserDto>)getTable().getSelectionModel();
+		return selectionModel.getSelectedSet().iterator().next();
+	}
 	
-	public List<String> getSelectedUsers(){
+	private List<String> getSelectedUsers(){
 		MultiSelectionModel<UserDto> selectionModel= (MultiSelectionModel<UserDto>)getTable().getSelectionModel();
 		List<String> users = new ArrayList<String>();
 		for (Iterator<UserDto> iterator = selectionModel.getSelectedSet().iterator(); iterator.hasNext();) {
@@ -278,6 +282,14 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 	@Override
 	protected void getResults(AsyncCallback<List<UserDto>> asyncCallback) {
 		userService.getUsers(asyncCallback);
+	}
+
+	@Override
+	protected void update(){
+		((MultiSelectionModel<UserDto>)getTable().getSelectionModel()).clear();
+		getDataProvider().getList().clear();
+		getResults(asyncCallbackList);
+		getTable().getColumnSortList().push(getTable().getColumn(0));
 	}
 
 

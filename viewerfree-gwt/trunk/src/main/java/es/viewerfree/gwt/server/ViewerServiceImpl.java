@@ -10,6 +10,7 @@ import es.viewerfree.gwt.server.util.CryptoUtil;
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.shared.ParamKey;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
+import es.viewerfree.gwt.shared.dto.PictureDto;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
 @SuppressWarnings("serial")
@@ -66,13 +67,13 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	public AlbumDto getPictures(String albumName) {
 		UserDto userDto =(UserDto)getSession(ParamKey.USER);
 		List<String> pictures = albumManager.getPictures(albumName);
-		List<String> cryptedPics = new ArrayList<String>();
+		List<PictureDto> pictureDtos = new ArrayList<PictureDto>();
 		for (String pic : pictures) {
-			cryptedPics.add(CryptoUtil.encrypt(pic, userDto.getName()));
+			PictureDto pictureDto = new PictureDto(pic, CryptoUtil.encrypt(pic, userDto.getName()));
+			pictureDtos.add(pictureDto);
 		}
-		AlbumDto albumDto = new AlbumDto(albumName, pictures);
+		AlbumDto albumDto = new AlbumDto(albumName, pictureDtos);
 		albumDto.setCryptedName(CryptoUtil.encrypt(albumName, userDto.getName()));
-		albumDto.setCryptedPictures(cryptedPics);
 		return albumDto;
 	}
 

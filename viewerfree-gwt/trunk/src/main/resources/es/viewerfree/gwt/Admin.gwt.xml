@@ -23,6 +23,7 @@
 
 
   <!-- Other module inherits                                      -->
+    <inherits name="com.reveregroup.gwt.imagepreloader.ImagePreloader" />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='es.viewerfree.gwt.client.Admin' />

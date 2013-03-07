@@ -11,13 +11,11 @@ public class AlbumDto implements Serializable{
 	
 	private String cryptedName;
 	
-	private List<String> pictures;
-	
-	private List<String> cryptedPictures;
+	private List<PictureDto> pictures;
 	
 	private int selectedPic;
 
-	public AlbumDto(String name, List<String> pictures) {
+	public AlbumDto(String name, List<PictureDto> pictures) {
 		super();
 		this.name = name;
 		this.pictures = pictures;
@@ -35,13 +33,7 @@ public class AlbumDto implements Serializable{
 		this.name = name;
 	}
 
-	public List<String> getPictures() {
-		return pictures;
-	}
-
-	public void setPictures(List<String> pictures) {
-		this.pictures = pictures;
-	}
+	
 
 	public int getSelectedPic() {
 		return selectedPic;
@@ -59,12 +51,63 @@ public class AlbumDto implements Serializable{
 		this.cryptedName = cryptedName;
 	}
 
-	public List<String> getCryptedPictures() {
-		return cryptedPictures;
+	public List<PictureDto> getPictures() {
+		return pictures;
 	}
 
-	public void setCryptedPictures(List<String> cryptedPictures) {
-		this.cryptedPictures = cryptedPictures;
+	public void setPictures(List<PictureDto> pictures) {
+		this.pictures = pictures;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((cryptedName == null) ? 0 : cryptedName.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((pictures == null) ? 0 : pictures.hashCode());
+		result = prime * result + selectedPic;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AlbumDto other = (AlbumDto) obj;
+		if (cryptedName == null) {
+			if (other.cryptedName != null)
+				return false;
+		} else if (!cryptedName.equals(other.cryptedName))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (pictures == null) {
+			if (other.pictures != null)
+				return false;
+		} else if (!pictures.equals(other.pictures))
+			return false;
+		if (selectedPic != other.selectedPic)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "AlbumDto [name=" + name + ", cryptedName=" + cryptedName
+				+ ", pictures=" + pictures + ", selectedPic=" + selectedPic
+				+ "]";
+	}
+
+
 	
 }

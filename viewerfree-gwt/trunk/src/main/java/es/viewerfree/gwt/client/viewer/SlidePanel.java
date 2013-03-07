@@ -347,11 +347,11 @@ public class SlidePanel extends PopupPanel {
 	}
 
 	private String getSelectedImage() {
-		return albumDto.getPictures().get(albumDto.getSelectedPic());
+		return albumDto.getPictures().get(albumDto.getSelectedPic()).getName();
 	}
 
 	private String getSelectedCriptedImage() {
-		return albumDto.getCryptedPictures().get(albumDto.getSelectedPic());
+		return albumDto.getPictures().get(albumDto.getSelectedPic()).getCriptedName();
 	}
 
 
@@ -406,7 +406,7 @@ public class SlidePanel extends PopupPanel {
 		}
 
 		public void onClick(ClickEvent clickevent) {
-			viewerService.rotatePicture(angle, albumDto.getName(), albumDto.getPictures().get(albumDto.getSelectedPic()), new AsyncCallback<Void>() {
+			viewerService.rotatePicture(angle, albumDto.getName(), albumDto.getPictures().get(albumDto.getSelectedPic()).getName(), new AsyncCallback<Void>() {
 
 				@Override
 				public void onSuccess(Void arg0) {

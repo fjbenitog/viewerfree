@@ -552,4 +552,18 @@
 
 .gwt-MenuBar .gwt-MenuItem-disabled {
     color: #FFCC99;
-}	
+}
+
+.albumPanel {
+	border: 1px solid #FFCC99;
+	padding: 15px;
+}
+
+.picTitle {
+	color: #4B4A4A;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: arial, sans-serif;
+	vertical-align: bottom;
+	text-shadow: 1px 1px 0 #DDDDFF;
+}
