@@ -18,7 +18,7 @@ import es.viewerfree.gwt.client.common.BarPanel;
 import es.viewerfree.gwt.client.common.BaseEntryPoint;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
-import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.client.util.MessageDialogUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
 public class Admin extends BaseEntryPoint {
@@ -49,7 +49,7 @@ public class Admin extends BaseEntryPoint {
 			
 			@Override
 			public void onFailure(Throwable throwable) {
-				ErrorMessageUtil.getErrorDialogBox(messages.serverError());					
+				MessageDialogUtil.getErrorDialogBox(messages.serverError());					
 			}
 
 		});

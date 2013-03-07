@@ -28,7 +28,7 @@ import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
-import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.client.util.MessageDialogUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 
@@ -109,7 +109,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 
 			@Override
 			public void onFailure(Throwable ex) {
-				ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
+				MessageDialogUtil.getErrorDialogBox(messages.adminCreatingUserError());
 			}
 
 			@Override
@@ -308,7 +308,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 				@Override
 				public void onFailure(Throwable throwable) {
 					getFormPanel().remove(getLoaderImage());
-					ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
+					MessageDialogUtil.getErrorDialogBox(messages.adminCreatingUserError());
 					setErrorMessage("");
 					setEnabled(true);
 					hide();
@@ -347,7 +347,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 	@Override
 	public void onFailure(Throwable throwable) {
 		getFormPanel().remove(getLoaderImage());
-		ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
+		MessageDialogUtil.getErrorDialogBox(messages.adminCreatingUserError());
 		setErrorMessage("");
 		setEnabled(true);
 		this.hide();
@@ -416,7 +416,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 
 		@Override
 		public void onFailure(Throwable arg0) {
-			ErrorMessageUtil.getErrorDialogBox(messages.adminCreatingUserError());
+			MessageDialogUtil.getErrorDialogBox(messages.adminCreatingUserError());
 		}
 	}
 

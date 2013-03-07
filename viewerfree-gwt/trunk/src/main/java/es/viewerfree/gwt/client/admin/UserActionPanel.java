@@ -25,9 +25,11 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 
 import es.viewerfree.gwt.client.admin.ui.ActionPanel;
+import es.viewerfree.gwt.client.common.ConfirmDialogBox;
+import es.viewerfree.gwt.client.common.ErrorDialogBox;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
-import es.viewerfree.gwt.client.util.ErrorMessageUtil;
+import es.viewerfree.gwt.client.util.MessageDialogUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
 public class UserActionPanel  extends ActionPanel<UserDto>{
@@ -97,20 +99,31 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 
 				@Override
 				public void execute() {
-					userService.delete(getSelectedUsers(), new AsyncCallback<Void>() {
+					final ConfirmDialogBox confirmDialogBox = new ConfirmDialogBox(messages.confirmDeleteUserMessage());
+					confirmDialogBox.addAcceptClickHandler(new ClickHandler() {
 						
 						@Override
-						public void onSuccess(Void ex) {
-							getModifyUserItem().setEnabled(false);
-							getDeleteUsersItem().setEnabled(false);
-							update();
-						}
-						
-						@Override
-						public void onFailure(Throwable ex) {
-							ErrorMessageUtil.getErrorDialogBox("Error deleting the users");
+						public void onClick(ClickEvent arg0) {
+							userService.delete(getSelectedUsers(), new AsyncCallback<Void>() {
+								
+								@Override
+								public void onSuccess(Void ex) {
+									confirmDialogBox.hide();
+									getModifyUserItem().setEnabled(false);
+									getDeleteUsersItem().setEnabled(false);
+									update();
+								}
+								
+								@Override
+								public void onFailure(Throwable ex) {
+									confirmDialogBox.hide();
+									MessageDialogUtil.getErrorDialogBox("Error deleting the users");
+								}
+							});
+							
 						}
 					});
+					confirmDialogBox.invoke();
 				}
 			});
 			this.deleteUsersItem.setEnabled(false);
