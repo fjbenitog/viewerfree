@@ -24,7 +24,11 @@ import es.viewerfree.gwt.client.util.StringComparator;
 
 public abstract class ActionPanel<T>  extends LayoutPanel {
 
+	private static final int PAGE_SIZE = 15;
+
+
 	protected final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+
 	
 	private HorizontalPanel buttonsPanel;
 	
@@ -114,7 +118,7 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 			SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
 			this.pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
 			this.pager.setDisplay(getTable());
-			this.pager.setPageSize(10);
+			this.pager.setPageSize(PAGE_SIZE);
 		}
 		return this.pager;
 	}
@@ -131,16 +135,12 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 			List<T> list = getDataProvider().getList();
 
 			addColumns(list);
+
+			
 		}
 		return this.table;
 	}
 	
-	public void update(){
-		((MultiSelectionModel<T>)getTable().getSelectionModel()).clear();
-		getDataProvider().getList().clear();
-		getResults(asyncCallbackList);
-		getTable().getColumnSortList().push(getTable().getColumn(0));
-	}
 
 	protected ListDataProvider<T> getDataProvider(){
 		if(this.dataProvider == null){
@@ -155,14 +155,12 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 		addColumns(columnSortHandler);
 	}
 	
-	public T getSelectedItem(){
-		MultiSelectionModel<T> selectionModel= (MultiSelectionModel<T>)getTable().getSelectionModel();
-		return selectionModel.getSelectedSet().iterator().next();
-	}
+
 	protected abstract void addColumns(ListHandler<T> columnSortHandler) ;
 
 	protected abstract void getResults(AsyncCallback<List<T>> asyncCallbackList);
 	
+	protected abstract void update();
 	protected final class AsyncCallbackList implements AsyncCallback<List<T>>{
 
 		@Override
@@ -186,6 +184,7 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 		public void refresh() {
 			update();
 		}
+
 		
 	}
 }

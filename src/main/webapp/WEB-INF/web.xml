@@ -47,7 +47,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>imageService</servlet-name>
-        <url-pattern>/Viewer/imageService</url-pattern>
+        <url-pattern>/imageService</url-pattern>
     </servlet-mapping>
     
     <servlet>
@@ -98,6 +98,10 @@
 	<filter-mapping>
 		<filter-name>login</filter-name>
 		<url-pattern>/uploadFileService</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>login</filter-name>
+		<url-pattern>/imageService</url-pattern>
 	</filter-mapping>
 
 </web-app>

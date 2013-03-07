@@ -149,7 +149,7 @@ public class ImagesPanel extends LayoutPanel {
 		ShowImageHandler handler = new ShowImageHandler(album,i);
 		final Image loaderImage = new Image(constants.viewerImagesPath()+constants.imageLoader());
 		final HorizontalPanel imagePanel = createImagePanel(loaderImage);
-		final FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(album.getCryptedName(), album.getCryptedPictures().get(i), Action.SHOW_THUMBNAIL),
+		final FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(album.getCryptedName(), album.getPictures().get(i).getCriptedName(), Action.SHOW_THUMBNAIL),
 				constants.imageThumbnailSize(),constants.imageThumbnailSize() ,
 				new FitImageLoadHandler() {
 
@@ -159,7 +159,7 @@ public class ImagesPanel extends LayoutPanel {
 				imagePanel.add(event.getFitImage());
 			}
 		});
-		fitImage.setTitle(album.getPictures().get(i));
+		fitImage.setTitle(album.getPictures().get(i).getName());
 		fitImage.addClickHandler(handler);
 		getImagesFlowPanel().add(imagePanel);
 
