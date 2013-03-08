@@ -15,6 +15,7 @@
 	</bean>
 	
 	<bean id="viewer" class="es.viewerfree.gwt.server.ViewerServiceImpl" scope="request">
+		<property name="userService" ref="service.user"/>
 		<property name="albumManager" ref="albumManager"/>
 		<property name="cachedPath"><value>${preview.path}</value></property>
 		<property name="thumbnailCachedPath"><value>${thumbnail.path}</value></property>
