@@ -94,9 +94,9 @@ public class AlbumActionPanel extends ActionPanel<String>{
 			this.rightPanel.add(getPicTitle());
 			this.rightPanel.setWidgetTopHeight(getPicTitle(), 50, Unit.PX, 22, Unit.PX);
 			this.rightPanel.add(getListScrollPanel());
-			this.rightPanel.setWidgetTopHeight(getListScrollPanel(), 70, Unit.PX, 35, Unit.PCT);
+			this.rightPanel.setWidgetTopBottom(getListScrollPanel(), 70, Unit.PX, 210, Unit.PX);
 			this.rightPanel.add(getEditorPicturePanel());
-			this.rightPanel.setWidgetTopHeight(getEditorPicturePanel(), 55, Unit.PCT, 40, Unit.PCT);
+			this.rightPanel.setWidgetBottomHeight(getEditorPicturePanel(), 25, Unit.PX, 180, Unit.PX);
 			getButtonsPicturesPanel().setVisible(false);
 		}
 		return this.rightPanel;
