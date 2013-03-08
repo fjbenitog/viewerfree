@@ -58,12 +58,22 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	private ScrollPanel listScrollPanel;
 
 	private HorizontalPanel imagePanel;
+	
+	private HorizontalPanel buttonsPicturesPanel;
+	
+	private VerticalPanel editorPicturePanel;
 
 	private LayoutPanel rightPanel;
 
 	private AlbumDto albumDto;
 
 	private Label picTitle;
+	
+	private Image imageRightRotate;
+
+	private Image imageLeftRotate;
+	
+	private Image imageDelete;
 
 	public AlbumActionPanel() {
 		super();
@@ -85,8 +95,9 @@ public class AlbumActionPanel extends ActionPanel<String>{
 			this.rightPanel.setWidgetTopHeight(getPicTitle(), 50, Unit.PX, 22, Unit.PX);
 			this.rightPanel.add(getListScrollPanel());
 			this.rightPanel.setWidgetTopHeight(getListScrollPanel(), 70, Unit.PX, 35, Unit.PCT);
-			this.rightPanel.add(getImagePanel());
-			this.rightPanel.setWidgetTopHeight(getImagePanel(), 55, Unit.PCT, 40, Unit.PCT);
+			this.rightPanel.add(getEditorPicturePanel());
+			this.rightPanel.setWidgetTopHeight(getEditorPicturePanel(), 55, Unit.PCT, 40, Unit.PCT);
+			getButtonsPicturesPanel().setVisible(false);
 		}
 		return this.rightPanel;
 	}
@@ -147,6 +158,19 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		return this.uploadPicturerItem;
 	}
 	
+	private VerticalPanel getEditorPicturePanel() {
+		if(this.editorPicturePanel==null){
+			this.editorPicturePanel = new VerticalPanel();
+			this.editorPicturePanel.setWidth("100%");
+			this.editorPicturePanel.setHeight("100%");
+			this.editorPicturePanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+			this.editorPicturePanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+			this.editorPicturePanel.add(getImagePanel());
+			this.editorPicturePanel.add(getButtonsPicturesPanel());
+		}
+		return editorPicturePanel;
+	}
+	
 	private HorizontalPanel getImagePanel() {
 		if(this.imagePanel==null){
 			this.imagePanel = new HorizontalPanel();
@@ -157,6 +181,49 @@ public class AlbumActionPanel extends ActionPanel<String>{
 			this.imagePanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 		}
 		return imagePanel;
+	}
+	
+	private HorizontalPanel getButtonsPicturesPanel() {
+		if(this.buttonsPicturesPanel==null){
+			this.buttonsPicturesPanel = new HorizontalPanel();
+			this.buttonsPicturesPanel.setWidth("100px");
+			this.buttonsPicturesPanel.setHeight("100%");
+			this.buttonsPicturesPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+			this.buttonsPicturesPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+			this.buttonsPicturesPanel.add(getImageLeftRotate());
+			this.buttonsPicturesPanel.add(getImageRightRotate());
+			this.buttonsPicturesPanel.add(getImageDelete());
+		}
+		return buttonsPicturesPanel;
+	}
+	
+	private Image getImageRightRotate(){
+		if(this.imageRightRotate == null){
+			this.imageRightRotate = new Image(constants.adminImagesPath()+constants.imageRightRotate());
+			this.imageRightRotate.setStyleName("buttons");
+			this.imageRightRotate.setTitle(messages.rotatePicture());
+			this.imageRightRotate.addClickHandler(new ClickHandlerRoatePic(90));
+		}
+		return this.imageRightRotate;
+	}
+
+	private Image getImageLeftRotate(){
+		if(this.imageLeftRotate == null){
+			this.imageLeftRotate = new Image(constants.adminImagesPath()+constants.imageLeftRotate());
+			this.imageLeftRotate.setStyleName("buttons");
+			this.imageLeftRotate.setTitle(messages.rotatePicture());
+			this.imageLeftRotate.addClickHandler(new ClickHandlerRoatePic(-90));
+		}
+		return this.imageLeftRotate;
+	}
+	
+	private Image getImageDelete(){
+		if(this.imageDelete == null){
+			this.imageDelete = new Image(constants.adminImagesPath()+constants.imageDelete());
+			this.imageDelete.setStyleName("buttons");
+			this.imageDelete.setTitle(messages.deletePicture());
+		}
+		return this.imageDelete;
 	}
 
 	private void newAlbumForm(){
@@ -234,7 +301,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 			}
 		});
 		fitImage.setTitle(pictureDto.getName());
-
+		getButtonsPicturesPanel().setVisible(true);
 	}
 
 	private void loadPictures(final String albumName) {
@@ -316,6 +383,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 			final String albumName = getSelectedItem();
 			unselectPicture();
 			getImagePanel().clear();
+			getButtonsPicturesPanel().setVisible(false);
 			if(albumName!=null){
 				getUploadPicturerItem().setEnabled(true);
 				loadPictures(albumName);
@@ -328,5 +396,31 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		}
 
 
+	}
+	
+	private class ClickHandlerRoatePic implements ClickHandler{
+
+		private int angle;
+
+		public ClickHandlerRoatePic(int angle) {
+			super();
+			this.angle = angle;
+		}
+
+		public void onClick(ClickEvent clickevent) {
+			final PictureDto pictureDto = getSelectionModelPictures().getSelectedObject();
+			viewerService.rotatePicture(angle, albumDto.getName(), pictureDto.getName(), new AsyncCallback<Void>() {
+
+				@Override
+				public void onSuccess(Void arg0) {
+					addPictureToPanel(pictureDto);
+				}
+
+				@Override
+				public void onFailure(Throwable arg0) {
+					MessageDialogUtil.getErrorDialogBox(messages.serverError());
+				}
+			});
+		}
 	}
 }

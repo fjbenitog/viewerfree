@@ -180,6 +180,10 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("imageCloseButton")
   String imageCloseButton();
   
+  @DefaultStringValue("delete-icon.png")
+  @Key("imageDelete")
+  String imageDelete();
+  
   @DefaultStringValue("images/")
   @Key("imagesPath")
   String imagesPath();

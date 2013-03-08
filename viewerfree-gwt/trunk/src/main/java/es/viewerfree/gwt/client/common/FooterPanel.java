@@ -27,7 +27,7 @@ public class FooterPanel extends HorizontalPanel {
 			this.linksPanel.setSpacing(20);
 			this.linksPanel.add(new HTML("&copy; <a href=\""+constants.projectURL()+"\">"+constants.softwareVersion()+"</a>."+
 					" "+constants.gnuLincense()+". "+messages.designedBy()+
-					"<a href=\""+constants.projectURL()+"\">"+constants.owner()+"</a>"));
+					" <a href=\""+constants.projectURL()+"\">"+constants.owner()+"</a>"));
 		}
 		return this.linksPanel;
 	}
