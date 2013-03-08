@@ -261,7 +261,6 @@ public class ImagesPanel extends LayoutPanel {
 		private SlidePanel getSlidePanel(){
 			albumDto.setSelectedPic(selectedPic);
 			SlidePanel slidePanel = new SlidePanel(albumDto);
-			slidePanel.setRefreshWidgetListener(new RefreshImagesPanelListener(albumDto.getName()));
 			return slidePanel;
 		}
 

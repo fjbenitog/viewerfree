@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.viewerfree.gwt.client.service.ViewerService;
+import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.server.service.SpringRemoteServiceServlet;
 import es.viewerfree.gwt.server.util.CryptoUtil;
 import es.viewerfree.gwt.server.viewer.AlbumManager;
@@ -12,10 +13,22 @@ import es.viewerfree.gwt.shared.ParamKey;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
 import es.viewerfree.gwt.shared.dto.PictureDto;
 import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 @SuppressWarnings("serial")
 public class ViewerServiceImpl extends SpringRemoteServiceServlet implements ViewerService {
 	
+	private IUserService userService;
+	
+	public IUserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(IUserService userService) {
+		this.userService = userService;
+	}
+
+
 	private String thumbnailCachedPath;
 	
 	private String cachedPath;
@@ -48,16 +61,15 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	}
 
 	@Override
-	public List<String> getUserAlbums() {
-		return getUserAlbums((UserDto)getSession(ParamKey.USER), this.albumManager.getAlbums());
+	public List<String> getUserAlbums() throws ServiceException {
+		return getUserAlbums(userService.getUser((((UserDto)getSession(ParamKey.USER)).getId())), this.albumManager.getAlbums());
 	}
 
 	private List<String> getUserAlbums(UserDto userDto, List<String> albums) {
 		List<String> albumsList = new ArrayList<String>();
 		for (String album : userDto.getAlbums()) {
-			int index = Arrays.binarySearch((String[]) albums.toArray(new String[albums.size()]), album);
-			if(index>=0){
-				albumsList.add(albums.get(index));
+			if(albums.contains(album)){
+				albumsList.add(album);
 			}
 		}
 		return albumsList ;

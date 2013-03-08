@@ -6,11 +6,12 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import es.viewerfree.gwt.shared.dto.AlbumDto;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 @RemoteServiceRelativePath("springGwtServices/viewer")
 public interface ViewerService extends RemoteService{
 
-	List<String> getUserAlbums();
+	List<String> getUserAlbums() throws ServiceException;
 	
 	List<String> getAlbums();
 	
