@@ -77,9 +77,9 @@ public class AlbumActionPanel extends ActionPanel<String>{
 
 	public AlbumActionPanel() {
 		super();
-		setWidgetLeftWidth(getMainPanel(), 20, Unit.PX, 45, Unit.PCT);
+		setWidgetLeftWidth(getMainPanel(), 20, Unit.PX, 48, Unit.PCT);
 		add(getRightPanel());
-		setWidgetRightWidth(getRightPanel(), 20, Unit.PX, 45, Unit.PCT);
+		setWidgetRightWidth(getRightPanel(), 20, Unit.PX, 48, Unit.PCT);
 
 		getButtonsPanel().add(getCreateAlbumButton());
 		getButtonsPanel().add(getActionsMenu());
@@ -188,6 +188,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 			this.buttonsPicturesPanel = new HorizontalPanel();
 			this.buttonsPicturesPanel.setWidth("100px");
 			this.buttonsPicturesPanel.setHeight("100%");
+			this.buttonsPicturesPanel.setStyleName("editor");
 			this.buttonsPicturesPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 			this.buttonsPicturesPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 			this.buttonsPicturesPanel.add(getImageLeftRotate());
@@ -200,7 +201,6 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	private Image getImageRightRotate(){
 		if(this.imageRightRotate == null){
 			this.imageRightRotate = new Image(constants.adminImagesPath()+constants.imageRightRotate());
-			this.imageRightRotate.setStyleName("buttons");
 			this.imageRightRotate.setTitle(messages.rotatePicture());
 			this.imageRightRotate.addClickHandler(new ClickHandlerRoatePic(90));
 		}
@@ -210,7 +210,6 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	private Image getImageLeftRotate(){
 		if(this.imageLeftRotate == null){
 			this.imageLeftRotate = new Image(constants.adminImagesPath()+constants.imageLeftRotate());
-			this.imageLeftRotate.setStyleName("buttons");
 			this.imageLeftRotate.setTitle(messages.rotatePicture());
 			this.imageLeftRotate.addClickHandler(new ClickHandlerRoatePic(-90));
 		}
@@ -220,7 +219,6 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	private Image getImageDelete(){
 		if(this.imageDelete == null){
 			this.imageDelete = new Image(constants.adminImagesPath()+constants.imageDelete());
-			this.imageDelete.setStyleName("buttons");
 			this.imageDelete.setTitle(messages.deletePicture());
 		}
 		return this.imageDelete;
@@ -287,9 +285,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		if(pictureDto==null){
 			return;
 		}
-		final Image loaderImage = new Image(constants.viewerImagesPath()+constants.imageLoader());
-		getImagePanel().clear();
-		getImagePanel().add(loaderImage);
+		final Image loaderImage = addLoaderImage();
 		final FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(getAlbumDto().getCryptedName(), pictureDto.getCriptedName(), Action.SHOW_THUMBNAIL),
 				constants.imageThumbnailSize(),constants.imageThumbnailSize() ,
 				new FitImageLoadHandler() {
@@ -304,12 +300,20 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		getButtonsPicturesPanel().setVisible(true);
 	}
 
+	private Image addLoaderImage() {
+		final Image loaderImage = new Image(constants.viewerImagesPath()+constants.imageLoader());
+		getImagePanel().clear();
+		getImagePanel().add(loaderImage);
+		return loaderImage;
+	}
+
 	private void loadPictures(final String albumName) {
 		viewerService.getPictures(albumName, new AsyncCallback<AlbumDto>() {
 
 			@Override
 			public void onSuccess(AlbumDto albumDto) {
 				setAlbumDto(albumDto);
+				getPicTitle().setText(messages.picturesLabel()+" ( "+albumDto.getName()+" )");
 				getImagesList().setRowCount(albumDto.getPictures().size(),true);
 				getImagesList().setRowData(0,albumDto.getPictures());
 
@@ -408,6 +412,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		}
 
 		public void onClick(ClickEvent clickevent) {
+			addLoaderImage();
 			final PictureDto pictureDto = getSelectionModelPictures().getSelectedObject();
 			viewerService.rotatePicture(angle, albumDto.getName(), pictureDto.getName(), new AsyncCallback<Void>() {
 
