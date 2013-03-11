@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.MultiSelectionModel;
 
 import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.common.RefreshWidgetListener;
@@ -51,6 +50,8 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 	private LayoutPanel mainPanel;
 
 	protected StringComparator stringComparator = new StringComparator();
+	
+	protected int pageStart;
 	
 	public ActionPanel() {
 		add(getMainPanel());
@@ -171,6 +172,7 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 		@Override
 		public void onSuccess(List<T> results) {
 			getDataProvider().getList().addAll(results);
+			getTable().setPageStart(pageStart);
 		}
 		
 	}
@@ -182,6 +184,7 @@ public abstract class ActionPanel<T>  extends LayoutPanel {
 
 		@Override
 		public void refresh() {
+			pageStart = getTable().getPageStart();
 			update();
 		}
 

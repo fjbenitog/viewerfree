@@ -120,7 +120,7 @@ public class ImagesPanel extends LayoutPanel {
 	}
 	
 	private void addPictureIfisNecessary() {
-		int picByRow = getOffsetWidth()/MAX_SIZE_PIC;
+		int picByRow = (getOffsetWidth()/MAX_SIZE_PIC)-1;
 		int diffPics = albumDto.getPictures().size()-total;
 		int initcount = total;
 		for (int j = initcount; j < (Math.min(picByRow, diffPics)+initcount); j++) {
@@ -227,6 +227,7 @@ public class ImagesPanel extends LayoutPanel {
 			if (oldScrollPos >= lastScrollPos && albumDto.getPictures().size()-total<=0) {
 				return;
 			}
+
 			int maxScrollTop = scrollImagesPanel.getWidget().getOffsetHeight()
 					- scrollImagesPanel.getOffsetHeight();
 			if (lastScrollPos >= maxScrollTop) {

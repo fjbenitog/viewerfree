@@ -9,8 +9,7 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
-import magick.ImageInfo;
-import magick.MagickImage;
+import es.viewerfree.gwt.server.image.VFImage;
 import es.viewerfree.gwt.server.viewer.ManageImage;
 
 
@@ -18,14 +17,12 @@ public class ManageImageImpl implements ManageImage {
 
 	private float _memoryLimit;
 	
+	
 	public synchronized  void resize(String inImage,String outImage,int height) throws Exception {
-		ImageInfo origInfo = new ImageInfo(inImage); //load image info
-		MagickImage image = new MagickImage(origInfo); //load image
-		int width = (int) (image.getDimension().getWidth()*(height/image.getDimension().getHeight()));
+		VFImage image = new VFImage(inImage);
+		int width = (int) (image.getWidth()*(height/image.getHeight()));
 		image = image.scaleImage(width, height); //to Scale image
-		image.setFileName(outImage); //give new location
-		image.writeImage(origInfo);
-		image.destroyImages();
+		image.writeImage(outImage);
 	}
 	
 	public float getMemoryLimit() {
@@ -37,7 +34,6 @@ public class ManageImageImpl implements ManageImage {
 	}
 	
 	public void getDefaultImage(OutputStream out) throws IOException{
-
 		int width = 300; int height = 300;
 		BufferedImage bi = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
 
@@ -55,25 +51,21 @@ public class ManageImageImpl implements ManageImage {
 
 	@Override
 	public void rotate(String inImage,String outImage,int angle) throws Exception {
-			ImageInfo origInfo = new ImageInfo(inImage); //load image info
-			MagickImage image = new MagickImage(origInfo); //load image
-			image = image.rotateImage(angle);
-			image.setFileName(outImage); //give new location
-			image.writeImage(origInfo);
-			image.destroyImages();
-		
+		VFImage image = new VFImage(inImage); //load image
+		image = image.rotateImage(angle);
+		image.writeImage(outImage);
 	}
 	
 	public static void main(String arg[]) throws Exception{
 //		System.setProperty("jmagick.systemclassloader","false");
 //		System.setProperty("java.library.path", "/usr/local/lib");
-		ImageInfo origInfo = new ImageInfo("./pictures/dc-comcs.jpg"); //load image info
-		MagickImage image = new MagickImage(origInfo); //load image
-		int height = 500;
-		int width = (int) (image.getDimension().getWidth()*(height/image.getDimension().getHeight()));
-		image = image.scaleImage(width, height); //to Scale image
-		image.setFileName("./pictures/dc-comcs-rotate.jpg"); //give new location
-		image.writeImage(origInfo); //save
+//		ImageInfo origInfo = new ImageInfo("./pictures/dc-comcs.jpg"); //load image info
+//		MagickImage image = new MagickImage(origInfo); //load image
+//		int height = 500;
+//		int width = (int) (image.getDimension().getWidth()*(height/image.getDimension().getHeight()));
+//		image = image.scaleImage(width, height); //to Scale image
+//		image.setFileName("./pictures/dc-comcs-rotate.jpg"); //give new location
+//		image.writeImage(origInfo); //save
 
 //		FileOutputStream outputStream = new FileOutputStream(new File("./pictures/DSC_9869-rotate-2.png"));
 //		ManageImageImpl manageImage = new ManageImageImpl();
@@ -82,6 +74,9 @@ public class ManageImageImpl implements ManageImage {
 //		manageImage.resize("./pictures/DSC_9869.jpg", 100, outputStream);
 //		manageImage.resize("./pictures/DSC_9869-rotate.png", 1000, outputStream);
 		
+		VFImage image = new VFImage("./pictures/P1000819.JPG");
+		VFImage rotateImage = image.rotateImage(90);
+		rotateImage.writeImage("./pictures/P1000819_rotate.JPG");
 	}
 
 

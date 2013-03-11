@@ -85,7 +85,7 @@ public class FileUploadService implements HttpRequestHandler{
 	private String validateImageFile(List<FileItem> items) throws FileUploadException {
 		FileItem fileImage = items.get(1);
 		String imageName = fileImage.getName();
-		if(!FilenameUtils.isExtension(imageName, fileExtensions)){
+		if(!FilenameUtils.isExtension(imageName.toLowerCase(), fileExtensions)){
 			throw new FileUploadException("Error: Only image files are valid");
 		}
 		return imageName;

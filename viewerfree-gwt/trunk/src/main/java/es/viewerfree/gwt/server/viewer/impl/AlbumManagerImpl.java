@@ -1,6 +1,7 @@
 package es.viewerfree.gwt.server.viewer.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,6 +9,11 @@ import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.imageio.stream.FileImageInputStream;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.AutoCloseInputStream;
 
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.server.viewer.ManageImage;
@@ -62,19 +68,7 @@ public class AlbumManagerImpl implements AlbumManager {
 	}
 
 	public void getPicture(File file,OutputStream out) throws IOException{
-		RandomAccessFile fileReader = new RandomAccessFile(file,"r");
-		byte[]  temp = new byte[256];
-		int off =0;
-		int length = (int)file.length();
-		while((length-off)>temp.length){
-			fileReader.read(temp,0,temp.length);
-			out.write(temp);
-			off+=temp.length-1;
-		}
-		temp = new byte[(int) (file.length()-off)];
-		fileReader.read(temp,0,temp.length);
-		out.write(temp);
-		fileReader.close();
+		IOUtils.copyLarge(new AutoCloseInputStream(new FileInputStream(file)), out);
 	}
 
 	public void getPicture(String albumName,String pictureName,OutputStream out) throws IOException{
