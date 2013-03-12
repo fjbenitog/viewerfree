@@ -23,4 +23,6 @@ public interface AlbumManager {
 	public void rotateCachedPicture(String albumName,String[] cachedPaths,String fotoName, int angle) throws Exception;
 
 	public void createAlbum(String albumName);
+	
+	public void deletePicture(String albumName,String pciture) throws IOException;
 }
