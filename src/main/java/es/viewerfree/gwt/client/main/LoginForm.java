@@ -1,5 +1,7 @@
 package es.viewerfree.gwt.client.main;
 
+import com.google.api.gwt.oauth2.client.Auth;
+import com.google.api.gwt.oauth2.client.AuthRequest;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -93,7 +95,32 @@ public class LoginForm extends FlexTable{
 
 
 		public void onClick(ClickEvent clickevent) {
+//			loginWithGoogle();
 			proccesLogin();
+		}
+
+		private void loginWithGoogle() {
+			String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
+			String CLIENT_ID = "768415354622.apps.googleusercontent.com"; // available from the APIs console
+			String BUZZ_PHOTOS_SCOPE = "https://www.googleapis.com/auth/photos";
+
+
+			AuthRequest req = new AuthRequest(AUTH_URL, CLIENT_ID).withScopes(BUZZ_PHOTOS_SCOPE); // Can specify multiple scopes here
+			
+			Auth.get().login(req, new com.google.gwt.core.client.Callback<String, Throwable>() {
+				
+				@Override
+				public void onSuccess(String token) {
+					System.err.println("Token:"+token);
+					
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					caught.printStackTrace();
+					
+				}
+			});
 		}
 
 		public void onKeyUp(KeyUpEvent event) {
