@@ -26,7 +26,6 @@ import com.google.gwt.view.client.SelectionModel;
 
 import es.viewerfree.gwt.client.admin.ui.ActionPanel;
 import es.viewerfree.gwt.client.common.ConfirmDialogBox;
-import es.viewerfree.gwt.client.common.ErrorDialogBox;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;

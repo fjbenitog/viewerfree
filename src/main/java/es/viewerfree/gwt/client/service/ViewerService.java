@@ -20,4 +20,6 @@ public interface ViewerService extends RemoteService{
 	void rotatePicture(int angle,String albumName,String pictureName) throws Exception;
 	
 	void createAlbum(String albumName);
+	
+	void deletePicture(String albumName, String pictureName) throws Exception;
 }

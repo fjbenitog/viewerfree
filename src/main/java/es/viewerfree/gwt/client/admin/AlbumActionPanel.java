@@ -34,6 +34,7 @@ import com.reveregroup.gwt.imagepreloader.FitImageLoadHandler;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.admin.ui.ActionPanel;
+import es.viewerfree.gwt.client.common.ConfirmDialogBox;
 import es.viewerfree.gwt.client.common.UploadPicForm;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
@@ -42,6 +43,8 @@ import es.viewerfree.gwt.client.util.ViewerHelper;
 import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
 import es.viewerfree.gwt.shared.dto.PictureDto;
+
+//TODO: Refactoring to update screen
 
 public class AlbumActionPanel extends ActionPanel<String>{
 
@@ -220,6 +223,38 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		if(this.imageDelete == null){
 			this.imageDelete = new Image(constants.adminImagesPath()+constants.imageDelete());
 			this.imageDelete.setTitle(messages.deletePicture());
+			this.imageDelete.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					final ConfirmDialogBox confirmDialogBox = new ConfirmDialogBox(messages.confirmDeletePictureMessage());
+					confirmDialogBox.addAcceptClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							viewerService.deletePicture(albumDto.getName(), getSelectionModelPictures().getSelectedObject().getName(), new AsyncCallback<Void>() {
+								
+								@Override
+								public void onSuccess(Void v) {
+									pageStart = getTable().getPageStart();
+									update();
+									getImagePanel().clear();
+									getButtonsPicturesPanel().setVisible(false);
+									getTable().setPageStart(pageStart);
+									confirmDialogBox.hide();
+								}
+								
+								@Override
+								public void onFailure(Throwable t) {
+									MessageDialogUtil.getErrorDialogBox(messages.serverError());
+								}
+							});
+							
+						}
+					});
+					confirmDialogBox.invoke();
+				}
+			});
 		}
 		return this.imageDelete;
 	}

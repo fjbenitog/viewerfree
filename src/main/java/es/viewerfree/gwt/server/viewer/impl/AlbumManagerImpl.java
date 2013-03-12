@@ -5,12 +5,9 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
-import javax.imageio.stream.FileImageInputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.AutoCloseInputStream;
@@ -74,6 +71,34 @@ public class AlbumManagerImpl implements AlbumManager {
 	public void getPicture(String albumName,String pictureName,OutputStream out) throws IOException{
 		getPicture(new File(getPath()+"/"+albumName+"/"+pictureName),out);
 	}
+	
+	@Override
+	public void rotateCachedPicture(String albumName, String[] cachedPaths,String pictureName,
+			int angle) throws Exception {
+		for(String cachedPath:cachedPaths){
+			String pathname = getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName;
+			File fotoCacheada = new File(pathname);
+			if(fotoCacheada.exists()){
+				manageImage.rotate(pathname, pathname,angle);
+			}
+		}
+	}
+
+	@Override
+	public void createAlbum(String albumName) {
+		File album = new File(getAlbumsPath(), albumName) ;
+		album.mkdir();
+	}
+
+	@Override
+	public void deletePicture(String albumName, String pciture) throws IOException {
+		File pictureFile = new File(getPath()+"/"+albumName+"/"+pciture);
+		if(!pictureFile.delete()){
+			throw new IOException("The file was not able to be deleted");
+		}
+	}
+	
+	
 
 	public FilenameFilter getDirfilenameFilter() {
 		return dirfilenameFilter;
@@ -117,23 +142,6 @@ public class AlbumManagerImpl implements AlbumManager {
 
 	}
 
-	@Override
-	public void rotateCachedPicture(String albumName, String[] cachedPaths,String pictureName,
-			int angle) throws Exception {
-		for(String cachedPath:cachedPaths){
-			String pathname = getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName;
-			File fotoCacheada = new File(pathname);
-			if(fotoCacheada.exists()){
-				manageImage.rotate(pathname, pathname,angle);
-			}
-		}
-	}
-
-	@Override
-	public void createAlbum(String albumName) {
-		File album = new File(getAlbumsPath(), albumName) ;
-		album.mkdir();
-	}
 
 	private File getAlbumsPath() {
 		File albumsPath = new File(getPath());
@@ -153,6 +161,8 @@ public class AlbumManagerImpl implements AlbumManager {
 
 
 	}
+
+
 
 
 

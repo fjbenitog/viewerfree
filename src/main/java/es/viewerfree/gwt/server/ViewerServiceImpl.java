@@ -1,7 +1,6 @@
 package es.viewerfree.gwt.server;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import es.viewerfree.gwt.client.service.ViewerService;
@@ -105,6 +104,12 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	public void createAlbum(String albumName) {
 		this.albumManager.createAlbum(albumName);
 		
+	}
+
+	@Override
+	public void deletePicture(String albumName, String pictureName)
+			throws Exception {
+		this.albumManager.deletePicture(albumName, pictureName);
 	}
 
 
