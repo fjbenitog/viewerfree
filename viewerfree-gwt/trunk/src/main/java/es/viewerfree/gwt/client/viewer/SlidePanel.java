@@ -242,7 +242,7 @@ public class SlidePanel extends PopupPanel {
 
 	private String createDownloadImageLink() {
 		return "<a target='_blank' href='"+ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_REAL_PICTURE)+
-				"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/></a>";
+				"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/>"+messages.downloadPic()+"</a>";
 	}
 
 	private HorizontalPanel getButtonsPanel(){
