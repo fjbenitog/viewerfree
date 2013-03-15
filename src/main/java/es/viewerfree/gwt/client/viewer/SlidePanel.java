@@ -48,7 +48,7 @@ public class SlidePanel extends PopupPanel {
 	private HorizontalPanel rightArrowPanel;
 
 	private HorizontalPanel leftArrowPanel;
-
+	
 	private Image rightArrow;
 
 	private Image leftArrow;
@@ -62,6 +62,8 @@ public class SlidePanel extends PopupPanel {
 	private Image imageNext;
 
 	private Image imagePrevious;
+	
+	private Image imageClose;
 
 	private HTML imageFileDownload;
 
@@ -125,10 +127,15 @@ public class SlidePanel extends PopupPanel {
 
 			this.mainPanel.setWidgetTopHeight(getUtilityPanel(), constants.imageLoaderSize()-PANEL_BUTTONS_WIDTH/2, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
 			this.mainPanel.setWidgetLeftWidth(getUtilityPanel(), 5*IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
+			
+			this.mainPanel.add(getImageClose());
+			this.mainPanel.setWidgetTopHeight(getImageClose(), 0, Unit.PX, 24, Unit.PX);
+			this.mainPanel.setWidgetRightWidth(getImageClose(), 0, Unit.PX, 24, Unit.PX);
 
 		}
 		return this.mainPanel;
 	}
+	
 
 	private HorizontalPanel getImagePanel(){
 		if(this.imagePanel == null){
@@ -156,6 +163,25 @@ public class SlidePanel extends PopupPanel {
 		return this.leftArrowPanel;
 	}
 
+	private Image getImageClose(){
+		if(this.imageClose == null){
+			this.imageClose = new Image(constants.viewerImagesPath()+constants.imageCloseIcon());
+			this.imageClose.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent e) {
+					stop();
+					if(refreshWidgetListener!=null){
+						refreshWidgetListener.refresh();
+					}
+					hide();
+				}
+			});
+			this.imageClose.setStyleName("closeButton");
+		}
+		return this.imageClose;
+	}
+	
 
 	private Image getLeftArrow(){
 		if(this.leftArrow == null){
@@ -242,7 +268,7 @@ public class SlidePanel extends PopupPanel {
 
 	private String createDownloadImageLink() {
 		return "<a target='_blank' href='"+ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_REAL_PICTURE)+
-				"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/>"+messages.downloadPic()+"</a>";
+				"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/></a>";
 	}
 
 	private HorizontalPanel getButtonsPanel(){
@@ -392,16 +418,17 @@ public class SlidePanel extends PopupPanel {
 		}
 	}
 
+	private void stop() {
+		getPicTimer().cancel();
+		updateButtonsStop();
+	}
+	
 	private class HandlerStopSlideshow implements ClickHandler,CloseHandler<PopupPanel>{
 
 		public void onClick(ClickEvent clickevent) {
 			stop();
 		}
 
-		private void stop() {
-			getPicTimer().cancel();
-			updateButtonsStop();
-		}
 
 		@Override
 		public void onClose(CloseEvent<PopupPanel> event) {
@@ -411,6 +438,7 @@ public class SlidePanel extends PopupPanel {
 			}
 		}
 	}
+	
 
 	public RefreshWidgetListener getRefreshWidgetListener() {
 		return refreshWidgetListener;
