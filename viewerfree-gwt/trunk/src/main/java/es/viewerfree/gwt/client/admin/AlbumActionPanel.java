@@ -386,7 +386,9 @@ public class AlbumActionPanel extends ActionPanel<String>{
 
 	@Override
 	protected void update() {
-		loadPictures(albumDto.getName());
+		if(albumDto!=null){
+			loadPictures(albumDto.getName());
+		}
 		getDataProvider().getList().clear();
 		getResults(asyncCallbackList);
 	}

@@ -192,6 +192,10 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("adminImagesPath")
   String adminImagesPath();
   
+  @DefaultStringValue("close_button.png")
+  @Key("imageCloseIcon")
+  String imageCloseIcon();
+  
   @DefaultBooleanValue(false)
   @Key("debugMode")
   boolean debugMode();
