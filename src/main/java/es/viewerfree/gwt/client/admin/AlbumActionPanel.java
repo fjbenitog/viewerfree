@@ -61,9 +61,9 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	private ScrollPanel listScrollPanel;
 
 	private HorizontalPanel imagePanel;
-	
+
 	private HorizontalPanel buttonsPicturesPanel;
-	
+
 	private VerticalPanel editorPicturePanel;
 
 	private LayoutPanel rightPanel;
@@ -71,15 +71,17 @@ public class AlbumActionPanel extends ActionPanel<String>{
 	private AlbumDto albumDto;
 
 	private Label picTitle;
-	
+
 	private Image imageRightRotate;
 
 	private Image imageLeftRotate;
-	
+
 	private Image imageDelete;
 
 	public AlbumActionPanel() {
 		super();
+		relocationMainPanel();
+
 		setWidgetLeftWidth(getMainPanel(), 20, Unit.PX, 48, Unit.PCT);
 		add(getRightPanel());
 		setWidgetRightWidth(getRightPanel(), 20, Unit.PX, 48, Unit.PCT);
@@ -91,15 +93,26 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		getTable().getSelectionModel().addSelectionChangeHandler(new GetPicturesCallback());
 	}
 
+	private void relocationMainPanel() {
+
+		getMainPanel().setWidgetTopBottom(getTableScrollPanel(), 20, Unit.PX, 80, Unit.PX);
+		getMainPanel().setWidgetLeftRight(getTableScrollPanel(), 25, Unit.PX, 25, Unit.PX);
+
+		getMainPanel().setWidgetBottomHeight(getPagerPanel(),50,Unit.PX,25,Unit.PX);
+		
+		getMainPanel().setWidgetBottomHeight(getButtonsPanel(), 10, Unit.PX, 40, Unit.PX);
+		getMainPanel().setWidgetLeftWidth(getButtonsPanel(), 25, Unit.PX, 100, Unit.PCT);
+	}
+
 	private LayoutPanel getRightPanel(){
 		if(this.rightPanel == null){
 			this.rightPanel = new LayoutPanel();
 			this.rightPanel.add(getPicTitle());
-			this.rightPanel.setWidgetTopHeight(getPicTitle(), 50, Unit.PX, 22, Unit.PX);
+			this.rightPanel.setWidgetTopHeight(getPicTitle(), 20, Unit.PX, 22, Unit.PX);
 			this.rightPanel.add(getListScrollPanel());
-			this.rightPanel.setWidgetTopBottom(getListScrollPanel(), 70, Unit.PX, 210, Unit.PX);
+			this.rightPanel.setWidgetTopBottom(getListScrollPanel(), 45, Unit.PX, 200, Unit.PX);
 			this.rightPanel.add(getEditorPicturePanel());
-			this.rightPanel.setWidgetBottomHeight(getEditorPicturePanel(), 25, Unit.PX, 180, Unit.PX);
+			this.rightPanel.setWidgetBottomHeight(getEditorPicturePanel(), 10, Unit.PX, 180, Unit.PX);
 			getButtonsPicturesPanel().setVisible(false);
 		}
 		return this.rightPanel;
@@ -160,7 +173,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		}
 		return this.uploadPicturerItem;
 	}
-	
+
 	private VerticalPanel getEditorPicturePanel() {
 		if(this.editorPicturePanel==null){
 			this.editorPicturePanel = new VerticalPanel();
@@ -173,7 +186,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		}
 		return editorPicturePanel;
 	}
-	
+
 	private HorizontalPanel getImagePanel() {
 		if(this.imagePanel==null){
 			this.imagePanel = new HorizontalPanel();
@@ -185,7 +198,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		}
 		return imagePanel;
 	}
-	
+
 	private HorizontalPanel getButtonsPicturesPanel() {
 		if(this.buttonsPicturesPanel==null){
 			this.buttonsPicturesPanel = new HorizontalPanel();
@@ -200,7 +213,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		}
 		return buttonsPicturesPanel;
 	}
-	
+
 	private Image getImageRightRotate(){
 		if(this.imageRightRotate == null){
 			this.imageRightRotate = new Image(constants.adminImagesPath()+constants.imageRightRotate());
@@ -218,22 +231,22 @@ public class AlbumActionPanel extends ActionPanel<String>{
 		}
 		return this.imageLeftRotate;
 	}
-	
+
 	private Image getImageDelete(){
 		if(this.imageDelete == null){
 			this.imageDelete = new Image(constants.adminImagesPath()+constants.imageDelete());
 			this.imageDelete.setTitle(messages.deletePicture());
 			this.imageDelete.addClickHandler(new ClickHandler() {
-				
+
 				@Override
 				public void onClick(ClickEvent event) {
 					final ConfirmDialogBox confirmDialogBox = new ConfirmDialogBox(messages.confirmDeletePictureMessage());
 					confirmDialogBox.addAcceptClickHandler(new ClickHandler() {
-						
+
 						@Override
 						public void onClick(ClickEvent event) {
 							viewerService.deletePicture(albumDto.getName(), getSelectionModelPictures().getSelectedObject().getName(), new AsyncCallback<Void>() {
-								
+
 								@Override
 								public void onSuccess(Void v) {
 									pageStart = getTable().getPageStart();
@@ -243,13 +256,13 @@ public class AlbumActionPanel extends ActionPanel<String>{
 									getTable().setPageStart(pageStart);
 									confirmDialogBox.hide();
 								}
-								
+
 								@Override
 								public void onFailure(Throwable t) {
 									MessageDialogUtil.getErrorDialogBox(messages.serverError());
 								}
 							});
-							
+
 						}
 					});
 					confirmDialogBox.invoke();
@@ -438,7 +451,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 
 
 	}
-	
+
 	private class ClickHandlerRoatePic implements ClickHandler{
 
 		private int angle;
