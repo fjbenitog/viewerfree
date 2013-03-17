@@ -1,17 +1,19 @@
 package es.viewerfree.gwt.server.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -34,6 +36,14 @@ public class User implements Serializable{
 	@Column(name="login",unique=true)
 	private String user;
 	
+	@Override
+	public String toString() {
+		return "User [_id=" + _id + ", user=" + user + ", password=" + password
+				+ ", name=" + name + ", surname=" + surname + ", email="
+				+ email + ", profile=" + profile + ", albums=" + albums
+				+ ", tags=" + tags + "]";
+	}
+
 	private String password;
 	
 	private String name;
@@ -45,9 +55,11 @@ public class User implements Serializable{
 	private String profile;
 	
 	@ManyToMany( cascade = CascadeType.MERGE)
-	private List<Album> albums;
+	private Set<Album> albums;
 	
-
+	@OneToMany( cascade = CascadeType.MERGE, fetch=FetchType.LAZY)
+	private Set<Tag> tags;
+	
 	public String getProfile() {
 		return profile;
 	}
@@ -110,12 +122,14 @@ public class User implements Serializable{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (_id ^ (_id >>> 32));
+		result = prime * result + ((albums == null) ? 0 : albums.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((profile == null) ? 0 : profile.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
+		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
@@ -130,6 +144,11 @@ public class User implements Serializable{
 			return false;
 		User other = (User) obj;
 		if (_id != other._id)
+			return false;
+		if (albums == null) {
+			if (other.albums != null)
+				return false;
+		} else if (!albums.equals(other.albums))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -156,6 +175,11 @@ public class User implements Serializable{
 				return false;
 		} else if (!surname.equals(other.surname))
 			return false;
+		if (tags == null) {
+			if (other.tags != null)
+				return false;
+		} else if (!tags.equals(other.tags))
+			return false;
 		if (user == null) {
 			if (other.user != null)
 				return false;
@@ -164,11 +188,11 @@ public class User implements Serializable{
 		return true;
 	}
 
-	public List<Album> getAlbums() {
+	public Set<Album> getAlbums() {
 		return albums;
 	}
 
-	public void setAlbums(List<Album> albums) {
+	public void setAlbums(Set<Album> albums) {
 		this.albums = albums;
 	}
 

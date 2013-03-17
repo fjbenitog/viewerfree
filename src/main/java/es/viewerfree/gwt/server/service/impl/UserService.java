@@ -1,13 +1,19 @@
 package es.viewerfree.gwt.server.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.IUserDao;
+import es.viewerfree.gwt.server.entities.Album;
+import es.viewerfree.gwt.server.entities.User;
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.dto.UserProfile;
 import es.viewerfree.gwt.shared.service.ServiceException;
 
 
@@ -21,19 +27,19 @@ public class UserService implements IUserService {
 		try {
 			userDto.setPassword(BCrypt.hashpw(userDto.getPassword(),BCrypt.gensalt()));
 			userDto.setName(userDto.getName().toLowerCase());
-			getUserDao().createUser(userDto);
+			getUserDao().mergeUser(toUser(new User(), userDto));
 		} catch (DaoException e) {
 			throw new ServiceException("Error creating user",e);
 		}
 	}
 
-	public UserDto getCredentials(String user, String password) throws ServiceException {
+	public UserDto getCredentials(String userName, String password) throws ServiceException {
 		try {
-			UserDto userDto = _userDao.getUser(user);
-			if(userDto!=null && !BCrypt.checkpw(password, userDto.getPassword())) {
+			User user = _userDao.getUser(userName);
+			if(user!=null && !BCrypt.checkpw(password, user.getPassword())) {
 				return null;
 			}
-			return userDto;
+			return toUserDto(user);
 
 		} catch (DaoException e) {
 			throw new ServiceException("Error getting Credentials",e);
@@ -42,7 +48,7 @@ public class UserService implements IUserService {
 
 	public UserDto getUser(String user) throws ServiceException {
 			try {
-				return _userDao.getUser(user.toLowerCase());
+				return toUserDto(_userDao.getUser(user.toLowerCase()));
 			} catch (DaoException e) {
 				throw new ServiceException("Error getting user",e);
 			}
@@ -50,7 +56,12 @@ public class UserService implements IUserService {
 	
 	public List<UserDto> getAllUsers() throws ServiceException {
 		try {
-			return _userDao.findAllUsers();
+			List<User> allUsers = _userDao.findAllUsers();
+			List<UserDto> users = new ArrayList<UserDto>();
+			for (User user : allUsers) {
+				users.add(toUserDto(user));
+			}
+			return users;
 		} catch (DaoException e) {
 			throw new ServiceException("Error getting all users",e);
 		}
@@ -66,7 +77,7 @@ public class UserService implements IUserService {
 
 	public UserDto getUser(Long id) throws ServiceException {
 		try {
-			return _userDao.getUser(id);
+			return toUserDto(_userDao.getUser(id));
 		} catch (DaoException e) {
 			throw new ServiceException("Error getting User by Id",e);
 		}
@@ -74,10 +85,11 @@ public class UserService implements IUserService {
 
 	public void modifyUser(UserDto userDto) throws ServiceException {
 		try {
-			if(!userDto.getPassword().equals("****")){
-				userDto.setPassword(BCrypt.hashpw(userDto.getPassword(),BCrypt.gensalt()));
+			User user = toUser(_userDao.getUser(userDto.getName()), userDto);
+			if(!user.getPassword().equals("****")){
+				user.setPassword(BCrypt.hashpw(userDto.getPassword(),BCrypt.gensalt()));
 			}
-			_userDao.modifyUser(userDto);
+			_userDao.mergeUser(user);
 		} catch (DaoException e) {
 			throw new ServiceException("Error modifying User",e);
 		}
@@ -90,6 +102,56 @@ public class UserService implements IUserService {
 		} catch (DaoException e) {
 			throw new ServiceException("Error deleting user",e);
 		}
+	}
+	
+	private User toUser(User user,UserDto userDto) {
+		if(user==null || userDto==null){
+			return null;
+		}
+		//		user.setId(userDto.getId());
+		user.setUser(userDto.getName());
+		if(!userDto.getPassword().equals("****")){
+			user.setPassword(userDto.getPassword());
+		}
+		UserProfile profile = userDto.getProfile();
+		user.setProfile(profile!=null?profile.toString():UserProfile.NORMAL.toString());
+		user.setName(userDto.getFullName());
+		user.setSurname(userDto.getSurname());
+		user.setEmail(userDto.getEmail());
+
+		Set<Album> albums = new HashSet<Album>();
+
+		List<String> albumsArr = userDto.getAlbums();
+		if(albumsArr!=null){
+			for(String albumName:albumsArr){
+				Album album = new Album();
+				album.setName(albumName);
+				albums.add(album);
+			}
+			user.setAlbums(albums);
+		}
+		return user;
+	}
+
+	private UserDto toUserDto(User user){
+		if(user==null){
+			return null;
+		}
+		UserDto userDto = new UserDto(user.getUser(), user.getPassword());
+		userDto.setId(user.getId());
+		userDto.setProfile(UserProfile.valueOf(user.getProfile()));
+		userDto.setFullName(user.getName());
+		userDto.setSurname(user.getSurname());
+		userDto.setEmail(user.getEmail());
+		List<String> albums = new ArrayList<String>();
+		Set<Album> albumsList = user.getAlbums();
+		if(albumsList!=null){
+			for(Album album :albumsList){
+				albums.add(album.getName());
+			}
+		}
+		userDto.setAlbums(albums);
+		return userDto;
 	}
 
 }
