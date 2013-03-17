@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ViewerPanel extends SplitLayoutPanel {
 	
@@ -21,6 +22,8 @@ public class ViewerPanel extends SplitLayoutPanel {
 	
 	private ScrollPanel scrollAlbumPanel;
 	
+	private VerticalPanel leftPanel;
+	
 	public ViewerPanel() {
 		super(7);
 		addWest(getScrollImagesPanel(), 200);
@@ -30,10 +33,19 @@ public class ViewerPanel extends SplitLayoutPanel {
 	private ScrollPanel getScrollImagesPanel(){
 		if(this.scrollAlbumPanel == null){
 			this.scrollAlbumPanel = new ScrollPanel();
-			this.scrollAlbumPanel.add(getFoldersListPanel());
+			this.scrollAlbumPanel.add(getLeftPanel());
 		}
 		return this.scrollAlbumPanel;
 	}
+	
+	private VerticalPanel getLeftPanel(){
+		if(this.leftPanel == null){
+			this.leftPanel = new VerticalPanel();
+			this.leftPanel.add(getFoldersListPanel());
+		}
+		return this.leftPanel;
+	}
+	
 	
 	private LayoutPanel getRightPanel(){
 		if(this.rightPanel == null){

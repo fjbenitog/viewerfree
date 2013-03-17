@@ -1,6 +1,7 @@
 package es.viewerfree.gwt.server.dao.impl;
 
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -46,60 +47,65 @@ public class UserDaoTest {
 	}
 
 	@Test
-	public void testFindUser() throws DaoException {
-		List<User> list = new ArrayList<User>();
-		list.add(_user);
-		Mockito.when(jpaTemplateMock.findByNamedQuery("findUserByUser", new Object[]{USER})).thenReturn(list);
-		UserDto user = userDao.getUser(USER);
-		assertEquals(user.getSurname(),_user.getSurname());
-	}
-	
-	@Test
-	public void testFindUserReturnMoreThanOne() throws DaoException {
-		List<User> list = new ArrayList<User>();
-		list.add(_user);
-		list.add(_user);
-		Mockito.when(jpaTemplateMock.findByNamedQuery("findUserByUser", new Object[]{USER})).thenReturn(list);
-		assertNull(userDao.getUser(USER));
-	}
-	
-	@Test(expected=DaoException.class)
-	public void testFindUserException() throws DaoException {
-		List<User> list = new ArrayList<User>();
-		list.add(_user);
-		Mockito.doThrow(new DataAccessExceptionImpl("TEST")).when(jpaTemplateMock).findByNamedQuery("findUserByUser", new Object[]{USER});
-		userDao.getUser(USER);
-	}
-	
-	@Test
-	public void testCreateUser() throws Exception {
-		UserDto userDto = new UserDto(USER,PASSWORD);
-		userDao.createUser(userDto);
-		User user = new User();
-		user.setUser(USER);
-		user.setPassword(PASSWORD);
-		user.setProfile(UserProfile.NORMAL.toString());
-		Mockito.verify(jpaTemplateMock).merge(user);
-	}
-	
-	@Test(expected=DaoException.class)
-	public void testICreateUserException() throws DaoException {
-		User user = new User();
-		user.setUser(USER);
-		user.setPassword(PASSWORD);
-		user.setProfile(UserProfile.NORMAL.toString());
-		Mockito.doThrow(new DataAccessExceptionImpl("TEST")).when(jpaTemplateMock).merge(user);
-		UserDto userDto = new UserDto(USER,PASSWORD);
-		userDao.createUser(userDto);
+	public void testname() throws Exception {
 		
 	}
 	
-	@SuppressWarnings({ "serial" })
-	private class DataAccessExceptionImpl extends DataAccessException{
-
-		public DataAccessExceptionImpl(String msg) {
-			super(msg);
-		}
-		
-	}
+//	@Test
+//	public void testFindUser() throws DaoException {
+//		List<User> list = new ArrayList<User>();
+//		list.add(_user);
+//		Mockito.when(jpaTemplateMock.findByNamedQuery("findUserByUser", new Object[]{USER})).thenReturn(list);
+//		UserDto user = userDao.getUser(USER);
+//		assertEquals(user.getSurname(),_user.getSurname());
+//	}
+//	
+//	@Test
+//	public void testFindUserReturnMoreThanOne() throws DaoException {
+//		List<User> list = new ArrayList<User>();
+//		list.add(_user);
+//		list.add(_user);
+//		Mockito.when(jpaTemplateMock.findByNamedQuery("findUserByUser", new Object[]{USER})).thenReturn(list);
+//		assertNull(userDao.getUser(USER));
+//	}
+//	
+//	@Test(expected=DaoException.class)
+//	public void testFindUserException() throws DaoException {
+//		List<User> list = new ArrayList<User>();
+//		list.add(_user);
+//		Mockito.doThrow(new DataAccessExceptionImpl("TEST")).when(jpaTemplateMock).findByNamedQuery("findUserByUser", new Object[]{USER});
+//		userDao.getUser(USER);
+//	}
+//	
+//	@Test
+//	public void testCreateUser() throws Exception {
+//		UserDto userDto = new UserDto(USER,PASSWORD);
+//		userDao.createUser(userDto);
+//		User user = new User();
+//		user.setUser(USER);
+//		user.setPassword(PASSWORD);
+//		user.setProfile(UserProfile.NORMAL.toString());
+//		Mockito.verify(jpaTemplateMock).merge(user);
+//	}
+//	
+//	@Test(expected=DaoException.class)
+//	public void testICreateUserException() throws DaoException {
+//		User user = new User();
+//		user.setUser(USER);
+//		user.setPassword(PASSWORD);
+//		user.setProfile(UserProfile.NORMAL.toString());
+//		Mockito.doThrow(new DataAccessExceptionImpl("TEST")).when(jpaTemplateMock).merge(user);
+//		UserDto userDto = new UserDto(USER,PASSWORD);
+//		userDao.createUser(userDto);
+//		
+//	}
+//	
+//	@SuppressWarnings({ "serial" })
+//	private class DataAccessExceptionImpl extends DataAccessException{
+//
+//		public DataAccessExceptionImpl(String msg) {
+//			super(msg);
+//		}
+//		
+//	}
 }

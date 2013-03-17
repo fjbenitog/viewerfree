@@ -22,4 +22,5 @@ public interface IUserService {
 	
 	public void delete(List<String> users) throws ServiceException;
 
+	
 }

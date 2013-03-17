@@ -12,6 +12,9 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.AutoCloseInputStream;
 
+import es.viewerfree.gwt.server.dao.DaoException;
+import es.viewerfree.gwt.server.dao.ITagDao;
+import es.viewerfree.gwt.server.dao.IUserDao;
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.server.viewer.ManageImage;
 
@@ -25,6 +28,26 @@ public class AlbumManagerImpl implements AlbumManager {
 	private ManageImage manageImage;
 
 	private static  Comparator<String> comparatorAlphanumeric = new ComparatorAlphanumeric();
+	
+	private ITagDao tagDao;
+	
+	private IUserDao userDao;
+
+	public IUserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(IUserDao userDao) {
+		this.userDao = userDao;
+	}
+
+	public ITagDao getTagDao() {
+		return tagDao;
+	}
+
+	public void setTagDao(ITagDao tagDao) {
+		this.tagDao = tagDao;
+	}
 
 	public ManageImage getManageImage() {
 		return manageImage;
@@ -139,9 +162,17 @@ public class AlbumManagerImpl implements AlbumManager {
 	@Override
 	public void getDefaultImage(OutputStream out) throws IOException {
 		manageImage.getDefaultImage(out);
-
 	}
 
+	@Override
+	public void addTag(String userName, String albumName, String tagName) throws DaoException {
+		tagDao.addTag(userDao.getUser(userName), albumName, tagName);
+	}
+	
+	@Override
+	public List<String> getAlbums(String userName, String tagName) {
+		return tagDao.getAlbumsByTag(userName, tagName);
+	}
 
 	private File getAlbumsPath() {
 		File albumsPath = new File(getPath());
@@ -161,9 +192,5 @@ public class AlbumManagerImpl implements AlbumManager {
 
 
 	}
-
-
-
-
 
 }

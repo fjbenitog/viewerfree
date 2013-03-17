@@ -2,21 +2,19 @@ package es.viewerfree.gwt.server.dao;
 
 import java.util.List;
 
-import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.server.entities.User;
 
 
 public interface IUserDao {
 
-	public UserDto getUser(String user) throws DaoException ;
+	public User getUser(String user) throws DaoException ;
 	
-	public UserDto getUser(Long id) throws DaoException ;
+	public User getUser(Long id) throws DaoException ;
 	
-	public void createUser(UserDto userDto) throws DaoException;
+	public void mergeUser(User user) throws DaoException;
 	
-	public List<UserDto> findAllUsers() throws DaoException;
+	public List<User> findAllUsers() throws DaoException;
 	
-	public void modifyUser(UserDto userDto) throws DaoException;
-
 	public void delete(List<String> user) throws DaoException;
 
 }

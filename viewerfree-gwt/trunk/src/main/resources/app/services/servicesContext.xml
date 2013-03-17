@@ -5,6 +5,10 @@
   	<bean id="userDao" class="es.viewerfree.gwt.server.dao.impl.UserDao">
   		<property name="entityManagerFactory" ref="entityManagerFactory"/>
   	</bean>
+  	
+  	<bean id="tagDao" class="es.viewerfree.gwt.server.dao.impl.TagDao">
+  		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+  	</bean>
 
 	<bean id="service.user" class="es.viewerfree.gwt.server.service.impl.UserService">
 		<property name="userDao" ref="userDao"/>
