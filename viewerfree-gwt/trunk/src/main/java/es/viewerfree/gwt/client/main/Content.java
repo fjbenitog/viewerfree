@@ -1,7 +1,6 @@
 package es.viewerfree.gwt.client.main;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -15,8 +14,6 @@ public class Content extends LayoutPanel{
 	
 	private HTML info;
 	
-	private LayoutPanel rightPanel;
-	
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 	
 	private final Constants constants = GWT.create(Constants.class);
@@ -24,22 +21,11 @@ public class Content extends LayoutPanel{
 	public Content() {
 		setStyleName("loginPanel");
 		add(getInfo());
-		setWidgetLeftWidth(getInfo(), 0, Unit.PCT, 50, Unit.PCT);
-		add(getRightPanel());
-		setWidgetRightWidth(getRightPanel(), 0, Unit.PX, 48, Unit.PCT);
-	}
-
-	public LayoutPanel getRightPanel(){
-		if(this.rightPanel==null){
-			this.rightPanel = new LayoutPanel();
-			this.rightPanel.add(getLoginForm());
-			this.rightPanel.setWidgetLeftWidth(getLoginForm(), 0, Unit.PCT, 500, Unit.PX);
-			this.rightPanel.setWidgetTopHeight(getLoginForm(), 90, Unit.PX, 100, Unit.PCT);
-			Style style = getLoginForm().getElement().getStyle();
-			style.clearLeft();
-			style.clearTop();
-		}
-		return this.rightPanel;
+		setWidgetTopBottom(getInfo(), 20, Unit.PX, 10, Unit.PCT);
+		setWidgetLeftRight(getInfo(), 15, Unit.PCT, 550, Unit.PX);
+		add(getLoginForm());
+		setWidgetTopBottom(getLoginForm(), 40, Unit.PX, 10, Unit.PCT);
+		setWidgetRightWidth(getLoginForm(), 0, Unit.PX, 500, Unit.PX);
 	}
 	
 	public LoginForm getLoginForm(){
@@ -64,7 +50,6 @@ public class Content extends LayoutPanel{
 			htmlText.append("</ul>");
 			htmlText.append("<div class='info'>").append(messages.demoMessage()).append("</div>");
 			this.info = new HTML(htmlText.toString());
-			this.info.setStyleName("left");
 		}
 		return this.info;
 	}
