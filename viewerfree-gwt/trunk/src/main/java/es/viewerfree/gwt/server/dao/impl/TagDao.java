@@ -1,6 +1,8 @@
 package es.viewerfree.gwt.server.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,7 +12,6 @@ import org.springframework.orm.jpa.support.JpaDaoSupport;
 import es.viewerfree.gwt.server.dao.ITagDao;
 import es.viewerfree.gwt.server.entities.Album;
 import es.viewerfree.gwt.server.entities.Tag;
-import es.viewerfree.gwt.server.entities.Tag.TagId;
 import es.viewerfree.gwt.server.entities.User;
 
 public class TagDao extends JpaDaoSupport implements ITagDao {
@@ -18,12 +19,13 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 	@Override
 	public void addTag(User user, String albumName, String tagName) {
 		Tag tag = getEntityTag(user.getUser(), tagName);
+		Album album = getEntityAlbum(albumName);
 		if(tag == null){
-			tag = composeTag(user, albumName, tagName);
+			tag = composeTag(user, album, tagName);
 		}else{
-			Album album = new Album();
-			album.setName(albumName);
-			tag.getAlbums().add(album);
+			if(!tag.getAlbums().contains(album)){
+				tag.getAlbums().add(album);
+			}
 		}
 		getJpaTemplate().merge(tag);
 	}
@@ -47,19 +49,21 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		}
 		return tagEntity;
 	}
+	
+	private Album getEntityAlbum(String albumName) {
+		List<Album> albums = getJpaTemplate().findByNamedQuery("findAlbumByName", new Object[]{albumName});
+		Album albumEntity = null;
+		if(albums.size()==1){
+			albumEntity = albums.get(0);
+		}
+		return albumEntity;
+	}
 
-	private Tag composeTag(User user, String albumName, String tagName) {
-		Tag tag;
-		tag = new Tag();
-		TagId id = new TagId();
-		id.setName(tagName);
-		id.setUser(user);
-		tag.setId(id);
-		Album album = new Album();
-		album.setName(albumName);
-		Set<Album> albums = new HashSet<Album>();
-		albums.add(album);
-		tag.setAlbums(albums);
+	private Tag composeTag(User user, Album album, String tagName) {
+		Tag tag = new Tag();
+		tag.setName(tagName);
+		tag.setUser(user);
+		tag.setAlbums(Arrays.asList(album));
 		return tag;
 	}
 }

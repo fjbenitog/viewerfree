@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.viewerfree.gwt.server.ServiceTestSupport;
 import es.viewerfree.gwt.shared.dto.UserDto;
-import es.viewerfree.gwt.shared.service.ServiceException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:context/ApplicationContext.xml"})
