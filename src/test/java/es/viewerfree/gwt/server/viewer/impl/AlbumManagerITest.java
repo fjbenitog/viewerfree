@@ -2,8 +2,10 @@ package es.viewerfree.gwt.server.viewer.impl;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +45,6 @@ public class AlbumManagerITest extends ServiceTestSupport{
 		assertEquals(Arrays.asList(ALBUMS.get(0)),albumManager.getAlbums(user.getName(), TAG1));
 		
 		albumManager.addTag(user.getName(), user.getAlbums().get(1), TAG1);
-		
 		assertEquals(ALBUMS,albumManager.getAlbums(user.getName(), TAG1));
 	}
 	

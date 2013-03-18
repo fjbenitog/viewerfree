@@ -1,9 +1,8 @@
 package es.viewerfree.gwt.server.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -119,7 +118,7 @@ public class UserService implements IUserService {
 		user.setSurname(userDto.getSurname());
 		user.setEmail(userDto.getEmail());
 
-		Set<Album> albums = new HashSet<Album>();
+		Collection<Album> albums = new ArrayList<Album>();
 
 		List<String> albumsArr = userDto.getAlbums();
 		if(albumsArr!=null){
@@ -144,7 +143,7 @@ public class UserService implements IUserService {
 		userDto.setSurname(user.getSurname());
 		userDto.setEmail(user.getEmail());
 		List<String> albums = new ArrayList<String>();
-		Set<Album> albumsList = user.getAlbums();
+		Collection<Album> albumsList = user.getAlbums();
 		if(albumsList!=null){
 			for(Album album :albumsList){
 				albums.add(album.getName());

@@ -15,6 +15,7 @@ import org.apache.commons.io.input.AutoCloseInputStream;
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.ITagDao;
 import es.viewerfree.gwt.server.dao.IUserDao;
+import es.viewerfree.gwt.server.entities.User;
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.server.viewer.ManageImage;
 
@@ -166,7 +167,8 @@ public class AlbumManagerImpl implements AlbumManager {
 
 	@Override
 	public void addTag(String userName, String albumName, String tagName) throws DaoException {
-		tagDao.addTag(userDao.getUser(userName), albumName, tagName);
+		User user = userDao.getUser(userName);
+		tagDao.addTag(user, albumName, tagName);
 	}
 	
 	@Override
