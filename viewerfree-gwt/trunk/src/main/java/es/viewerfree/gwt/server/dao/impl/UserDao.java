@@ -6,6 +6,7 @@ import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.IUserDao;
+import es.viewerfree.gwt.server.entities.Tag;
 import es.viewerfree.gwt.server.entities.User;
 
 
@@ -40,6 +41,15 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 
 	}
 	
+	public void mergeTag(Tag tag)throws DaoException {
+		try{
+			getJpaTemplate().merge(tag);
+		}catch (Exception e) {
+			throw new DaoException("Unanabled to create a User",e);
+		}
+
+	}
+	
 
 	@SuppressWarnings("unchecked")
 	public List<User> findAllUsers() throws DaoException {
@@ -58,7 +68,9 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 	@Override
 	public void delete(List<String> users) throws DaoException {
 		for (String user : users) {
-			getJpaTemplate().remove(getUserEntity(user));
+			User userEntity = getUserEntity(user);
+			if(userEntity!=null)
+				getJpaTemplate().remove(userEntity);
 		}
 	}
 

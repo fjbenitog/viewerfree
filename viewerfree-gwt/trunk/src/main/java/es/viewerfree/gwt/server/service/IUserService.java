@@ -21,6 +21,5 @@ public interface IUserService {
 	public void modifyUser(UserDto userDto) throws ServiceException;
 	
 	public void delete(List<String> users) throws ServiceException;
-
 	
 }

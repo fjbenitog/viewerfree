@@ -13,6 +13,10 @@
 	<bean id="service.user" class="es.viewerfree.gwt.server.service.impl.UserService">
 		<property name="userDao" ref="userDao"/>
 	</bean>
+	<bean id="service.tag" class="es.viewerfree.gwt.server.service.impl.TagService">
+		<property name="userDao" ref="userDao"/>
+		<property name="tagDao" ref="tagDao"/>
+	</bean>
 	
 	<bean id="user" class="es.viewerfree.gwt.server.UserServiceImpl" scope="request">
 		<property name="userService" ref="service.user"/>
@@ -20,6 +24,7 @@
 	
 	<bean id="viewer" class="es.viewerfree.gwt.server.ViewerServiceImpl" scope="request">
 		<property name="userService" ref="service.user"/>
+		<property name="tagService" ref="service.tag"/>
 		<property name="albumManager" ref="albumManager"/>
 		<property name="cachedPath"><value>${preview.path}</value></property>
 		<property name="thumbnailCachedPath"><value>${thumbnail.path}</value></property>

@@ -37,6 +37,7 @@
 		<property name="properties">
 			<props>
 				<prop key="save*">PROPAGATION_REQUIRED, -Exception</prop>
+				<prop key="add*">PROPAGATION_REQUIRED, -Exception</prop>
 				<prop key="create*">PROPAGATION_REQUIRED, -Exception</prop>
 				<prop key="insert*">PROPAGATION_REQUIRED, -Exception</prop>
 				<prop key="update*">PROPAGATION_REQUIRED, -Exception</prop>

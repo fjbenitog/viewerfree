@@ -2,16 +2,14 @@ package es.viewerfree.gwt.server.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import es.viewerfree.gwt.server.dao.ITagDao;
 import es.viewerfree.gwt.server.entities.Album;
 import es.viewerfree.gwt.server.entities.Tag;
+import es.viewerfree.gwt.server.entities.Tag.TagId;
 import es.viewerfree.gwt.server.entities.User;
 
 public class TagDao extends JpaDaoSupport implements ITagDao {
@@ -41,6 +39,13 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		return sTags;
 	}
 
+	@Override
+	public List<Tag> getTagsByAlbum(User user, String albumName) {
+		List<Tag> tags = getJpaTemplate().findByNamedQuery("findTagsByAlbum", new Object[]{user.getId(),albumName});
+		
+		return tags;
+	}
+	
 	private Tag getEntityTag(String userName, String tagName) {
 		List<Tag> tags = getJpaTemplate().findByNamedQuery("findTagByName", new Object[]{tagName,userName});
 		Tag tagEntity = null;
@@ -61,9 +66,13 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 
 	private Tag composeTag(User user, Album album, String tagName) {
 		Tag tag = new Tag();
-		tag.setName(tagName);
-		tag.setUser(user);
+		TagId tagId = new TagId();
+		tagId.setName(tagName);
+		tagId.setUser(user);
+		tag.setTagId(tagId);
 		tag.setAlbums(Arrays.asList(album));
 		return tag;
 	}
+
+
 }

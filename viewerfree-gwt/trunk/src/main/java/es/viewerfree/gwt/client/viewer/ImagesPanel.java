@@ -24,6 +24,7 @@ import com.reveregroup.gwt.imagepreloader.FitImageLoadHandler;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.common.AddTagForm;
 import es.viewerfree.gwt.client.common.RefreshWidgetListener;
 import es.viewerfree.gwt.client.common.UploadPicForm;
 import es.viewerfree.gwt.client.service.ViewerService;
@@ -55,6 +56,8 @@ public class ImagesPanel extends LayoutPanel {
 	
 	private Button uploadImage;
 	
+	private Image addTagImage;
+	
 	private static final int MAX_SIZE_PIC = 150;
 
 	public ImagesPanel() {
@@ -71,15 +74,18 @@ public class ImagesPanel extends LayoutPanel {
 			this.albumTitlePanel.add(getAlbumTitleLabel());
 			this.albumTitlePanel.setWidgetLeftRight(getAlbumTitleLabel(), 50, Unit.PX, 100, Unit.PX);
 			this.albumTitlePanel.setWidgetTopBottom(getAlbumTitleLabel(), 2, Unit.PX, 15, Unit.PX);
-			this.albumTitlePanel.add(getCreateUserButton());
-			this.albumTitlePanel.setWidgetRightWidth(getCreateUserButton(), 60, Unit.PX, 150, Unit.PX);
-			this.albumTitlePanel.setWidgetTopBottom(getCreateUserButton(), 23, Unit.PX, 23, Unit.PX);
+			this.albumTitlePanel.add(getUploadImageButton());
+			this.albumTitlePanel.setWidgetRightWidth(getUploadImageButton(), 60, Unit.PX, 150, Unit.PX);
+			this.albumTitlePanel.setWidgetTopBottom(getUploadImageButton(), 23, Unit.PX, 23, Unit.PX);
+			this.albumTitlePanel.add(getAddTagImage());
+			this.albumTitlePanel.setWidgetRightWidth(getAddTagImage(), 215, Unit.PX, 35, Unit.PX);
+			this.albumTitlePanel.setWidgetTopBottom(getAddTagImage(), 18, Unit.PX, 18, Unit.PX);
 			this.albumTitlePanel.setStyleName("titlePanel");
 		}
 		return this.albumTitlePanel;
 	}
 	
-	private Button getCreateUserButton(){
+	private Button getUploadImageButton(){
 		if(this.uploadImage == null){
 			this.uploadImage = new Button(messages.uploadPicture());
 			this.uploadImage.addClickHandler(new ClickHandler() {
@@ -93,11 +99,33 @@ public class ImagesPanel extends LayoutPanel {
 		return this.uploadImage;
 	}
 	
+	private Image getAddTagImage(){
+		if(this.addTagImage== null){
+			this.addTagImage = new Image(constants.viewerImagesPath()+constants.imageAddTagIcon());
+			this.addTagImage.setStyleName("tag");
+			this.addTagImage.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent arg0) {
+					addTagForm(albumDto.getName());
+				}
+			});
+	
+		}
+		return this.addTagImage;
+	}
+	
 	private void uploadPicForm(final String albumName){
 		UploadPicForm uploadPicForm = new UploadPicForm(albumName);
 		uploadPicForm.setRefreshWidgetListener(new RefreshImagesPanelListener(albumName));
 		uploadPicForm.setAnimationEnabled(true);
 		uploadPicForm.setGlassEnabled(true);
+	}
+	
+	private void addTagForm(final String albumName){
+		AddTagForm addTagForm = new AddTagForm(albumName);
+//		addTagForm.setRefreshWidgetListener(new RefreshImagesPanelListener(albumName));
+		addTagForm.setAnimationEnabled(true);
+		addTagForm.setGlassEnabled(true);
 	}
 
 	private Label getAlbumTitleLabel(){

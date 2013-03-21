@@ -20,7 +20,7 @@
 		<property name="albumPath"><value>${album.path}</value></property>
 		<property name="applicationPath"><value>${application.path}</value></property>
 		<property name="manageImage" ref="manageImage"/>
-		<property name="tagDao" ref="tagDao"/>
+		
 		<property name="userDao" ref="userDao"/>
 	</bean>
 

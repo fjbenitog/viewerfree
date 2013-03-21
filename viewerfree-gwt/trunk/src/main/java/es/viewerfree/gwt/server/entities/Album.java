@@ -1,22 +1,15 @@
 package es.viewerfree.gwt.server.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-@Entity()
+@Entity
 @Table(name="vf_album")
 @NamedQueries({@NamedQuery(name="findAlbumByName",query="SELECT a from Album a where a.name = ?")})
 public class Album implements Serializable{ 

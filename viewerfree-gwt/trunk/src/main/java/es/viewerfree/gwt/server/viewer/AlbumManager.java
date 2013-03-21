@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import es.viewerfree.gwt.server.dao.DaoException;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 
 public interface AlbumManager {
@@ -28,7 +28,4 @@ public interface AlbumManager {
 	
 	public void deletePicture(String albumName,String pciture) throws IOException;
 	
-	public void addTag(String userName,String albumName, String tagName) throws DaoException;
-	
-	public List<String> getAlbums(String userName, String tagName);
 }

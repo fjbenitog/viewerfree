@@ -54,8 +54,7 @@ public class User implements Serializable{
 	        inverseJoinColumns=@JoinColumn(name="ALBUM_ID"))
 	private Collection<Album> albums;
 	
-//	@OneToMany( cascade = CascadeType.MERGE, fetch=FetchType.LAZY)
-//	private Set<Tag> tags;
+
 	
 	public String getProfile() {
 		return profile;

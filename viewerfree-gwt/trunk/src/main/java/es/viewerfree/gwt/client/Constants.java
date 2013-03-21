@@ -184,6 +184,14 @@ public interface Constants extends com.google.gwt.i18n.client.Constants {
   @Key("imageDelete")
   String imageDelete();
   
+  @DefaultStringValue("tag-new-icon.png")
+  @Key("imageAddTagIcon")
+  String imageAddTagIcon();
+  
+  @DefaultStringValue("tag-new-icon_small.png")
+  @Key("imageAddTagIconSmall")
+  String imageAddTagIconSmall();
+  
   @DefaultStringValue("images/")
   @Key("imagesPath")
   String imagesPath();
