@@ -22,4 +22,6 @@ public interface ViewerService extends RemoteService{
 	void createAlbum(String albumName);
 	
 	void deletePicture(String albumName, String pictureName) throws Exception;
+	
+	void addTag(String albumName, String tagName) throws Exception;
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.viewerfree.gwt.client.service.ViewerService;
+import es.viewerfree.gwt.server.service.ITagService;
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.server.service.SpringRemoteServiceServlet;
 import es.viewerfree.gwt.server.util.CryptoUtil;
@@ -18,6 +19,8 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 public class ViewerServiceImpl extends SpringRemoteServiceServlet implements ViewerService {
 	
 	private IUserService userService;
+	
+	private ITagService tagService;
 	
 	public IUserService getUserService() {
 		return userService;
@@ -110,6 +113,19 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	public void deletePicture(String albumName, String pictureName)
 			throws Exception {
 		this.albumManager.deletePicture(albumName, pictureName);
+	}
+
+	@Override
+	public void addTag(String albumName, String tagName) throws Exception {
+		tagService.addTag(((UserDto)getSession(ParamKey.USER)).getName(), albumName, tagName);
+	}
+
+	public ITagService getTagService() {
+		return tagService;
+	}
+
+	public void setTagService(ITagService tagService) {
+		this.tagService = tagService;
 	}
 
 

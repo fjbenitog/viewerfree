@@ -15,16 +15,12 @@ import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 import es.viewerfree.gwt.shared.service.ServiceException;
 
-
-
-
 public class UserService implements IUserService {
 
 	private IUserDao _userDao;
 
 	public void createUser(UserDto userDto ) throws ServiceException {
 		try {
-			userDto.setPassword(BCrypt.hashpw(userDto.getPassword(),BCrypt.gensalt()));
 			userDto.setName(userDto.getName().toLowerCase());
 			getUserDao().mergeUser(toUser(new User(), userDto));
 		} catch (DaoException e) {
@@ -85,9 +81,6 @@ public class UserService implements IUserService {
 	public void modifyUser(UserDto userDto) throws ServiceException {
 		try {
 			User user = toUser(_userDao.getUser(userDto.getName()), userDto);
-			if(!user.getPassword().equals("****")){
-				user.setPassword(BCrypt.hashpw(userDto.getPassword(),BCrypt.gensalt()));
-			}
 			_userDao.mergeUser(user);
 		} catch (DaoException e) {
 			throw new ServiceException("Error modifying User",e);
@@ -110,7 +103,7 @@ public class UserService implements IUserService {
 		//		user.setId(userDto.getId());
 		user.setUser(userDto.getName());
 		if(!userDto.getPassword().equals("****")){
-			user.setPassword(userDto.getPassword());
+			user.setPassword(BCrypt.hashpw(userDto.getPassword(),BCrypt.gensalt()));
 		}
 		UserProfile profile = userDto.getProfile();
 		user.setProfile(profile!=null?profile.toString():UserProfile.NORMAL.toString());
@@ -152,5 +145,6 @@ public class UserService implements IUserService {
 		userDto.setAlbums(albums);
 		return userDto;
 	}
+
 
 }

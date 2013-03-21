@@ -18,6 +18,7 @@ import es.viewerfree.gwt.server.dao.IUserDao;
 import es.viewerfree.gwt.server.entities.User;
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.server.viewer.ManageImage;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 
 public class AlbumManagerImpl implements AlbumManager {
@@ -164,18 +165,7 @@ public class AlbumManagerImpl implements AlbumManager {
 	public void getDefaultImage(OutputStream out) throws IOException {
 		manageImage.getDefaultImage(out);
 	}
-
-	@Override
-	public void addTag(String userName, String albumName, String tagName) throws DaoException {
-		User user = userDao.getUser(userName);
-		tagDao.addTag(user, albumName, tagName);
-	}
 	
-	@Override
-	public List<String> getAlbums(String userName, String tagName) {
-		return tagDao.getAlbumsByTag(userName, tagName);
-	}
-
 	private File getAlbumsPath() {
 		File albumsPath = new File(getPath());
 		if(!albumsPath.exists()){

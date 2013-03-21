@@ -2,6 +2,7 @@ package es.viewerfree.gwt.server.dao;
 
 import java.util.List;
 
+import es.viewerfree.gwt.server.entities.Tag;
 import es.viewerfree.gwt.server.entities.User;
 
 
@@ -16,5 +17,7 @@ public interface IUserDao {
 	public List<User> findAllUsers() throws DaoException;
 	
 	public void delete(List<String> user) throws DaoException;
+	
+	public void mergeTag(Tag tag)throws DaoException;
 
 }
