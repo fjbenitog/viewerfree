@@ -594,8 +594,48 @@
 	text-shadow: 1px 1px 0 #DDDDFF;
 }
 
-.editor img {
+.tagForm  {
+
+}
+
+.tagForm .editor img {
 	cursor: pointer;
+}
+
+.tagForm input {
+	border: 1px solid #AFAFA4;
+	vertical-align: middle;
+}
+
+.tagForm input:hover {
+	border: 1px solid #8A8A7B;
+}
+
+.tagForm input:focus {
+	border: 1px solid #FF8000;
+}
+
+.tagForm .gwt-Label {
+	color: #FF8000;
+	display: inline-table;
+	padding-right: 15px;
+	font-size: 15px;
+	font-weight: bold;
+	font-family: arial, sans-serif;
+	cursor: pointer;
+	padding-right: 15px;
+}
+
+.tagForm .gwt-Label:HOVER {
+	color: #FFCC99;
+}
+
+.tagForm .titleLabel {
+	font-size: 11px;
+	font-weight: bold;
+	font-family: arial, sans-serif;
+	border-bottom: 1px solid #FF8000;
+	text-shadow: 2px 2px 3px #6374AB;
 }
 
 .closeButton{

@@ -13,9 +13,9 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 public class TagService implements ITagService {
 
 	private IUserDao userDao;
-	
+
 	private ITagDao tagDao;
-	
+
 	@Override
 	public void addTag(String userName, String albumName, String tagName)
 			throws ServiceException {
@@ -32,19 +32,23 @@ public class TagService implements ITagService {
 			throws ServiceException {
 		return tagDao.getAlbumsByTag(userName, tagName);
 	}
-	
+
 	@Override
 	public List<String> getTags(String userName, String albumName) throws ServiceException{
-		try {
-			List<String> tagsName = new ArrayList<String>();
-			List<Tag> tags = tagDao.getTagsByAlbum(userDao.getUser(userName), albumName);
-			for (Tag tag : tags) {
-				tagsName.add(tag.getTagId().getName());
-			}
-			return tagsName;
-		} catch (DaoException e) {
-			throw new ServiceException("Error getting Tag",e);
+		return tagsToList(tagDao.getTagsByAlbum(userName, albumName));
+	}
+	
+	@Override
+	public List<String> getOtherTags(String userName, String albumName) throws ServiceException{
+		return tagsToList(tagDao.getOtherTagsByAlbum(userName, albumName));
+	}
+	
+	private List<String> tagsToList(List<Tag> tags) {
+		List<String> tagsName = new ArrayList<String>();
+		for (Tag tag : tags) {
+			tagsName.add(tag.getTagId().getName());
 		}
+		return tagsName;
 	}
 
 	public IUserDao getUserDao() {

@@ -11,5 +11,7 @@ public interface ITagDao {
 	
 	public List<String> getAlbumsByTag(String userName, String tagName);
 	
-	public List<Tag> getTagsByAlbum(User user, String albumName);
+	public List<Tag> getTagsByAlbum(String user, String albumName);
+	
+	public List<Tag> getOtherTagsByAlbum(String user, String albumName);
 }
