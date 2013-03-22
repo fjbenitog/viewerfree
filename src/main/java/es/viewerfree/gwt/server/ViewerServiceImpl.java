@@ -120,6 +120,11 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 		tagService.addTag(((UserDto)getSession(ParamKey.USER)).getName(), albumName, tagName);
 	}
 
+	@Override
+	public List<String> getTags(String album) throws Exception {
+		return tagService.getTags(((UserDto)getSession(ParamKey.USER)).getName(), album);
+	}
+	
 	public ITagService getTagService() {
 		return tagService;
 	}
@@ -127,6 +132,7 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	public void setTagService(ITagService tagService) {
 		this.tagService = tagService;
 	}
+
 
 
 }

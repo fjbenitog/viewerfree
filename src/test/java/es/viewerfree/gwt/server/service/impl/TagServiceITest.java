@@ -4,16 +4,17 @@ package es.viewerfree.gwt.server.service.impl;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
-import java.util.List;
 
-import org.junit.Before;
+import javax.sql.DataSource;
+
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 
 import es.viewerfree.gwt.server.ServiceTestSupport;
 import es.viewerfree.gwt.server.service.ITagService;
@@ -22,74 +23,85 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:context/ApplicationContext.xml"})
-@TransactionConfiguration(defaultRollback=true)
-@Transactional
 public class TagServiceITest extends ServiceTestSupport{
 
 	private static final String USER_2 = "USER_2";
 	private static final String TAG1 = "TAG1";
 	private static final String TAG2 = "TAG2";
 	
+	private static final String[] TABLES = {"viewerfree.VF_ALBUM_USER","viewerfree.VF_ALBUM_TAG",
+		"viewerfree.VF_ALBUM","viewerfree.VF_TAG","viewerfree.VF_USERS"};
+
 	@Autowired
 	private ITagService tagService;
 	
-	
-	@Before
-	public void setUp() throws ServiceException{
-		userService.delete(Arrays.asList(USER_NAME,"admin"));
+	protected SimpleJdbcTemplate simpleJdbcTemplate;
+
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		this.simpleJdbcTemplate = new SimpleJdbcTemplate(dataSource);
 	}
-	
+
+	protected int deleteFromTables(String... names) {
+		return SimpleJdbcTestUtils.deleteFromTables(this.simpleJdbcTemplate, names);
+	}
+
+	@After
+	public void tearDown() throws ServiceException{
+		deleteFromTables(TABLES);
+	}
+
 	@Test
 	public void addTagOneAlbum() throws Exception {
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
 	}
-	
+
 	@Test
 	public void addTagTwoAlbum() throws Exception {
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
-		
+
 		tagService.addTag(user.getName(), user.getAlbums().get(1), TAG1);
 		assertEquals(ALBUMS,tagService.getAlbums(user.getName(), TAG1));
 	}
-	
+
 	@Test
 	public void addTwoTagsToAlbum() throws Exception {
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
-		
+
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG2);
-		
+
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG2));
 	}
-	
+
 	@Test
 	public void addSameTwoTagsToAlbum() throws Exception {
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
-		
+
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
-		
+
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
 	}
-	
+
 	@Test
 	public void addTagOneAlbumTwoUsers() throws Exception {
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
-		
+
 		UserDto user2 = insertUser(createUserDto(USER_2));
 		tagService.addTag(user2.getName(), user2.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user2.getName(), TAG1));
 	}
-	
+
 	@Test
 	public void getTagsByAlbum() throws Exception {
 		UserDto user = insertUser(createUserDto());
@@ -98,6 +110,20 @@ public class TagServiceITest extends ServiceTestSupport{
 
 		assertEquals(Arrays.asList(TAG1,TAG2),tagService.getTags(user.getName(), user.getAlbums().get(0)));
 	}
-	
-	
+
+	@Test
+	public void getOtherTagsByAlbum() throws Exception {
+		UserDto user = insertUser(createUserDto());
+		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
+		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG2);
+		assertEquals(Arrays.asList(TAG1,TAG2),tagService.getTags(user.getName(), user.getAlbums().get(0)));
+		
+
+		tagService.addTag(user.getName(), user.getAlbums().get(1), TAG1);
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), user.getAlbums().get(1)));
+
+		assertEquals(Arrays.asList(TAG2),tagService.getOtherTags(user.getName(), user.getAlbums().get(1)));
+	}
+
+
 }
