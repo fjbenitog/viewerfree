@@ -18,6 +18,4 @@ public interface IUserDao {
 	
 	public void delete(List<String> user) throws DaoException;
 	
-	public void mergeTag(Tag tag)throws DaoException;
-
 }

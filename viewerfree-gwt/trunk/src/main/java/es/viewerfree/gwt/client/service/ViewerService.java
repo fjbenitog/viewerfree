@@ -26,4 +26,8 @@ public interface ViewerService extends RemoteService{
 	void addTag(String albumName, String tagName) throws Exception;
 	
 	List<String> getTags(String album) throws Exception;
+	
+	List<String> getOtherTags(String album) throws Exception;
+	
+	void removeTag(String albumName, String tagName) throws Exception;
 }

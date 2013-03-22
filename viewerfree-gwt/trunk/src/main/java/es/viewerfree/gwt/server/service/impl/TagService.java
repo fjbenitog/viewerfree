@@ -51,6 +51,17 @@ public class TagService implements ITagService {
 		return tagsName;
 	}
 
+	@Override
+	public void removeTag(String userName, String albumName, String tagName)
+			throws ServiceException {
+		try {
+			tagDao.removeTag(userDao.getUser(userName),albumName,tagName);
+		} catch (DaoException e) {
+			throw new ServiceException("Error Removing Tag",e);
+		}
+		
+	}
+	
 	public IUserDao getUserDao() {
 		return userDao;
 	}
@@ -66,6 +77,7 @@ public class TagService implements ITagService {
 	public void setTagDao(ITagDao tagDao) {
 		this.tagDao = tagDao;
 	}
+
 
 
 }

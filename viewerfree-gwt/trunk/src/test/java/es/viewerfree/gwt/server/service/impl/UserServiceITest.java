@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,18 +17,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.viewerfree.gwt.server.ServiceTestSupport;
 import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:context/ApplicationContext.xml"})
-@TransactionConfiguration(defaultRollback=true)
-@Transactional
 public class UserServiceITest extends ServiceTestSupport{
 
+	@Before
+	public void setUp() throws ServiceException{
+		deleteFromTables(TABLES);
+	}
+	
 	@Test
 	public void getAdminUser() throws Exception {
+		insertUser(createUserDto());
 		List<UserDto> allUsers = userService.getAllUsers();
 		assertEquals(1,allUsers.size());
-		assertEquals("admin",allUsers.get(0).getName());
+		assertEquals(USER_NAME.toLowerCase(),allUsers.get(0).getName());
 	}
 	
 	@Test

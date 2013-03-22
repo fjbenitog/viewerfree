@@ -640,5 +640,6 @@
 
 .closeButton{
 	cursor: pointer;
+	font-size: 11px;
 }
 
