@@ -33,7 +33,7 @@ import javax.persistence.Table;
 	@EmbeddedId
 	private TagId tagId;
 
-	@ManyToMany( cascade = CascadeType.MERGE, fetch=FetchType.LAZY)
+	@ManyToMany( cascade = {CascadeType.MERGE}, fetch=FetchType.LAZY)
 	@JoinTable(name="vf_album_tag")
 	private Collection<Album> albums;
 

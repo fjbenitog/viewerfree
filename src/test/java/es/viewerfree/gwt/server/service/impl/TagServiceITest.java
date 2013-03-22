@@ -5,16 +5,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 
-import javax.sql.DataSource;
-
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 
 import es.viewerfree.gwt.server.ServiceTestSupport;
 import es.viewerfree.gwt.server.service.ITagService;
@@ -28,28 +25,16 @@ public class TagServiceITest extends ServiceTestSupport{
 	private static final String USER_2 = "USER_2";
 	private static final String TAG1 = "TAG1";
 	private static final String TAG2 = "TAG2";
-	
-	private static final String[] TABLES = {"viewerfree.VF_ALBUM_USER","viewerfree.VF_ALBUM_TAG",
-		"viewerfree.VF_ALBUM","viewerfree.VF_TAG","viewerfree.VF_USERS"};
+
 
 	@Autowired
 	private ITagService tagService;
-	
-	protected SimpleJdbcTemplate simpleJdbcTemplate;
 
-	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.simpleJdbcTemplate = new SimpleJdbcTemplate(dataSource);
-	}
-
-	protected int deleteFromTables(String... names) {
-		return SimpleJdbcTestUtils.deleteFromTables(this.simpleJdbcTemplate, names);
-	}
-
-	@After
-	public void tearDown() throws ServiceException{
+	@Before
+	public void setUp() throws ServiceException{
 		deleteFromTables(TABLES);
 	}
+
 
 	@Test
 	public void addTagOneAlbum() throws Exception {

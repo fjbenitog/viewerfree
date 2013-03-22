@@ -13,4 +13,6 @@ public interface ITagService {
 	void addTag(String userName, String albumName, String tagName) throws ServiceException;
 	
 	List<String> getAlbums(String userName, String tagName) throws ServiceException;
+	
+	void removeTag(String userName, String albumName, String tagName)  throws ServiceException;
 }

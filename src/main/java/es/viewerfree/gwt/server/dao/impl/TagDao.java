@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
 
+import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.ITagDao;
 import es.viewerfree.gwt.server.entities.Album;
 import es.viewerfree.gwt.server.entities.Tag;
@@ -13,6 +17,9 @@ import es.viewerfree.gwt.server.entities.Tag.TagId;
 import es.viewerfree.gwt.server.entities.User;
 
 public class TagDao extends JpaDaoSupport implements ITagDao {
+
+	private static final String DELETE_TAG_FROM_ALBUM = "Delete from  viewerfree.VF_ALBUM_TAG a " +
+					"where a.ALBUMS_NAME = ? AND a.VF_TAG_TAG_NAME = ? AND a.vf_tag_user_ID_USER = ?";
 
 	@Override
 	public void addTag(User user, String albumName, String tagName) {
@@ -51,6 +58,18 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		return getJpaTemplate().findByNamedQuery("findOtherTags", new Object[]{user,albumName});
 	}
 	
+	@Override
+	public void removeTag(User user, String albumName, String tagName) throws DaoException {
+		try{
+		EntityManager em = EntityManagerFactoryUtils.getTransactionalEntityManager 
+				  (getJpaTemplate ().getEntityManagerFactory () );
+		em.createNativeQuery(DELETE_TAG_FROM_ALBUM).setParameter(1, albumName)
+		.setParameter(3, user).setParameter(2, tagName).executeUpdate();
+		}catch(Exception ex){
+			throw new DaoException("Error deleting tag",ex);
+		}
+	}
+	
 	private Tag getEntityTag(String userName, String tagName) {
 		List<Tag> tags = getJpaTemplate().findByNamedQuery("findTagByName", new Object[]{tagName,userName});
 		Tag tagEntity = null;
@@ -78,6 +97,8 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		tag.setAlbums(Arrays.asList(album));
 		return tag;
 	}
+
+
 
 
 }

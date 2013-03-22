@@ -1,6 +1,5 @@
 package es.viewerfree.gwt.client.common;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -9,7 +8,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -24,56 +22,92 @@ import es.viewerfree.gwt.client.util.MessageDialogUtil;
 
 public class AddTagForm extends DialogBoxExt{
 
+	
+
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 
 	private static final Constants constants = GWT.create(Constants.class);
-	
+
 	private final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
-	
+
 	private String albumName;
-	
+
 	private LayoutPanel mainPanel;
-	
+
 	private HorizontalPanel addTagPanel;
-	
+
 	private TextBox tagField;
-	
+
 	private Image addTagImage;
-	
+
 	private FlowPanel albumTagsPanel;
-	
+
 	private Label albumTagLabel;
-	
+
+	private FlowPanel albumOtherTagsPanel;
+
+	private Label albumOtherTagLabel;
+
 	public AddTagForm(String albumName) {
 		super();
 		this.albumName = albumName;
 		Image image = new Image(constants.imagesPath()+constants.imageCloseButton());
 		image.setStyleName("close");
 		setCloseWidget(image);
-		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+messages.addTag()+"</div>");
+		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+messages.addTag()+" ( "+albumName+" )</div>");
 		add(getMainPanel());
 		initValues();
 		show();
 		center();
 	}
-	
+
 	private void initValues() {
 		viewerService.getTags(albumName, new AsyncCallback<List<String>>() {
-			
+
 			@Override
 			public void onSuccess(List<String> tags) {
-				for (String tag : tags) {
-					getAlbumTagsPanel().add(new Label(tag));
-					
+				for (final String tag : tags) {
+					Label tagLabel = new Label(tag);
+					tagLabel.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent ev) {
+							removeTag(tag);
+						}
+					});
+					getAlbumTagsPanel().add(tagLabel);
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				MessageDialogUtil.getErrorDialogBox(messages.serverError());
 			}
 		});
-		
+
+		viewerService.getOtherTags(albumName, new AsyncCallback<List<String>>() {
+
+			@Override
+			public void onSuccess(List<String> tags) {
+				for (final String tag : tags) {
+					Label otherTagLabel = new Label(tag);
+					otherTagLabel.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent ev) {
+							addTag(tag);
+						}
+					});
+					getAlbumOtherTagsPanel().add(otherTagLabel);
+				}
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				MessageDialogUtil.getErrorDialogBox(messages.serverError());
+			}
+		});
+
 	}
 
 	private LayoutPanel getMainPanel(){
@@ -88,12 +122,18 @@ public class AddTagForm extends DialogBoxExt{
 			this.mainPanel.setWidgetTopHeight(getAlbumTagLabel(), 44, Unit.PX, 15, Unit.PX);
 			this.mainPanel.setWidgetLeftRight(getAlbumTagLabel(), 10, Unit.PX, 10, Unit.PX);
 			this.mainPanel.add(getAlbumTagsPanel());
-			this.mainPanel.setWidgetTopBottom(getAlbumTagsPanel(), 65, Unit.PX, 10, Unit.PX);
+			this.mainPanel.setWidgetTopHeight(getAlbumTagsPanel(), 65, Unit.PX, 75, Unit.PX);
 			this.mainPanel.setWidgetLeftRight(getAlbumTagsPanel(), 10, Unit.PX, 10, Unit.PX);
+			this.mainPanel.add(getAlbumOtherTagLabel());
+			this.mainPanel.setWidgetTopHeight(getAlbumOtherTagLabel(), 150, Unit.PX, 15, Unit.PX);
+			this.mainPanel.setWidgetLeftRight(getAlbumOtherTagLabel(), 10, Unit.PX, 10, Unit.PX);
+			this.mainPanel.add(getAlbumOtherTagsPanel());
+			this.mainPanel.setWidgetTopBottom(getAlbumOtherTagsPanel(), 170, Unit.PX, 10, Unit.PX);
+			this.mainPanel.setWidgetLeftRight(getAlbumOtherTagsPanel(), 10, Unit.PX, 10, Unit.PX);
 		}
 		return this.mainPanel;
 	}
-	
+
 	private HorizontalPanel getAddTagPanel(){
 		if(this.addTagPanel==null){
 			this.addTagPanel = new HorizontalPanel();
@@ -103,11 +143,11 @@ public class AddTagForm extends DialogBoxExt{
 			this.addTagPanel.setCellHorizontalAlignment(getTagField(), HorizontalPanel.ALIGN_CENTER);
 			this.addTagPanel.add(getAddTagImage());
 			this.addTagPanel.setCellHorizontalAlignment(getAddTagImage(), HorizontalPanel.ALIGN_LEFT);
-			
+
 		}
 		return this.addTagPanel;
 	}
-	
+
 	private TextBox getTagField(){
 		if(this.tagField==null){
 			this.tagField = new TextBox();
@@ -115,22 +155,38 @@ public class AddTagForm extends DialogBoxExt{
 		}
 		return this.tagField;
 	}
-	
+
 	private FlowPanel getAlbumTagsPanel(){
 		if(this.albumTagsPanel==null){
 			this.albumTagsPanel = new FlowPanel();
 		}
 		return this.albumTagsPanel;
 	}
-	
+
 	private Label getAlbumTagLabel(){
 		if(this.albumTagLabel==null){
 			this.albumTagLabel = new Label(messages.albumTags());
 			this.albumTagLabel.setStyleName("titleLabel");
+
 		}
 		return this.albumTagLabel;
 	}
-	
+
+	private FlowPanel getAlbumOtherTagsPanel(){
+		if(this.albumOtherTagsPanel==null){
+			this.albumOtherTagsPanel = new FlowPanel();
+		}
+		return this.albumOtherTagsPanel;
+	}
+
+	private Label getAlbumOtherTagLabel(){
+		if(this.albumOtherTagLabel==null){
+			this.albumOtherTagLabel = new Label(messages.otherAlbumTags());
+			this.albumOtherTagLabel.setStyleName("titleLabel");
+		}
+		return this.albumOtherTagLabel;
+	}
+
 	private Image getAddTagImage(){
 		if(this.addTagImage== null){
 			this.addTagImage = new Image(constants.viewerImagesPath()+constants.imageAddTagIconSmall());
@@ -140,25 +196,35 @@ public class AddTagForm extends DialogBoxExt{
 					if(getTagField().getText().isEmpty()){
 						return;
 					}
-					
-					viewerService.addTag(albumName, getTagField().getValue(), new AsyncCallback<Void>() {
-						
-						@Override
-						public void onSuccess(Void arg0) {
-							getTagField().setText("");
-							getAlbumTagsPanel().clear();
-							initValues();
-						}
-						
-						@Override
-						public void onFailure(Throwable t) {
-							MessageDialogUtil.getErrorDialogBox(messages.serverError());
-						}
-					});
+					addTag(getTagField().getValue());
 				}
+
 			});
-	
+
 		}
 		return this.addTagImage;
+	}
+	
+	private void addTag(String tagName) {
+		viewerService.addTag(albumName, tagName, new callbackTags());
+	}
+	
+	private void removeTag(String tagName) {
+		viewerService.removeTag(albumName, tagName, new callbackTags());
+	}
+	
+	private final class callbackTags implements AsyncCallback<Void> {
+		@Override
+		public void onSuccess(Void arg0) {
+			getTagField().setText("");
+			getAlbumTagsPanel().clear();
+			getAlbumOtherTagsPanel().clear();
+			initValues();
+		}
+
+		@Override
+		public void onFailure(Throwable t) {
+			MessageDialogUtil.getErrorDialogBox(messages.serverError());
+		}
 	}
 }
