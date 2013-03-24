@@ -8,6 +8,8 @@ public interface ITagService {
 
 	List<String> getTags(String userName, String albumName) throws ServiceException;
 	
+	List<String> getTags(String userName) throws ServiceException;
+	
 	List<String> getOtherTags(String userName, String albumName) throws ServiceException;
 	
 	void addTag(String userName, String albumName, String tagName) throws ServiceException;

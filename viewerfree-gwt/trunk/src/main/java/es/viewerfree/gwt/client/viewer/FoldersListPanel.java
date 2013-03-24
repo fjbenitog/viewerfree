@@ -13,13 +13,13 @@ import es.viewerfree.gwt.client.ViewerFreeMessages;
 public class FoldersListPanel extends VerticalPanel {
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
-	
+
 	private final Constants constants = GWT.create(Constants.class);
-	
+
 	private DisclosurePanel albumsListPanel;
-	
+
 	private FlowPanel listPanel; 
-	
+
 	public FoldersListPanel() {
 		setStyleName("albums");
 		add(getAlbumsListPanel());
@@ -27,16 +27,16 @@ public class FoldersListPanel extends VerticalPanel {
 		setSpacing(10);
 	}
 
-	private DisclosurePanel getAlbumsListPanel(){
+	public DisclosurePanel getAlbumsListPanel(){
 		if(this.albumsListPanel == null){
 			this.albumsListPanel =  new DisclosurePanel(messages.albumsLabel());
 			this.albumsListPanel.setAnimationEnabled(true);
-			this.albumsListPanel.setOpen(true);
+			//			this.albumsListPanel.setOpen(true);
 			this.albumsListPanel.setContent(getListPanel());
 		}
 		return this.albumsListPanel;
 	}
-	
+
 	private FlowPanel getListPanel(){
 		if(this.listPanel == null){
 			this.listPanel = new FlowPanel();
@@ -45,13 +45,13 @@ public class FoldersListPanel extends VerticalPanel {
 	}
 
 	public void addFolder(String album,ClickHandler clickHandler){
-			HTML albumLink = new HTML("<img border=\"0\" src=\""+constants.viewerImagesPath()+constants.imageFolder()+"\">"+album);
-			if(clickHandler!=null){
-				albumLink.addClickHandler(clickHandler);
-			}
-			getListPanel().add(albumLink);
+		HTML albumLink = new HTML("<img border=\"0\" src=\""+constants.viewerImagesPath()+constants.imageFolder()+"\">"+album);
+		if(clickHandler!=null){
+			albumLink.addClickHandler(clickHandler);
+		}
+		getListPanel().add(albumLink);
 	}
-	
+
 	public void markFolder(String album){
 		for (int i = 0; i < getListPanel().getWidgetCount(); i++) {
 			HTML widget = (HTML)getListPanel().getWidget(i);
