@@ -16,4 +16,7 @@ public interface ITagDao {
 	public List<Tag> getOtherTagsByAlbum(String user, String albumName);
 	
 	void removeTag(User user,String albumName, String tagName) throws DaoException;
+	
+	public List<Tag> getTagsByUser(String user);
+	
 }

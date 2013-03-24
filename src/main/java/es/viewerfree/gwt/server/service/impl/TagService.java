@@ -62,6 +62,11 @@ public class TagService implements ITagService {
 		
 	}
 	
+	@Override
+	public List<String> getTags(String userName) throws ServiceException {
+		return tagsToList(tagDao.getTagsByUser(userName));
+	}
+	
 	public IUserDao getUserDao() {
 		return userDao;
 	}
@@ -77,6 +82,7 @@ public class TagService implements ITagService {
 	public void setTagDao(ITagDao tagDao) {
 		this.tagDao = tagDao;
 	}
+
 
 
 

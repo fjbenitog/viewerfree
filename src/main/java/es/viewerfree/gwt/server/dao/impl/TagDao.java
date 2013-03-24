@@ -70,6 +70,11 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		}
 	}
 	
+	@Override
+	public List<Tag> getTagsByUser(String user) {
+		return getJpaTemplate().findByNamedQuery("findTagsByUser", new Object[]{user});
+	}
+	
 	private Tag getEntityTag(String userName, String tagName) {
 		List<Tag> tags = getJpaTemplate().findByNamedQuery("findTagByName", new Object[]{tagName,userName});
 		Tag tagEntity = null;
@@ -97,6 +102,8 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		tag.setAlbums(Arrays.asList(album));
 		return tag;
 	}
+
+
 
 
 

@@ -27,23 +27,23 @@ import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 
 public class Viewer extends BaseEntryPoint {
-	  
+
 	private LayoutPanel contentPanel;
-	
+
 	private BarPanel barPanel;
-	
+
 	private HorizontalPanel adminPanel;
-	
+
 	private Label adminLabel;
-	
+
 	private static final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
-	
+
 	private static final Constants constants = GWT.create(Constants.class);
-	
+
 	private static final UserServiceAsync userService = GWT.create(UserService.class);
-	
+
 	private static final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
-	
+
 	private ViewerPanel viewerPanel;
 
 	@Override
@@ -57,29 +57,42 @@ public class Viewer extends BaseEntryPoint {
 					getBarPanel().setCellHorizontalAlignment(getAdminPanel(), HorizontalPanel.ALIGN_LEFT);
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Throwable throwable) {
 				showErrorDialogBox();					
 			}
 
 		});
-		
+
 		viewerService.getUserAlbums(new AsyncCallback<List<String>>() {
-			
+
 			@Override
 			public void onSuccess(List<String>  albums) {
 				getViewerPanel().setAlbumsList(albums);
 			}
-			
+
 			@Override
 			public void onFailure(Throwable arg0) {
 				showErrorDialogBox();
 			}
 		});
-		
+
+		viewerService.getTags(new AsyncCallback<List<String>>() {
+
+			@Override
+			public void onSuccess(List<String>  tags) {
+				getViewerPanel().setTagsList(tags);
+			}
+
+			@Override
+			public void onFailure(Throwable arg0) {
+				showErrorDialogBox();
+			}
+		});
+
 	}
-	
+
 	private void showErrorDialogBox() {
 		MessageDialogUtil.getErrorDialogBox(messages.serverError());
 	}
@@ -102,8 +115,8 @@ public class Viewer extends BaseEntryPoint {
 		}
 		return this.barPanel;
 	}
-	
-	
+
+
 	private HorizontalPanel getAdminPanel(){
 		if(this.adminPanel==null){
 			this.adminPanel = new HorizontalPanel();
@@ -111,13 +124,13 @@ public class Viewer extends BaseEntryPoint {
 		}
 		return this.adminPanel;
 	}
-	
+
 	private Label getAdminLabel(){
 		if(this.adminLabel==null){
 			this.adminLabel = new HTML(messages.adminLabel());
 			this.adminLabel.setStyleName("barLink");
 			this.adminLabel.addClickHandler(new ClickHandler() {
-				
+
 				@Override
 				public void onClick(ClickEvent arg0) {
 					Window.open(GWT.getHostPageBaseURL()+constants.adminPath()+"?locale="+LocaleInfo.getCurrentLocale().getLocaleName(),"_blank","");
@@ -145,5 +158,5 @@ public class Viewer extends BaseEntryPoint {
 		}
 		return fullName.toString().isEmpty()?user.getName():fullName.toString();
 	}
-	
+
 }

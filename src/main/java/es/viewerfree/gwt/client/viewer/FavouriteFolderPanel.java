@@ -8,13 +8,13 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import es.viewerfree.gwt.client.Constants;
 
-public class FolderPanel extends ScrollPanel {
+public class FavouriteFolderPanel extends ScrollPanel {
 
 	private final Constants constants = GWT.create(Constants.class);
 	
 	private FlowPanel folderPanel;
 	
-	public FolderPanel() {
+	public FavouriteFolderPanel() {
 		setStyleName("pictures");
 		add(getFolderPanel());
 	}
