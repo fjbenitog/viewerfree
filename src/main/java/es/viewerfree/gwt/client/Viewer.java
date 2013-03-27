@@ -1,7 +1,5 @@
 package es.viewerfree.gwt.client;
 
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,8 +17,6 @@ import es.viewerfree.gwt.client.common.BarPanel;
 import es.viewerfree.gwt.client.common.BaseEntryPoint;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
-import es.viewerfree.gwt.client.service.ViewerService;
-import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;
 import es.viewerfree.gwt.client.viewer.ViewerPanel;
 import es.viewerfree.gwt.shared.dto.UserDto;
@@ -42,8 +38,6 @@ public class Viewer extends BaseEntryPoint {
 
 	private static final UserServiceAsync userService = GWT.create(UserService.class);
 
-	private static final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
-
 	private ViewerPanel viewerPanel;
 
 	@Override
@@ -63,32 +57,6 @@ public class Viewer extends BaseEntryPoint {
 				showErrorDialogBox();					
 			}
 
-		});
-
-		viewerService.getUserAlbums(new AsyncCallback<List<String>>() {
-
-			@Override
-			public void onSuccess(List<String>  albums) {
-				getViewerPanel().setAlbumsList(albums);
-			}
-
-			@Override
-			public void onFailure(Throwable arg0) {
-				showErrorDialogBox();
-			}
-		});
-
-		viewerService.getTags(new AsyncCallback<List<String>>() {
-
-			@Override
-			public void onSuccess(List<String>  tags) {
-				getViewerPanel().setTagsList(tags);
-			}
-
-			@Override
-			public void onFailure(Throwable arg0) {
-				showErrorDialogBox();
-			}
 		});
 
 	}

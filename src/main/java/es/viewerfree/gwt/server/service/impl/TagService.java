@@ -43,13 +43,6 @@ public class TagService implements ITagService {
 		return tagsToList(tagDao.getOtherTagsByAlbum(userName, albumName));
 	}
 	
-	private List<String> tagsToList(List<Tag> tags) {
-		List<String> tagsName = new ArrayList<String>();
-		for (Tag tag : tags) {
-			tagsName.add(tag.getTagId().getName());
-		}
-		return tagsName;
-	}
 
 	@Override
 	public void removeTag(String userName, String albumName, String tagName)
@@ -67,6 +60,14 @@ public class TagService implements ITagService {
 		return tagsToList(tagDao.getTagsByUser(userName));
 	}
 	
+	private List<String> tagsToList(List<Tag> tags) {
+		List<String> tagsName = new ArrayList<String>();
+		for (Tag tag : tags) {
+			tagsName.add(tag.getTagId().getName());
+		}
+		return tagsName;
+	}
+	
 	public IUserDao getUserDao() {
 		return userDao;
 	}
@@ -82,8 +83,5 @@ public class TagService implements ITagService {
 	public void setTagDao(ITagDao tagDao) {
 		this.tagDao = tagDao;
 	}
-
-
-
 
 }

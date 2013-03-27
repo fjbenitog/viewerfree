@@ -110,5 +110,24 @@ public class TagServiceITest extends ServiceTestSupport{
 		assertEquals(Arrays.asList(TAG2),tagService.getOtherTags(user.getName(), user.getAlbums().get(1)));
 	}
 
+	@Test
+	public void removeTag() throws Exception {
+		UserDto user = insertUser(createUserDto());
+		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
+		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		
+		tagService.removeTag(user.getName(), user.getAlbums().get(0), TAG1);
+		assertEquals(Arrays.asList(),tagService.getAlbums(user.getName(), TAG1));
+	}
+	
+	@Test
+	public void getTagsByUser() throws Exception {
+		UserDto user = insertUser(createUserDto());
+		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
+		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG2);
+		tagService.addTag(user.getName(), user.getAlbums().get(1), TAG1);
+
+		assertEquals(Arrays.asList(TAG1,TAG2),tagService.getTags(user.getName()));
+	}
 
 }
