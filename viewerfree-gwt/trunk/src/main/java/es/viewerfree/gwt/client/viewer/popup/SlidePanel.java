@@ -1,4 +1,4 @@
-package es.viewerfree.gwt.client.viewer;
+package es.viewerfree.gwt.client.viewer.popup;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;

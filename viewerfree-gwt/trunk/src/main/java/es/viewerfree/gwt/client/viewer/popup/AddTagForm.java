@@ -1,4 +1,4 @@
-package es.viewerfree.gwt.client.common;
+package es.viewerfree.gwt.client.viewer.popup;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.TextBox;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
+import es.viewerfree.gwt.client.common.DialogBoxExt;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;

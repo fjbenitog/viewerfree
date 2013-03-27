@@ -1,4 +1,4 @@
-package es.viewerfree.gwt.client.viewer;
+package es.viewerfree.gwt.client.viewer.right;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
@@ -24,13 +24,14 @@ import com.reveregroup.gwt.imagepreloader.FitImageLoadHandler;
 
 import es.viewerfree.gwt.client.Constants;
 import es.viewerfree.gwt.client.ViewerFreeMessages;
-import es.viewerfree.gwt.client.common.AddTagForm;
 import es.viewerfree.gwt.client.common.RefreshWidgetListener;
 import es.viewerfree.gwt.client.common.UploadPicForm;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;
 import es.viewerfree.gwt.client.util.ViewerHelper;
+import es.viewerfree.gwt.client.viewer.popup.AddTagForm;
+import es.viewerfree.gwt.client.viewer.popup.SlidePanel;
 import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
 
