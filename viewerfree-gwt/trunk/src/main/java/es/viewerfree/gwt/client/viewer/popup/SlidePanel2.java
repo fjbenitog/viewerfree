@@ -25,7 +25,7 @@ import es.viewerfree.gwt.client.util.ViewerHelper;
 import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
 
-public class SlidePanel extends PopupPanel {
+public class SlidePanel2 extends PopupPanel {
 
 	private static final int PANEL_BUTTONS_WIDTH = 120;
 
@@ -48,7 +48,7 @@ public class SlidePanel extends PopupPanel {
 	private HorizontalPanel rightArrowPanel;
 
 	private HorizontalPanel leftArrowPanel;
-
+	
 	private Image rightArrow;
 
 	private Image leftArrow;
@@ -62,7 +62,7 @@ public class SlidePanel extends PopupPanel {
 	private Image imageNext;
 
 	private Image imagePrevious;
-
+	
 	private Image imageClose;
 
 	private HTML imageFileDownload;
@@ -72,16 +72,13 @@ public class SlidePanel extends PopupPanel {
 	private HorizontalPanel utilityPanel;
 
 	private Timer picTimer;
-
+	
 	private boolean isImageLoaded;
-
+	
 	private RefreshWidgetListener refreshWidgetListener;
 
-	private FitImage[] fitImages;
-
-	public SlidePanel(AlbumDto albumDto) {
+	public SlidePanel2(AlbumDto albumDto) {
 		this.albumDto = albumDto;
-		fitImages = new FitImage[this.albumDto.getPictures().size()];
 		setSize(constants.imageLoaderSize()+"px", constants.imageLoaderSize()+"px");
 		setGlassEnabled(true);
 		setAnimationEnabled(true);
@@ -130,7 +127,7 @@ public class SlidePanel extends PopupPanel {
 
 			this.mainPanel.setWidgetTopHeight(getUtilityPanel(), constants.imageLoaderSize()-PANEL_BUTTONS_WIDTH/2, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
 			this.mainPanel.setWidgetLeftWidth(getUtilityPanel(), 5*IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
-
+			
 			this.mainPanel.add(getImageClose());
 			this.mainPanel.setWidgetTopHeight(getImageClose(), 0, Unit.PX, 24, Unit.PX);
 			this.mainPanel.setWidgetRightWidth(getImageClose(), 0, Unit.PX, 24, Unit.PX);
@@ -138,7 +135,7 @@ public class SlidePanel extends PopupPanel {
 		}
 		return this.mainPanel;
 	}
-
+	
 
 	private HorizontalPanel getImagePanel(){
 		if(this.imagePanel == null){
@@ -170,7 +167,7 @@ public class SlidePanel extends PopupPanel {
 		if(this.imageClose == null){
 			this.imageClose = new Image(constants.viewerImagesPath()+constants.imageCloseIcon());
 			this.imageClose.addClickHandler(new ClickHandler() {
-
+				
 				@Override
 				public void onClick(ClickEvent e) {
 					stop();
@@ -184,7 +181,7 @@ public class SlidePanel extends PopupPanel {
 		}
 		return this.imageClose;
 	}
-
+	
 
 	private Image getLeftArrow(){
 		if(this.leftArrow == null){
@@ -271,7 +268,7 @@ public class SlidePanel extends PopupPanel {
 
 	private String createDownloadImageLink() {
 		return "<a target='_blank' href='"+ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_REAL_PICTURE)+
-		"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/></a>";
+				"'><img border='0' src='"+constants.viewerImagesPath()+constants.imageFileDownload()+"'/></a>";
 	}
 
 	private HorizontalPanel getButtonsPanel(){
@@ -299,28 +296,20 @@ public class SlidePanel extends PopupPanel {
 		return this.utilityPanel;
 	}
 
-	private int nextIndexPicture() {
-		if(albumDto.getSelectedPic()<albumDto.getPictures().size()-1){
-			return albumDto.getSelectedPic()+1;
-		}else{
-			return 0;
-		}
-	}
-
 	private void nextPicture() {
-		albumDto.setSelectedPic(nextIndexPicture());
-	}
-
-	private int previousIndexPicture() {
-		if(albumDto.getSelectedPic()>0){
-			return albumDto.getSelectedPic()-1;
+		if(albumDto.getSelectedPic()<albumDto.getPictures().size()-1){
+			albumDto.setSelectedPic(albumDto.getSelectedPic()+1);
 		}else{
-			return albumDto.getPictures().size()-1;
+			albumDto.setSelectedPic(0);
 		}
 	}
 
 	private void previousPicture() {
-		albumDto.setSelectedPic(previousIndexPicture());
+		if(albumDto.getSelectedPic()>0){
+			albumDto.setSelectedPic(albumDto.getSelectedPic()-1);
+		}else{
+			albumDto.setSelectedPic(albumDto.getPictures().size()-1);
+		}
 	}
 
 	private void update() {
@@ -333,39 +322,18 @@ public class SlidePanel extends PopupPanel {
 
 	private void getFitImage() {
 		isImageLoaded = false;
-		if(albumDto.getPictures().size()>1){
-			int nextIndexPicture = nextIndexPicture();
-			if(fitImages[nextIndexPicture]==null){
-				fitImages[nextIndexPicture]= new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getCriptedImage(nextIndexPicture), Action.SHOW_PICTURE),
-						constants.imageSize(),constants.imageSize());
+		FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_PICTURE),
+				constants.imageSize(),constants.imageSize(),
+				new FitImageLoadHandler() {
+			@Override
+			public void imageLoaded(FitImageLoadEvent event) {
+				getImagePanel().remove(getImageLoader());
+				getImagePanel().add(event.getFitImage());
+				resize(event.getFitImage());
+				isImageLoaded = true;
 			}
-			int previousIndexPicture = previousIndexPicture();
-			if(fitImages[previousIndexPicture]==null){
-				fitImages[previousIndexPicture]= new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getCriptedImage(previousIndexPicture), Action.SHOW_PICTURE),
-						constants.imageSize(),constants.imageSize());
-			}
-		}
-		FitImage chachedImage = fitImages[albumDto.getSelectedPic()];
-		if(chachedImage==null){
-			FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_PICTURE),
-					constants.imageSize(),constants.imageSize(),
-					new FitImageLoadHandler() {
-				@Override
-				public void imageLoaded(FitImageLoadEvent event) {
-					getImagePanel().remove(getImageLoader());
-					getImagePanel().add(event.getFitImage());
-					resize(event.getFitImage());
-					isImageLoaded = true;
-				}
-			});
-			fitImages[albumDto.getSelectedPic()]=fitImage;
-			fitImage.setTitle(getSelectedImage());
-		}else{
-			getImagePanel().remove(getImageLoader());
-			getImagePanel().add(chachedImage);
-			resize(chachedImage);
-			isImageLoaded = true;
-		}
+		});
+		fitImage.setTitle(getSelectedImage());
 	}
 
 	private String getSelectedImage() {
@@ -374,10 +342,6 @@ public class SlidePanel extends PopupPanel {
 
 	private String getSelectedCriptedImage() {
 		return albumDto.getPictures().get(albumDto.getSelectedPic()).getCriptedName();
-	}
-
-	private String getCriptedImage(int index) {
-		return albumDto.getPictures().get(index).getCriptedName();
 	}
 
 
@@ -458,7 +422,7 @@ public class SlidePanel extends PopupPanel {
 		getPicTimer().cancel();
 		updateButtonsStop();
 	}
-
+	
 	private class HandlerStopSlideshow implements ClickHandler,CloseHandler<PopupPanel>{
 
 		public void onClick(ClickEvent clickevent) {
@@ -474,7 +438,7 @@ public class SlidePanel extends PopupPanel {
 			}
 		}
 	}
-
+	
 
 	public RefreshWidgetListener getRefreshWidgetListener() {
 		return refreshWidgetListener;

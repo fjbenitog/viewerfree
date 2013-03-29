@@ -1,24 +1,13 @@
 package es.viewerfree.gwt.server.service.impl;
 
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.IUserDao;
 import es.viewerfree.gwt.shared.dto.UserDto;
-import es.viewerfree.gwt.shared.service.ServiceException;
 
 public class UserServiceTest {
 

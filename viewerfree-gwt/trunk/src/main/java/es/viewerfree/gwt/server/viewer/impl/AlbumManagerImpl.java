@@ -12,13 +12,10 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.AutoCloseInputStream;
 
-import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.ITagDao;
 import es.viewerfree.gwt.server.dao.IUserDao;
-import es.viewerfree.gwt.server.entities.User;
 import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.server.viewer.ManageImage;
-import es.viewerfree.gwt.shared.service.ServiceException;
 
 
 public class AlbumManagerImpl implements AlbumManager {
