@@ -2,7 +2,6 @@ package es.viewerfree.gwt.server.dao;
 
 import java.util.List;
 
-import es.viewerfree.gwt.server.entities.Tag;
 import es.viewerfree.gwt.server.entities.User;
 
 
