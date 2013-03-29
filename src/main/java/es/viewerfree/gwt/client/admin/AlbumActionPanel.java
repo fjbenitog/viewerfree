@@ -363,7 +363,7 @@ public class AlbumActionPanel extends ActionPanel<String>{
 				setAlbumDto(albumDto);
 				getPicTitle().setText(messages.picturesLabel()+" ( "+albumDto.getName()+" )");
 				getImagesList().setRowCount(albumDto.getPictures().size(),true);
-				getImagesList().setRowData(0,albumDto.getPictures());
+				getImagesList().setRowData(albumDto.getPictures());
 
 			}
 
