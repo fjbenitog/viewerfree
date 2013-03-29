@@ -3,9 +3,10 @@ package es.viewerfree.gwt.client.viewer.left;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import es.viewerfree.gwt.client.viewer.ModificationObserver;
 import es.viewerfree.gwt.client.viewer.Subject;
 
-public class LeftPanel extends ScrollPanel{
+public class LeftPanel extends ScrollPanel implements ModificationObserver{
 
 	private VerticalPanel leftPanel;
 	
@@ -15,6 +16,7 @@ public class LeftPanel extends ScrollPanel{
 	
 	public LeftPanel() {
 		super();
+		Subject.getInstance().addObserver(this);
 		add(getLeftPanel());
 	}
 
@@ -40,6 +42,11 @@ public class LeftPanel extends ScrollPanel{
 			this.favouriteListPanel = new FavouriteListPanel();
 		}
 		return this.favouriteListPanel;
+	}
+
+	@Override
+	public void update() {
+		getFavouriteListPanel().update();
 	}
 	
 	

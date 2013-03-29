@@ -1,4 +1,4 @@
-package es.viewerfree.gwt.client.viewer.left;
+package es.viewerfree.gwt.client.viewer;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -8,14 +8,13 @@ import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 
-import es.viewerfree.gwt.client.viewer.Subject;
-import es.viewerfree.gwt.client.viewer.left.AlbumTagObserver.Type;
+import es.viewerfree.gwt.client.viewer.ClickItemObserver.Type;
+
 
 public final class SubjectHandler implements ClickHandler , OpenHandler<DisclosurePanel>, CloseHandler<DisclosurePanel>{
 
 	private String name;
 	private Type type;
-	private static Subject subject = Subject.getInstance();
 	
 	public SubjectHandler(String name, Type type) {
 		this.name = name;
@@ -37,6 +36,6 @@ public final class SubjectHandler implements ClickHandler , OpenHandler<Disclosu
 		update();
 	}
 	private void update() {
-		subject.notify(type, name);
+		Subject.getInstance().update(type, name);
 	}
 }

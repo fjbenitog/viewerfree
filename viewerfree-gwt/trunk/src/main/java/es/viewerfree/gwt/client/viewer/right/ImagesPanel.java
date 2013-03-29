@@ -124,7 +124,6 @@ public class ImagesPanel extends LayoutPanel {
 	
 	private void addTagForm(final String albumName){
 		AddTagForm addTagForm = new AddTagForm(albumName);
-//		addTagForm.setRefreshWidgetListener(new RefreshImagesPanelListener(albumName));
 		addTagForm.setAnimationEnabled(true);
 		addTagForm.setGlassEnabled(true);
 	}

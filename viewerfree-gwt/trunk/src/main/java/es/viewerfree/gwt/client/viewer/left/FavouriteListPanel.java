@@ -15,7 +15,8 @@ import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;
-import es.viewerfree.gwt.client.viewer.left.AlbumTagObserver.Type;
+import es.viewerfree.gwt.client.viewer.SubjectHandler;
+import es.viewerfree.gwt.client.viewer.ClickItemObserver.Type;
 
 public class FavouriteListPanel extends VerticalPanel  {
 
@@ -74,6 +75,7 @@ public class FavouriteListPanel extends VerticalPanel  {
 	}
 
 	public void addTags( List<String> tags){
+		getListPanel().clear();
 		for (final String tag : tags) {
 			final DisclosurePanel disclosurePanel = new DisclosurePanel(resources.tagIcon(),resources.tagIcon(),tag);
 			disclosurePanel.setAnimationEnabled(true);
@@ -110,6 +112,10 @@ public class FavouriteListPanel extends VerticalPanel  {
 	
 	private static void showServerError() {
 		MessageDialogUtil.getErrorDialogBox(messages.serverError());
+	}
+
+	public void update() {
+		setTags();
 	}
 
 

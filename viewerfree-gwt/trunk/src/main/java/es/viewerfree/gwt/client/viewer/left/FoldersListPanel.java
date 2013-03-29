@@ -16,9 +16,11 @@ import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;
+import es.viewerfree.gwt.client.viewer.ClickItemObserver;
 import es.viewerfree.gwt.client.viewer.Subject;
+import es.viewerfree.gwt.client.viewer.SubjectHandler;
 
-public class FoldersListPanel extends VerticalPanel implements AlbumTagObserver{
+public class FoldersListPanel extends VerticalPanel implements ClickItemObserver{
 
 	private static final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 	
@@ -59,6 +61,7 @@ public class FoldersListPanel extends VerticalPanel implements AlbumTagObserver{
 	}
 
 	private void setFolders(List<String> folders){
+		getListPanel().clear();
 		for (final String folder : folders) {
 			HTML albumLink = new HTML("<img border=\"0\" src=\""+constants.viewerImagesPath()+constants.imageFolder()+"\">"+folder);
 			albumLink.addClickHandler(new SubjectHandler(folder,Type.ALBUM));
@@ -100,12 +103,12 @@ public class FoldersListPanel extends VerticalPanel implements AlbumTagObserver{
 	}
 	
 	@Override
-	public void actualizar(Type type, String name) {
+	public void update(Type type, String name) {
 		if(type == Type.ALBUM){
 			markFolder(name);
 		}else{
 			markFolder("");
 		}
 	}
-	
+
 }
