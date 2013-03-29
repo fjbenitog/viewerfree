@@ -20,6 +20,7 @@ import es.viewerfree.gwt.client.common.DialogBoxExt;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;
+import es.viewerfree.gwt.client.viewer.Subject;
 
 public class AddTagForm extends DialogBoxExt{
 
@@ -68,6 +69,7 @@ public class AddTagForm extends DialogBoxExt{
 			@Override
 			public void onSuccess(List<String> tags) {
 				for (final String tag : tags) {
+					System.err.println("Tag:"+tag);
 					Label tagLabel = new Label(tag);
 					tagLabel.addClickHandler(new ClickHandler() {
 						
@@ -91,6 +93,7 @@ public class AddTagForm extends DialogBoxExt{
 			@Override
 			public void onSuccess(List<String> tags) {
 				for (final String tag : tags) {
+					System.err.println("OtherTag:"+tag);
 					Label otherTagLabel = new Label(tag);
 					otherTagLabel.addClickHandler(new ClickHandler() {
 						
@@ -217,6 +220,7 @@ public class AddTagForm extends DialogBoxExt{
 	private final class callbackTags implements AsyncCallback<Void> {
 		@Override
 		public void onSuccess(Void arg0) {
+			Subject.getInstance().update();
 			getTagField().setText("");
 			getAlbumTagsPanel().clear();
 			getAlbumOtherTagsPanel().clear();

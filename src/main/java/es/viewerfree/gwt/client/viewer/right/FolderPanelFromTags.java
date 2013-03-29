@@ -13,8 +13,8 @@ import es.viewerfree.gwt.client.ViewerFreeMessages;
 import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;
-import es.viewerfree.gwt.client.viewer.left.SubjectHandler;
-import es.viewerfree.gwt.client.viewer.left.AlbumTagObserver.Type;
+import es.viewerfree.gwt.client.viewer.SubjectHandler;
+import es.viewerfree.gwt.client.viewer.ClickItemObserver.Type;
 
 public class FolderPanelFromTags extends ScrollPanel {
 

@@ -23,9 +23,10 @@ import javax.persistence.Table;
 @NamedQueries({@NamedQuery(name="findTagByName",query="SELECT t from Tag t where t.tagId.name = ? AND t.tagId.user.user = ?")})
 @NamedNativeQueries({@NamedNativeQuery(name="findTagsByAlbum",query="SELECT t.TAG_NAME,t.USER_ID_USER from viewerfree.VF_TAG t, viewerfree.VF_ALBUM_TAG a, viewerfree.VF_USERS u " +
 		"where u.LOGIN = ? AND t.USER_ID_USER = u.ID_USER AND a.ALBUMS_NAME = ? AND t.TAG_NAME = a.VF_TAG_TAG_NAME ORDER BY t.TAG_NAME",resultClass=Tag.class),
-		@NamedNativeQuery(name="findOtherTags",query="SELECT t.TAG_NAME,t.USER_ID_USER from viewerfree.VF_TAG t, viewerfree.VF_ALBUM_TAG a, viewerfree.VF_USERS u where u.LOGIN = ?1 AND t.USER_ID_USER = u.ID_USER AND a.ALBUMS_NAME != ?2 AND t.TAG_NAME = a.VF_TAG_TAG_NAME" +
-				" AND a.VF_TAG_TAG_NAME NOT IN (SELECT t.TAG_NAME from viewerfree.VF_TAG t, viewerfree.VF_ALBUM_TAG a, viewerfree.VF_USERS u " +
-				"where u.LOGIN = ?1 AND t.USER_ID_USER = u.ID_USER AND a.ALBUMS_NAME = ?2 AND t.TAG_NAME = a.VF_TAG_TAG_NAME ) ORDER BY t.TAG_NAME",resultClass=Tag.class),
+		@NamedNativeQuery(name="findOtherTags",query="SELECT t.TAG_NAME,t.USER_ID_USER from viewerfree.VF_TAG t, viewerfree.VF_USERS u " +
+						"where u.LOGIN = ?1 AND t.USER_ID_USER = u.ID_USER AND" +
+						" t.TAG_NAME NOT IN( SELECT t.TAG_NAME from viewerfree.VF_TAG t, viewerfree.VF_ALBUM_TAG a, viewerfree.VF_USERS u " +
+		"where u.LOGIN = ?1 AND t.USER_ID_USER = u.ID_USER AND a.ALBUMS_NAME = ?2 AND t.TAG_NAME = a.VF_TAG_TAG_NAME ) ORDER BY t.TAG_NAME",resultClass=Tag.class),
 				@NamedNativeQuery(name="findTagsByUser",query="SELECT t.TAG_NAME,t.USER_ID_USER from viewerfree.VF_TAG t, viewerfree.VF_USERS u " +
 						"where u.LOGIN = ? AND t.USER_ID_USER = u.ID_USER ORDER BY t.TAG_NAME",resultClass=Tag.class)})
 

@@ -2,10 +2,10 @@ package es.viewerfree.gwt.client.viewer.right;
 
 import com.google.gwt.user.client.ui.LayoutPanel;
 
+import es.viewerfree.gwt.client.viewer.ClickItemObserver;
 import es.viewerfree.gwt.client.viewer.Subject;
-import es.viewerfree.gwt.client.viewer.left.AlbumTagObserver;
 
-public class RightPanel extends LayoutPanel implements AlbumTagObserver{
+public class RightPanel extends LayoutPanel implements ClickItemObserver{
 	
 	private FolderPanel folderPanel;
 	
@@ -50,7 +50,7 @@ public class RightPanel extends LayoutPanel implements AlbumTagObserver{
 	}
 	
 	@Override
-	public void actualizar(Type type, String name) {
+	public void update(Type type, String name) {
 		clear();
 		switch (type) {
 		case TOTAL_ALBUM:{

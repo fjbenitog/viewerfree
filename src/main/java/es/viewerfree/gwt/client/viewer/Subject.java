@@ -3,11 +3,12 @@ package es.viewerfree.gwt.client.viewer;
 import java.util.HashSet;
 import java.util.Set;
 
-import es.viewerfree.gwt.client.viewer.left.AlbumTagObserver;
-import es.viewerfree.gwt.client.viewer.left.AlbumTagObserver.Type;
+import es.viewerfree.gwt.client.viewer.ClickItemObserver.Type;
 
 public class Subject {
-	private Set<AlbumTagObserver> albumTagObservers = new HashSet<AlbumTagObserver>();
+	private Set<ClickItemObserver> clickItemObservers = new HashSet<ClickItemObserver>();
+	
+	private Set<ModificationObserver> modificationObservers = new HashSet<ModificationObserver>();
 
 	private static Subject subject = new Subject();
 	
@@ -18,17 +19,31 @@ public class Subject {
 		return subject;
 	}
 	
-	public void addObserver(AlbumTagObserver albumTagObserver){
-		albumTagObservers.add(albumTagObserver);
+	public void addObserver(ClickItemObserver clickItemObserver){
+		clickItemObservers.add(clickItemObserver);
 	}
 	
-	public void removeObserver(AlbumTagObserver albumTagObserver){
-		albumTagObservers.remove(albumTagObserver);
+	public void removeObserver(ClickItemObserver clickItemObserver){
+		clickItemObservers.remove(clickItemObserver);
 	}
 	
-	public void notify(Type type, String name){
-		for (AlbumTagObserver observer : albumTagObservers) {
-			observer.actualizar(type, name);
+	public void addObserver(ModificationObserver modificationObserver){
+		modificationObservers.add(modificationObserver);
+	}
+	
+	public void removeObserver(ModificationObserver modificationObserver){
+		modificationObservers.remove(modificationObserver);
+	}
+	
+	public void update(Type type, String name){
+		for (ClickItemObserver observer : clickItemObservers) {
+			observer.update(type, name);
+		}
+	}
+	
+	public void update(){
+		for (ModificationObserver observer : modificationObservers) {
+			observer.update();
 		}
 	}
 }
