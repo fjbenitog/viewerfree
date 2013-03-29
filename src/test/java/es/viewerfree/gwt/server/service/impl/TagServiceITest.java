@@ -107,7 +107,7 @@ public class TagServiceITest extends ServiceTestSupport{
 		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), user.getAlbums().get(1)));
 		assertEquals(Arrays.asList(TAG2),tagService.getOtherTags(user.getName(), user.getAlbums().get(1)));
 		
-		assertEquals(Arrays.asList(TAG1,TAG2),tagService.getTags(user.getName(), user.getAlbums().get(0)));
+		assertEquals(Arrays.asList(TAG2,TAG1),tagService.getTags(user.getName(), user.getAlbums().get(0)));
 		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), user.getAlbums().get(0)));
 		
 		tagService.removeTag(user.getName(), user.getAlbums().get(0), TAG2);
