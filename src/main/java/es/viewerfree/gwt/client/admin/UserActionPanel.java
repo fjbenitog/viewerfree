@@ -16,6 +16,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -29,6 +30,7 @@ import es.viewerfree.gwt.client.common.ConfirmDialogBox;
 import es.viewerfree.gwt.client.service.UserService;
 import es.viewerfree.gwt.client.service.UserServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;
+import es.viewerfree.gwt.client.util.ViewerHelper;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
 public class UserActionPanel  extends ActionPanel<UserDto>{
@@ -41,6 +43,8 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 	
 	private MenuItem exportUsers;
 	
+	private MenuItem importUsers;
+	
 	private Button refreshButton;
 	
 	private static final UserServiceAsync userService = GWT.create(UserService.class);
@@ -52,6 +56,7 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 		getMenuBarActions().addItem(getModifyUserItem());
 		getMenuBarActions().addItem(getDeleteUsersItem());
 		getMenuBarActions().addItem(getExportUsers());
+		getMenuBarActions().addItem(getImportUsers());
 		getButtonsPanel().add(getRefreshButton());
 	}
 
@@ -74,6 +79,13 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 		userForm.setRefreshWidgetListener(new RefreshPanelListener());
 		userForm.setAnimationEnabled(true);
 		userForm.setGlassEnabled(true);
+	}
+	
+	private void newImportUsersForm(){
+		ImportUsersForm importUsersForm = new ImportUsersForm();
+		importUsersForm.setRefreshWidgetListener(new RefreshPanelListener());
+		importUsersForm.setAnimationEnabled(true);
+		importUsersForm.setGlassEnabled(true);
 	}
 	
 	private void newUserForm(UserAction userAction){
@@ -140,11 +152,25 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 
 				@Override
 				public void execute() {
+					Window.open(ViewerHelper.createUrlExportUsers(getSelectedUsers()), "_blank", "");
 				}
 			});
 			this.exportUsers.setEnabled(false);
 		}
 		return this.exportUsers;
+	}
+	
+	private MenuItem getImportUsers(){
+		if(this.importUsers==null){
+			this.importUsers = new MenuItem(messages.importUsers(), new Command() {
+
+				@Override
+				public void execute() {
+					newImportUsersForm();
+				}
+			});
+		}
+		return this.importUsers;
 	}
 	
 	private Button getRefreshButton(){

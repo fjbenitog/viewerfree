@@ -19,6 +19,10 @@ public class ServletUtils {
 		return CryptoUtil.decrypt(picName, getUserDto(request).getName());
 	}
 	
+	public static String[] getParameters(HttpServletRequest request, ParamKey key){
+		return request.getParameterValues(key.toString());
+	}
+	
 	public static  UserDto getUserDto(HttpServletRequest request) {
 		return (UserDto) request.getSession().getAttribute(ParamKey.USER.toString());
 	}

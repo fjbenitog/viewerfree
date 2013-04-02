@@ -48,7 +48,7 @@ public class User implements Serializable{
 	
 	private String profile;
 	
-	@ManyToMany( cascade = CascadeType.ALL)
+	@ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name="vf_album_user",
 			joinColumns=@JoinColumn(name="ID_USER"),
 	        inverseJoinColumns=@JoinColumn(name="ALBUM_ID"))

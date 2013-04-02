@@ -67,6 +67,14 @@
         <servlet-name>logoutService</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>backupService</servlet-name>
+        <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>backupService</servlet-name>
+        <url-pattern>/backupService</url-pattern>
+    </servlet-mapping>
 	
 
 
@@ -102,6 +110,10 @@
 	<filter-mapping>
 		<filter-name>login</filter-name>
 		<url-pattern>/imageService</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>login</filter-name>
+		<url-pattern>/backupService</url-pattern>
 	</filter-mapping>
 
 </web-app>

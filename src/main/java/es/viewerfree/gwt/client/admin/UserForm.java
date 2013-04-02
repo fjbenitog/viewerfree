@@ -40,14 +40,14 @@ public class UserForm extends DialogBoxExt implements ClickHandler,KeyUpHandler,
 
 
 
-	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+	private static final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 
 
 	private static final Constants constants = GWT.create(Constants.class);
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
-	private final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
+	private static final ViewerServiceAsync viewerService = GWT.create(ViewerService.class);
 
 	private Button actionButton;
 
