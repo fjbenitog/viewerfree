@@ -59,6 +59,7 @@ public class UserServiceITest extends ServiceTestSupport{
 	@Test
 	public void deleteUser() throws Exception {
 		insertUser(createUserDto());
+		insertUser(createUserDto(USER2));
 		userService.delete(Arrays.asList(USER_NAME.toLowerCase()));
 		assertNull(userService.getUser(USER_NAME));
 	}

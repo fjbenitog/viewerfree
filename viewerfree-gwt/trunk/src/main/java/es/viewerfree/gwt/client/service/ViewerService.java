@@ -34,4 +34,5 @@ public interface ViewerService extends RemoteService{
 	void removeTag(String albumName, String tagName) throws Exception;
 	
 	List<String> geAlbumsByTag(String tag) throws ServiceException;
+	
 }
