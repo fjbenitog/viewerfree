@@ -1,11 +1,19 @@
 package es.viewerfree.gwt.shared.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import es.viewerfree.gwt.server.dto.UserDtoList;
 
-
+@XmlRootElement(name="user")
 public class UserDto implements Serializable {
 
 	private static final long serialVersionUID = 1202865512547719197L;
@@ -122,6 +130,16 @@ public class UserDto implements Serializable {
 		this.password = password;
 	}
 
+	@XmlElementWrapper(name = "albums")
+	@XmlElement(name = "album")
+	public List<String> getAlbums() {
+		return albums;
+	}
+	
+	public void setAlbums(List<String> albums) {
+		this.albums = albums;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -218,12 +236,30 @@ public class UserDto implements Serializable {
 				+ _profile + "]";
 	}
 
-	public List<String> getAlbums() {
-		return albums;
-	}
 
-	public void setAlbums(List<String> albums) {
-		this.albums = albums;
+	public static void main(String[] args) throws JAXBException {
+		UserDto userDto = new UserDto();
+		List<String> pepe = new ArrayList<String>();
+		pepe.add("lala");
+		pepe.add("lele");
+		userDto.setAlbums(pepe);
+		
+		UserDto userDto2 = new UserDto();
+		userDto2.setId(1);
+		List<String> pepe2 = new ArrayList<String>();
+		pepe2.add("lala2");
+		pepe2.add("lele2");
+		userDto2.setAlbums(pepe2);
+		
+		UserDtoList list = new UserDtoList();
+		List<UserDto> dtos = new ArrayList<UserDto>();
+		dtos.add(userDto);
+		dtos.add(userDto2);
+		list.setUsers(dtos);
+		JAXBContext jc = JAXBContext.newInstance(UserDtoList.class,UserDto.class);
+		 Marshaller marshaller = jc.createMarshaller();
+	        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+	        marshaller.marshal(list, System.out);
 	}
-
+	
 }

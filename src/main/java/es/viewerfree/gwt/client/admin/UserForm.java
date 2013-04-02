@@ -7,11 +7,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -32,11 +36,12 @@ import es.viewerfree.gwt.client.util.MessageDialogUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 
-public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback<Void>{
+public class UserForm extends DialogBoxExt implements ClickHandler,KeyUpHandler,AsyncCallback<Void>{
 
 
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
+
 
 	private static final Constants constants = GWT.create(Constants.class);
 
@@ -75,18 +80,21 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 	private UserAction userAction;
 
 	private RefreshWidgetListener refreshWidgetListener;
-	
+
 	private String userName;
+	
+	private FocusPanel focusPanel;
 
 	public UserForm(String userName, UserAction userAction) {
 		super();
+
 		this.userAction = userAction;
 		this.userName = userName;
 		Image image = new Image(constants.imagesPath()+constants.imageCloseButton());
 		image.setStyleName("close");
 		setCloseWidget(image);
 		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+userAction.getLabel()+"</div>");
-		add(getFormPanel());
+		add(getFocusPanel());
 		switch(userAction){
 		case CREATE:
 			viewerService.getAlbums(new AlbumsCallback());
@@ -97,7 +105,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 		}
 
 	}
-	
+
 	public UserForm(UserAction userAction) {
 		this(null,userAction);
 	}
@@ -114,7 +122,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 
 			@Override
 			public void onSuccess(UserDto userDto) {
- 				getUserField().setValue(userDto.getName());
+				getUserField().setValue(userDto.getName());
 				getUserField().setEnabled(false);
 				getNameField().setValue(userDto.getFullName());
 				getSurnameField().setValue(userDto.getSurname());
@@ -135,6 +143,16 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 		cellFormatter.setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
+	private FocusPanel getFocusPanel(){
+		if(this.focusPanel == null){
+			this.focusPanel = new FocusPanel();
+			this.focusPanel.setSize("100%", "100%");
+			this.focusPanel.addKeyUpHandler(this);
+			this.focusPanel.add(getFormPanel());
+		}
+		return this.focusPanel;
+	}
+	
 	private FlexTable getFormPanel(){
 		if(this.formPanel == null){
 			this.formPanel = new FlexTable();
@@ -154,6 +172,14 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 	}
 
 	private void addField(String label, Widget field) {
+//		if(field instanceof TextBox){
+//			((TextBox)field).addKeyUpHandler(this);
+//		}
+//		if(field instanceof ListBox){
+//			((ListBox)field).addKeyUpHandler(this);
+//		}
+
+		field.addHandler(this, KeyUpEvent.getType());
 		this.formPanel.setHTML(row, column, label);
 		this.formPanel.setWidget(row, column+1, field);
 		column+=2;
@@ -254,6 +280,17 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 
 	@Override
 	public void onClick(ClickEvent clickevent) {
+		submitForm();
+	}
+
+	@Override
+	public void onKeyUp(KeyUpEvent event) {
+		if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER){
+			submitForm();
+		}
+	}
+
+	private void submitForm() {
 		setErrorMessage("");
 		getUserField().getElement().getStyle().clearBorderColor();
 		getNameField().getElement().getStyle().clearBorderColor();
@@ -290,7 +327,7 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 		getButtonActionPanel().add(getLoaderImage());
 		getButtonActionPanel().setWidgetLeftRight(getLoaderImage(), 372, Unit.PX, 238, Unit.PX);
 		getButtonActionPanel().setWidgetTopBottom(getLoaderImage(), 6, Unit.PX, 6, Unit.PX);
-		List<String> albums = new ArrayList<String>();
+		ArrayList<String> albums = new ArrayList<String>();
 		for (CheckBox albumCheck : albumsChecks) {
 			if(albumCheck.getValue()){
 				albums.add(albumCheck.getText());
@@ -321,7 +358,6 @@ public class UserForm extends DialogBoxExt implements ClickHandler,AsyncCallback
 			});
 			break;
 		}
-
 	}
 
 	public void setEnabled(boolean enabled){

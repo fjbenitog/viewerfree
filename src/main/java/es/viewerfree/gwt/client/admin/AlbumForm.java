@@ -4,10 +4,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -22,7 +26,7 @@ import es.viewerfree.gwt.client.service.ViewerService;
 import es.viewerfree.gwt.client.service.ViewerServiceAsync;
 import es.viewerfree.gwt.client.util.MessageDialogUtil;
 
-public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallback<Void>{
+public class AlbumForm extends DialogBoxExt implements ClickHandler,KeyUpHandler,AsyncCallback<Void>{
 
 	private final ViewerFreeMessages messages = GWT.create(ViewerFreeMessages.class);
 
@@ -43,8 +47,10 @@ public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallbac
 	private int column;
 
 	private int row = 1;
-	
+
 	private RefreshWidgetListener refreshWidgetListener;
+	
+	private FocusPanel focusPanel;
 
 	public AlbumForm() {
 		super();
@@ -52,13 +58,22 @@ public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallbac
 		image.setStyleName("close");
 		setCloseWidget(image);
 		setHTML("<div style='font-weight: bold;font-family: arial,sans-serif;font-size: 15px;'>"+messages.createAlbum()+"</div>");
-		add(getFormPanel());
+		add(getFocusPanel());
 		addActionButton();
 		show();
 		center();
 	}
 
-	
+	private FocusPanel getFocusPanel(){
+		if(this.focusPanel == null){
+			this.focusPanel = new FocusPanel();
+			this.focusPanel.setSize("100%", "100%");
+			this.focusPanel.addKeyUpHandler(this);
+			this.focusPanel.add(getFormPanel());
+		}
+		return this.focusPanel;
+	}
+
 	private void addActionButton() {
 		row++;
 		FlexCellFormatter cellFormatter = getFormPanel().getFlexCellFormatter();
@@ -127,6 +142,17 @@ public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallbac
 
 	@Override
 	public void onClick(ClickEvent clickevent) {
+		submitForm();
+	}
+
+	@Override
+	public void onKeyUp(KeyUpEvent event) {
+		if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER){
+			submitForm();
+		}
+	}
+
+	private void submitForm() {
 		setErrorMessage("");
 		getAlbumField().getElement().getStyle().clearBorderColor();
 		StringBuffer message = new StringBuffer();
@@ -138,12 +164,13 @@ public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallbac
 			setErrorMessage(message.toString());
 			return;
 		}
-		
+
 		getButtonActionPanel().add(getLoaderImage());
 		getButtonActionPanel().setWidgetLeftRight(getLoaderImage(), 230, Unit.PX, 0, Unit.PX);
 		getButtonActionPanel().setWidgetTopBottom(getLoaderImage(), 6, Unit.PX, 6, Unit.PX);
 		viewerService.createAlbum(getAlbumField().getText(), this);
 	}
+
 
 	public void setEnabled(boolean enabled){
 		super.setEnabled(enabled);
@@ -186,6 +213,9 @@ public class AlbumForm extends DialogBoxExt implements ClickHandler,AsyncCallbac
 		this.refreshWidgetListener = refreshWidgetListener;
 	}
 
-	
+
+
+
+
 
 }
