@@ -39,6 +39,8 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 	
 	private MenuItem deleteUsersItem;
 	
+	private MenuItem exportUsers;
+	
 	private Button refreshButton;
 	
 	private static final UserServiceAsync userService = GWT.create(UserService.class);
@@ -49,6 +51,7 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 		getButtonsPanel().add(getActionsMenu());
 		getMenuBarActions().addItem(getModifyUserItem());
 		getMenuBarActions().addItem(getDeleteUsersItem());
+		getMenuBarActions().addItem(getExportUsers());
 		getButtonsPanel().add(getRefreshButton());
 	}
 
@@ -110,6 +113,7 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 									confirmDialogBox.hide();
 									getModifyUserItem().setEnabled(false);
 									getDeleteUsersItem().setEnabled(false);
+									getExportUsers().setEnabled(false);
 									update();
 								}
 								
@@ -128,6 +132,19 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 			this.deleteUsersItem.setEnabled(false);
 		}
 		return this.deleteUsersItem;
+	}
+	
+	private MenuItem getExportUsers(){
+		if(this.exportUsers==null){
+			this.exportUsers = new MenuItem(messages.exportUsers(), new Command() {
+
+				@Override
+				public void execute() {
+				}
+			});
+			this.exportUsers.setEnabled(false);
+		}
+		return this.exportUsers;
 	}
 	
 	private Button getRefreshButton(){
@@ -181,6 +198,7 @@ public class UserActionPanel  extends ActionPanel<UserDto>{
 				}
 				getModifyUserItem().setEnabled(count==1);
 				getDeleteUsersItem().setEnabled(count > 0);
+				getExportUsers().setEnabled(count > 0);
 			}
 		});
 		getTable().addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));

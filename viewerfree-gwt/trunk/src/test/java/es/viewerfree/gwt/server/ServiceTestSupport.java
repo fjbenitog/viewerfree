@@ -43,13 +43,17 @@ public class ServiceTestSupport {
 	}
 
 	protected UserDto createUserDto(String name) {
+		return createUserDto(name,ALBUMS);
+	}
+	
+	protected UserDto createUserDto(String name,List<String> albums) {
 		UserDto userDto = new UserDto(name, PASSWORD);
-		userDto.setAlbums(ALBUMS);
+		userDto.setAlbums(albums);
 		return userDto;
 	}
 	
 	protected UserDto createUserDto() {
-		return createUserDto(USER_NAME);
+		return createUserDto(USER_NAME,ALBUMS);
 	}
 	
 	protected void modifyUserAlbums(UserDto user, List<String> albums) throws ServiceException {

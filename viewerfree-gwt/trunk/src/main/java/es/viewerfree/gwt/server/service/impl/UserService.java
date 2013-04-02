@@ -1,16 +1,24 @@
 package es.viewerfree.gwt.server.service.impl;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.naming.spi.ObjectFactory;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.IUserDao;
+import es.viewerfree.gwt.server.dto.UserDtoList;
 import es.viewerfree.gwt.server.entities.Album;
 import es.viewerfree.gwt.server.entities.User;
 import es.viewerfree.gwt.server.service.IUserService;
+import es.viewerfree.gwt.server.util.JAXBUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 import es.viewerfree.gwt.shared.service.ServiceException;
@@ -59,6 +67,33 @@ public class UserService implements IUserService {
 			return users;
 		} catch (DaoException e) {
 			throw new ServiceException("Error getting all users",e);
+		}
+	}
+	
+	@Override
+	public String exportUsers(List<String> users) throws ServiceException {
+		try {
+			List<UserDto> usersObj = new ArrayList<UserDto>();
+			for (String user : users) {
+				usersObj.add(getUser(user));
+			}
+			UserDtoList userDtoList = new UserDtoList();
+			userDtoList.setUsers(usersObj);
+			return JAXBUtil.marshal(userDtoList);
+		} catch (JAXBException e) {
+			throw new ServiceException("error marshaling users", e);
+		}
+	}
+	
+	@Override
+	public void createUsersByXml(String xml) throws ServiceException {
+		try {
+			UserDtoList userdtoList = JAXBUtil.unmarshal(xml);
+			for (UserDto userDto : userdtoList.getUsers()) {
+				createUser(userDto);
+			}
+		} catch (JAXBException e) {
+			throw new ServiceException("error marshaling users", e);
 		}
 	}
 	
@@ -145,6 +180,8 @@ public class UserService implements IUserService {
 		userDto.setAlbums(albums);
 		return userDto;
 	}
+
+
 
 
 }

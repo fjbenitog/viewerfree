@@ -22,4 +22,8 @@ public interface IUserService {
 	
 	public void delete(List<String> users) throws ServiceException;
 	
+	public String exportUsers(List<String> users) throws ServiceException;
+	
+	public void createUsersByXml(String xml) throws ServiceException;
+	
 }

@@ -2,8 +2,10 @@ package es.viewerfree.gwt.server.service.impl;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +22,9 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:context/ApplicationContext.xml"})
 public class UserServiceITest extends ServiceTestSupport{
+	
+
+	private static final String USER2 = "USER2";
 
 	@Before
 	public void setUp() throws ServiceException{
@@ -58,6 +63,20 @@ public class UserServiceITest extends ServiceTestSupport{
 		assertNull(userService.getUser(USER_NAME));
 	}
 
+	@Test
+	public void importExportUser() throws Exception {
+		insertUser(createUserDto(USER_NAME,ALBUMS));
+		insertUser(createUserDto(USER2,ALBUMS_2));
+		String exportUsers = userService.exportUsers(Arrays.asList(USER_NAME,USER2));
+		deleteFromTables(TABLES);
+		userService.createUsersByXml(exportUsers);
+		
+		assertEquals(USER_NAME.toLowerCase(),userService.getUser(USER_NAME).getName());
+		assertEquals(USER2.toLowerCase(),userService.getUser(USER2).getName());
+		
+		assertNotNull(exportUsers);
+		
+	}
 	
 
 }
