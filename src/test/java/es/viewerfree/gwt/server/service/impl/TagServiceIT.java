@@ -19,7 +19,7 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:context/ApplicationContext.xml"})
-public class TagServiceITest extends ServiceTestSupport{
+public class TagServiceIT extends ServiceTestSupport{
 
 	private static final String USER_2 = "USER_2";
 	private static final String TAG1 = "TAG1";
@@ -136,6 +136,19 @@ public class TagServiceITest extends ServiceTestSupport{
 		tagService.addTag(user.getName(), user.getAlbums().get(1), TAG1);
 
 		assertEquals(Arrays.asList(TAG1,TAG2),tagService.getTags(user.getName()));
+	}
+	
+	@Test
+	public void addTagAlreadyExist() throws Exception {
+		UserDto user = insertUser(createUserDto());
+		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
+		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		
+		tagService.removeTag(user.getName(), user.getAlbums().get(0), TAG1);
+		assertEquals(Arrays.asList(),tagService.getAlbums(user.getName(), TAG1));
+		
+		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
+		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
 	}
 
 }

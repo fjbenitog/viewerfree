@@ -21,7 +21,7 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:context/ApplicationContext.xml"})
-public class UserServiceITest extends ServiceTestSupport{
+public class UserServiceIT extends ServiceTestSupport{
 	
 
 	private static final String USER2 = "USER2";
