@@ -27,12 +27,12 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		Album album = getEntityAlbum(albumName);
 		if(tag == null){
 			tag = composeTag(user, album, tagName);
+			getJpaTemplate().merge(tag);
 		}else{
 			if(!tag.getAlbums().contains(album)){
 				tag.getAlbums().add(album);
 			}
 		}
-		getJpaTemplate().merge(tag);
 	}
 
 
@@ -78,7 +78,7 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 	private Tag getEntityTag(String userName, String tagName) {
 		List<Tag> tags = getJpaTemplate().findByNamedQuery("findTagByName", new Object[]{tagName,userName});
 		Tag tagEntity = null;
-		if(tags.size()==1){
+		if(tags!=null && tags.size()==1){
 			tagEntity = tags.get(0);
 		}
 		return tagEntity;
