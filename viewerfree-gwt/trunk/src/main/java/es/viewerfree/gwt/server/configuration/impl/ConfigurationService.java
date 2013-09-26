@@ -101,6 +101,15 @@ public class ConfigurationService implements IConfigurationService, ApplicationC
 			throw new ServiceException("Error reloading values", e);
 		}
 	}
+	
+	@Override
+	public void cleanCache() throws ServiceException {
+		try {
+			albumManager.deleteCachedImages();
+		} catch (IOException e) {
+			throw new ServiceException("Not possible to delete cached images", e);
+		}
+	}
 
 	private List<File> getConfigurationFiles() throws IOException{
 		ConfigurableListableBeanFactory fb = ctx.getBeanFactory();
@@ -144,6 +153,7 @@ public class ConfigurationService implements IConfigurationService, ApplicationC
 		}
 	}
 
+	
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.ctx = (ConfigurableApplicationContext) applicationContext;
@@ -173,5 +183,6 @@ public class ConfigurationService implements IConfigurationService, ApplicationC
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}
+
 
 }

@@ -12,4 +12,6 @@ public interface IConfigurationService {
 	public void updateConfigurationProperties(List<ConfigDto>  configDtos) throws ServiceException;
 	
 	void reloadConfiguration() throws ServiceException;
+	
+	void cleanCache() throws ServiceException;
 }

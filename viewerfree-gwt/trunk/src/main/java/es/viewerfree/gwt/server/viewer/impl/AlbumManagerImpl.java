@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.AutoCloseInputStream;
 
@@ -20,20 +21,20 @@ import es.viewerfree.gwt.server.viewer.ManageImage;
 
 public class AlbumManagerImpl implements AlbumManager {
 
-	private  FilenameFilter dirfilenameFilter;
+	private FilenameFilter dirfilenameFilter;
 	private String albumPath;
 	private String applicationPath;
 	private FilenameFilter filenameFilter;	
 	private ManageImage manageImage;
 
 	private static  Comparator<String> comparatorAlphanumeric = new ComparatorAlphanumeric();
-	
+
 	private ITagDao tagDao;
-	
+
 	private IUserDao userDao;
-	
+
 	private String thumbnailCachedPath;
-	
+
 	private String cachedPath;
 
 	public String getCachedPath() {
@@ -113,7 +114,7 @@ public class AlbumManagerImpl implements AlbumManager {
 	public void getPicture(String albumName,String pictureName,OutputStream out) throws IOException{
 		getPicture(new File(getPath()+"/"+albumName+"/"+pictureName),out);
 	}
-	
+
 	@Override
 	public void rotateCachedPicture(String albumName, String pictureName,int angle) throws Exception {
 		String[] cachedPaths = new String[]{thumbnailCachedPath,cachedPath};
@@ -133,14 +134,14 @@ public class AlbumManagerImpl implements AlbumManager {
 	}
 
 	@Override
-	public void deletePicture(String albumName, String pciture) throws IOException {
-		File pictureFile = new File(getPath()+"/"+albumName+"/"+pciture);
+	public void deletePicture(String albumName, String picture) throws IOException {
+		File pictureFile = new File(getPath()+"/"+albumName+"/"+picture);
 		if(!pictureFile.delete()){
 			throw new IOException("The file was not able to be deleted");
 		}
 	}
-	
-	
+
+
 
 	public FilenameFilter getDirfilenameFilter() {
 		return dirfilenameFilter;
@@ -182,7 +183,18 @@ public class AlbumManagerImpl implements AlbumManager {
 	public void getDefaultImage(OutputStream out) throws IOException {
 		manageImage.getDefaultImage(out);
 	}
-	
+
+	@Override
+	public void deleteCachedImages() throws IOException {
+		String[] cachedPaths = new String[]{thumbnailCachedPath,cachedPath};
+		for (String cache : cachedPaths) {
+			File file = new File(getApplicationPath(),cache);
+			if( file.exists()) {
+				FileUtils.forceDelete(file);
+			}
+		}
+	}
+
 	private File getAlbumsPath() {
 		File albumsPath = new File(getPath());
 		if(!albumsPath.exists()){
@@ -198,8 +210,8 @@ public class AlbumManagerImpl implements AlbumManager {
 			return s1.toLowerCase().compareTo(s2.toLowerCase());
 		}
 
-
-
 	}
+
+
 
 }

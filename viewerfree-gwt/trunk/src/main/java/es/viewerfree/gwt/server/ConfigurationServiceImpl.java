@@ -32,11 +32,15 @@ public class ConfigurationServiceImpl extends SpringRemoteServiceServlet impleme
 	public void updateConfigValues(List<ConfigDto> configDtos) throws ServiceException {
 		configurationService.updateConfigurationProperties(configDtos);
 	}
+	
 	@Override
 	public void reload() throws ServiceException {
 		configurationService.reloadConfiguration();
 	}
-
-
+	
+	@Override
+	public void cleanCache() throws ServiceException {
+		configurationService.cleanCache();
+	}
 
 }
