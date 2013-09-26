@@ -178,7 +178,6 @@ public class ImagesPanel extends LayoutPanel {
 		final Image loaderImage = new Image(constants.viewerImagesPath()+constants.imageLoader());
 		final HorizontalPanel imagePanel = createImagePanel(loaderImage);
 		final FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(album.getCryptedName(), album.getPictures().get(i).getCriptedName(), Action.SHOW_THUMBNAIL),
-				constants.imageThumbnailSize(),constants.imageThumbnailSize() ,
 				new FitImageLoadHandler() {
 
 			@Override

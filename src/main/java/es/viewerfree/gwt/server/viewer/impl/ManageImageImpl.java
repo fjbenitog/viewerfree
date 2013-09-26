@@ -15,22 +15,11 @@ import es.viewerfree.gwt.server.viewer.ManageImage;
 
 public class ManageImageImpl implements ManageImage {
 
-	private float _memoryLimit;
-	
-	
 	public synchronized  void resize(String inImage,String outImage,int height) throws Exception {
 		VFImage image = new VFImage(inImage);
 		int width = (int) (image.getWidth()*(height/image.getHeight()));
 		image = image.scaleImage(width, height); //to Scale image
 		image.writeImage(outImage);
-	}
-	
-	public float getMemoryLimit() {
-		return _memoryLimit;
-	}
-
-	public void setMemoryLimit(float memoryLimit) {
-		_memoryLimit = memoryLimit;
 	}
 	
 	public void getDefaultImage(OutputStream out) throws IOException{

@@ -6,7 +6,7 @@
 	</bean>
 	
 	<bean id="login" class="es.viewerfree.gwt.server.filter.LoginFilter">
-		<property name="adminPatter" value="${adminPatter}"/>
+		<property name="adminPattern" value="${adminPattern}"/>
 	</bean>
 	
 </beans>

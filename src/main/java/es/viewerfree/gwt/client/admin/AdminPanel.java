@@ -22,9 +22,10 @@ public class AdminPanel extends LayoutPanel {
 	private TabLayoutPanel adminTabs;
 
 	private ActionPanel<UserDto> userActionPanel;
-	
-	private AlbumActionPanel albumActionPanel;
 
+	private ActionPanel<String> albumActionPanel;
+
+	private ConfigPanel configPanel;
 
 	public AdminPanel() {
 		setStyleName("adminContent");
@@ -59,6 +60,7 @@ public class AdminPanel extends LayoutPanel {
 			this.adminTabs = new TabLayoutPanel(30, Unit.PX);
 			this.adminTabs.add(getUserActionPanel(), messages.users(), true);
 			this.adminTabs.add(getAlbumActionPanel(), messages.albumsLabel(), true);
+			this.adminTabs.add(getConfigPanel(), messages.configLabel(), true);
 		}		return this.adminTabs;
 	}
 
@@ -72,11 +74,18 @@ public class AdminPanel extends LayoutPanel {
 	}
 
 
-	private AlbumActionPanel getAlbumActionPanel(){
+	private ActionPanel<String> getAlbumActionPanel(){
 		if(this.albumActionPanel == null){
 			this.albumActionPanel = new AlbumActionPanel();
 		}
 		return this.albumActionPanel;
+	}
+	
+	private ConfigPanel getConfigPanel(){
+		if(this.configPanel == null){
+			this.configPanel = new ConfigPanel();
+		}
+		return this.configPanel;
 	}
 
 }

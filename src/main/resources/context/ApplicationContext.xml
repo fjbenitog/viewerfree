@@ -12,6 +12,8 @@
 			</list>
 		</property>
 	</bean>
+	
+
 
 	<import resource="classpath:app/db/dataBaseContext.xml" />
 	<import resource="classpath:app/services/servicesContext.xml" />
