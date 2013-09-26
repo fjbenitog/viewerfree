@@ -1,14 +1,10 @@
 package es.viewerfree.gwt.server.service.impl;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.naming.spi.ObjectFactory;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 
 import org.mindrot.jbcrypt.BCrypt;
 

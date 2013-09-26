@@ -18,7 +18,7 @@ import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.service.ServiceException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:context/ApplicationContext.xml"})
+@ContextConfiguration(locations = {"classpath:ApplicationTestContext.xml"})
 public class TagServiceIT extends ServiceTestSupport{
 
 	private static final String USER_2 = "USER_2";

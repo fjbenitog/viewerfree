@@ -336,19 +336,16 @@ public class SlidePanel extends PopupPanel {
 		if(albumDto.getPictures().size()>1){
 			int nextIndexPicture = nextIndexPicture();
 			if(fitImages[nextIndexPicture]==null){
-				fitImages[nextIndexPicture]= new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getCriptedImage(nextIndexPicture), Action.SHOW_PICTURE),
-						constants.imageSize(),constants.imageSize());
+				fitImages[nextIndexPicture]= new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getCriptedImage(nextIndexPicture), Action.SHOW_PICTURE));
 			}
 			int previousIndexPicture = previousIndexPicture();
 			if(fitImages[previousIndexPicture]==null){
-				fitImages[previousIndexPicture]= new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getCriptedImage(previousIndexPicture), Action.SHOW_PICTURE),
-						constants.imageSize(),constants.imageSize());
+				fitImages[previousIndexPicture]= new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getCriptedImage(previousIndexPicture), Action.SHOW_PICTURE));
 			}
 		}
 		FitImage chachedImage = fitImages[albumDto.getSelectedPic()];
 		if(chachedImage==null){
 			FitImage fitImage = new FitImage(ViewerHelper.createUrlImage(albumDto.getCryptedName(), getSelectedCriptedImage(), Action.SHOW_PICTURE),
-					constants.imageSize(),constants.imageSize(),
 					new FitImageLoadHandler() {
 				@Override
 				public void imageLoaded(FitImageLoadEvent event) {
@@ -382,18 +379,18 @@ public class SlidePanel extends PopupPanel {
 
 
 	private void resize(FitImage image){
-		int delta = Window.getClientHeight()-(image.getHeight()+BUTTONS_PANEL_HEIGHT);
+		int delta = Window.getClientHeight()-(image.getOriginalHeight()+BUTTONS_PANEL_HEIGHT);
 		int maxHeight = 0;
 		if(delta< IMAGE_PADDING){
 			maxHeight = Window.getClientHeight()-BUTTONS_PANEL_HEIGHT-IMAGE_PADDING;
 			image.setMaxHeight(maxHeight);
 			setHeight((Window.getClientHeight()-PANEL_PADDING)+"px");
 		}else{
-			maxHeight = image.getHeight();
-			setHeight((image.getHeight()+BUTTONS_PANEL_HEIGHT)+"px");
+			maxHeight = image.getOriginalHeight();
+			setHeight((image.getOriginalHeight()+BUTTONS_PANEL_HEIGHT)+"px");
 		}
 
-		setWidth((image.getWidth()+PANEL_PADDING)+"px");
+		setWidth((image.getOriginalWidth()+PANEL_PADDING)+"px");
 		getMainPanel().setWidgetTopHeight(getImagePanel(), IMAGE_PADDING, Unit.PX, 100, Unit.PCT);
 
 		getImagePanel().setHeight(maxHeight+"px");
@@ -405,7 +402,7 @@ public class SlidePanel extends PopupPanel {
 		getMainPanel().setWidgetLeftWidth(getLeftArrowPanel(), IMAGE_PADDING, Unit.PX, 30, Unit.PCT);
 
 		getMainPanel().setWidgetTopHeight(getButtonsPanel(), maxHeight+IMAGE_PADDING+1, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);
-		int offset = ((image.getWidth()+PANEL_PADDING)/2)-PANEL_BUTTONS_WIDTH;
+		int offset = ((image.getOriginalWidth()+PANEL_PADDING)/2)-PANEL_BUTTONS_WIDTH;
 		getMainPanel().setWidgetLeftRight(getButtonsPanel(), offset, Unit.PX, offset, Unit.PX);
 
 		getMainPanel().setWidgetTopHeight(getUtilityPanel(), maxHeight+IMAGE_PADDING+1, Unit.PX, BUTTONS_PANEL_HEIGHT-IMAGE_PADDING, Unit.PX);

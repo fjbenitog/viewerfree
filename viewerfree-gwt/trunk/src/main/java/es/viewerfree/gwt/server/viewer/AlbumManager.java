@@ -20,7 +20,7 @@ public interface AlbumManager {
 	
 	public void getPicture(String albumName,String fotoName, OutputStream out) throws IOException;
 	
-	public void rotateCachedPicture(String albumName,String[] cachedPaths,String fotoName, int angle) throws Exception;
+	public void rotateCachedPicture(String albumName,String fotoName,int angle) throws Exception;
 
 	public void createAlbum(String albumName);
 	

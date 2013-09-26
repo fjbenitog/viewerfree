@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.service.ServiceException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:context/ApplicationContext.xml"})
+@ContextConfiguration(locations = {"classpath:ApplicationTestContext.xml"})
 public class UserServiceIT extends ServiceTestSupport{
 	
 

@@ -43,7 +43,7 @@ public class LoginFilterTest {
 		_httpServletResponseMock = new MockHttpServletResponse();
 		_filterChainMock = Mockito.mock(FilterChain.class);
 		_filter = new LoginFilter();
-		_filter.setAdminPatter(ADMIN_PATTER);
+		_filter.setadminPattern(ADMIN_PATTER);
 		userDto = new UserDto(USER, PASSWORD);
 	}
 	

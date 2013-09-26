@@ -19,15 +19,15 @@ import es.viewerfree.gwt.shared.dto.UserProfile;
 public class LoginFilter extends OncePerRequestFilter {
 
 	
-	private String adminPatter;
+	private String adminPattern;
 
 
-	public String getAdminPatter() {
-		return adminPatter;
+	public String getadminPattern() {
+		return adminPattern;
 	}
 
-	public void setAdminPatter(String adminPatter) {
-		this.adminPatter = adminPatter;
+	public void setadminPattern(String adminPattern) {
+		this.adminPattern = adminPattern;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class LoginFilter extends OncePerRequestFilter {
 	}
 	
 	private boolean allowAdminAccess(HttpServletRequest request){
-		return !request.getRequestURI().toString().startsWith(adminPatter)  || getUserDto(request).getProfile().equals(UserProfile.ADMIN);
+		return !request.getRequestURI().toString().startsWith(adminPattern)  || getUserDto(request).getProfile().equals(UserProfile.ADMIN);
 	}
 
 

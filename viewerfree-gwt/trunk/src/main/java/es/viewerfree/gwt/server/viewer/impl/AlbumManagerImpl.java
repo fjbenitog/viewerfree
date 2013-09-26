@@ -31,6 +31,26 @@ public class AlbumManagerImpl implements AlbumManager {
 	private ITagDao tagDao;
 	
 	private IUserDao userDao;
+	
+	private String thumbnailCachedPath;
+	
+	private String cachedPath;
+
+	public String getCachedPath() {
+		return cachedPath;
+	}
+
+	public void setCachedPath(String cachedPath) {
+		this.cachedPath = cachedPath;
+	}
+
+	public String getThumbnailCachedPath() {
+		return thumbnailCachedPath;
+	}
+
+	public void setThumbnailCachedPath(String thumbnailCachedPath) {
+		this.thumbnailCachedPath = thumbnailCachedPath;
+	}
 
 	public IUserDao getUserDao() {
 		return userDao;
@@ -95,8 +115,8 @@ public class AlbumManagerImpl implements AlbumManager {
 	}
 	
 	@Override
-	public void rotateCachedPicture(String albumName, String[] cachedPaths,String pictureName,
-			int angle) throws Exception {
+	public void rotateCachedPicture(String albumName, String pictureName,int angle) throws Exception {
+		String[] cachedPaths = new String[]{thumbnailCachedPath,cachedPath};
 		for(String cachedPath:cachedPaths){
 			String pathname = getApplicationPath()+"/"+cachedPath+"/"+albumName+"/"+pictureName;
 			File fotoCacheada = new File(pathname);

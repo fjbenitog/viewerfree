@@ -17,11 +17,11 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 
 @SuppressWarnings("serial")
 public class ViewerServiceImpl extends SpringRemoteServiceServlet implements ViewerService {
-	
+
 	private IUserService userService;
-	
+
 	private ITagService tagService;
-	
+
 	public IUserService getUserService() {
 		return userService;
 	}
@@ -31,29 +31,10 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	}
 
 
-	private String thumbnailCachedPath;
-	
-	private String cachedPath;
-
-	public String getCachedPath() {
-		return cachedPath;
-	}
-
-	public void setCachedPath(String cachedPath) {
-		this.cachedPath = cachedPath;
-	}
-
-	public String getThumbnailCachedPath() {
-		return thumbnailCachedPath;
-	}
-
-	public void setThumbnailCachedPath(String thumbnailCachedPath) {
-		this.thumbnailCachedPath = thumbnailCachedPath;
-	}
 
 
 	private AlbumManager albumManager;
-	
+
 	public AlbumManager getAlbumManager() {
 		return albumManager;
 	}
@@ -93,9 +74,8 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 
 	@Override
 	public void rotatePicture(int angle,String albumName, String pictureName) throws Exception {
-		albumManager.rotateCachedPicture(albumName, new String[]{thumbnailCachedPath,cachedPath}, 
-				pictureName, angle);
-		
+		albumManager.rotateCachedPicture(albumName, pictureName, angle);
+
 	}
 
 	@Override
@@ -106,7 +86,7 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	@Override
 	public void createAlbum(String albumName) {
 		this.albumManager.createAlbum(albumName);
-		
+
 	}
 
 	@Override
@@ -124,27 +104,27 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	public List<String> getTags(String album) throws Exception {
 		return tagService.getTags(((UserDto)getSession(ParamKey.USER)).getName(), album);
 	}
-	
+
 	@Override
 	public List<String> getOtherTags(String album) throws Exception {
 		return tagService.getOtherTags(((UserDto)getSession(ParamKey.USER)).getName(), album);
 	}
-	
+
 	@Override
 	public void removeTag(String albumName, String tagName) throws Exception {
 		tagService.removeTag(((UserDto)getSession(ParamKey.USER)).getName(), albumName, tagName);
 	}
-	
+
 	@Override
 	public List<String> getTags() throws Exception {
 		return tagService.getTags(((UserDto)getSession(ParamKey.USER)).getName());
 	}
-	
+
 	@Override
 	public List<String> geAlbumsByTag(String tagName) throws ServiceException {
 		return tagService.getAlbums(((UserDto)getSession(ParamKey.USER)).getName(), tagName);
 	}
-	
+
 	public ITagService getTagService() {
 		return tagService;
 	}

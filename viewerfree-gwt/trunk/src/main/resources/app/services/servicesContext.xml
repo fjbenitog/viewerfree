@@ -18,6 +18,12 @@
 		<property name="tagDao" ref="tagDao"/>
 	</bean>
 	
+	<bean id="configurationService" class="es.viewerfree.gwt.server.configuration.impl.ConfigurationService">
+		<property name="albumManager" ref="albumManager"/>
+		<property name="fileUploadService" ref="uploadFileService"/>
+		<property name="imageService" ref="imageService"/>
+	</bean>
+	
 	<bean id="user" class="es.viewerfree.gwt.server.UserServiceImpl" scope="request">
 		<property name="userService" ref="service.user"/>
 	</bean>
@@ -26,8 +32,11 @@
 		<property name="userService" ref="service.user"/>
 		<property name="tagService" ref="service.tag"/>
 		<property name="albumManager" ref="albumManager"/>
-		<property name="cachedPath"><value>${preview.path}</value></property>
-		<property name="thumbnailCachedPath"><value>${thumbnail.path}</value></property>
+
+	</bean>
+	
+	<bean id="config" class="es.viewerfree.gwt.server.ConfigurationServiceImpl" scope="request">
+		<property name="configurationService" ref="configurationService"></property>
 	</bean>
 	
 </beans>
