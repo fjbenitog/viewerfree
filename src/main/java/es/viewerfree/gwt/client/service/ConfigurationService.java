@@ -19,4 +19,6 @@ public interface ConfigurationService extends RemoteService {
 	void updateConfigValues(List<ConfigDto> configDtos) throws ServiceException;
 	
 	void reload() throws ServiceException;
+	
+	void cleanCache() throws ServiceException;
 }

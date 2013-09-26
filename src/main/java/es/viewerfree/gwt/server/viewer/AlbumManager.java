@@ -26,4 +26,6 @@ public interface AlbumManager {
 	
 	public void deletePicture(String albumName,String pciture) throws IOException;
 	
+	public void deleteCachedImages() throws IOException;
+	
 }
