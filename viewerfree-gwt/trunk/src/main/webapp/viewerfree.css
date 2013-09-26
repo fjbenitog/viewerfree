@@ -175,6 +175,11 @@
 	color: red;
 }
 
+.message {
+	font-family: Comic Sans MS;
+	color: green;
+}
+
 .warning {
 	background: none repeat scroll 0 0 #FFCC99;
 	font-family: Comic Sans MS;
@@ -642,4 +647,65 @@
 	cursor: pointer;
 	font-size: 11px;
 }
+
+.configForm {
+	font-weight: bold;
+	font-family: arial, sans-serif;
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #FFB366;
+	padding: 20px;
+}
+
+.configForm input {
+	border: 1px solid #AFAFA4;
+	font-family: arial, sans-serif;
+	vertical-align: middle;
+}
+
+.configForm select {
+	border: 1px solid #AFAFA4;
+	font-family: arial, sans-serif;
+	vertical-align: middle;
+}
+
+.configForm td {
+	font-family: arial, sans-serif;
+	padding-right: 20px;
+}
+
+.configForm button {
+	font-family: arial, sans-serif;
+	border: 1px solid #CC6600;
+	background: #FF8000;
+	border: 1px solid #CC6600;
+	color: white;
+	padding-left: 10px;
+	padding-right: 10px;
+	cursor: auto;
+}
+
+.configForm button:hover {
+	border: 1px solid #CC6600;
+}
+
+.configForm button:active {
+	border: 1px solid #FFB366;
+}
+
+.configForm input:hover {
+	border: 1px solid #8A8A7B;
+}
+
+.configForm input:focus {
+	border: 1px solid #FF8000;
+}
+
+.configForm select:hover {
+	border: 1px solid #8A8A7B;
+}
+
+.configForm select:focus {
+	border: 1px solid #FF8000;
+}
+
 
