@@ -12,6 +12,7 @@
 
 	<bean id="service.user" class="es.viewerfree.gwt.server.service.impl.UserService">
 		<property name="userDao" ref="userDao"/>
+		<property name="tagDao" ref="tagDao"/>
 	</bean>
 	<bean id="service.tag" class="es.viewerfree.gwt.server.service.impl.TagService">
 		<property name="userDao" ref="userDao"/>

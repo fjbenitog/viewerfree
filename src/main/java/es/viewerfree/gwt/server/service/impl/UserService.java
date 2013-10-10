@@ -9,19 +9,25 @@ import javax.xml.bind.JAXBException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import es.viewerfree.gwt.server.dao.DaoException;
+import es.viewerfree.gwt.server.dao.ITagDao;
 import es.viewerfree.gwt.server.dao.IUserDao;
 import es.viewerfree.gwt.server.dto.UserDtoList;
+import es.viewerfree.gwt.server.dto.UserDtoList.UserTags;
 import es.viewerfree.gwt.server.entities.Album;
+import es.viewerfree.gwt.server.entities.Tag;
 import es.viewerfree.gwt.server.entities.User;
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.server.util.JAXBUtil;
+import es.viewerfree.gwt.shared.dto.TagDto;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 import es.viewerfree.gwt.shared.service.ServiceException;
 
 public class UserService implements IUserService {
 
-	private IUserDao _userDao;
+	private IUserDao userDao;
+	
+	private ITagDao tagDao;
 
 	public void createUser(UserDto userDto ) throws ServiceException {
 		try {
@@ -34,7 +40,7 @@ public class UserService implements IUserService {
 
 	public UserDto getCredentials(String userName, String password) throws ServiceException {
 		try {
-			User user = _userDao.getUser(userName);
+			User user = userDao.getUser(userName);
 			if(user!=null && !BCrypt.checkpw(password, user.getPassword())) {
 				return null;
 			}
@@ -47,7 +53,7 @@ public class UserService implements IUserService {
 
 	public UserDto getUser(String user) throws ServiceException {
 			try {
-				return toUserDto(_userDao.getUser(user.toLowerCase()));
+				return toUserDto(userDao.getUser(user.toLowerCase()));
 			} catch (DaoException e) {
 				throw new ServiceException("Error getting user",e);
 			}
@@ -55,7 +61,7 @@ public class UserService implements IUserService {
 	
 	public List<UserDto> getAllUsers() throws ServiceException {
 		try {
-			List<User> allUsers = _userDao.findAllUsers();
+			List<User> allUsers = userDao.findAllUsers();
 			List<UserDto> users = new ArrayList<UserDto>();
 			for (User user : allUsers) {
 				users.add(toUserDto(user));
@@ -69,9 +75,13 @@ public class UserService implements IUserService {
 	@Override
 	public String exportUsers(List<String> users) throws ServiceException {
 		try {
-			List<UserDto> usersObj = new ArrayList<UserDto>();
+			List<UserTags> usersObj = new ArrayList<UserTags>();
 			for (String user : users) {
-				usersObj.add(getUser(user));
+				UserTags userTags = new UserTags();
+				usersObj.add(userTags);
+				UserDto userObj = getUser(user);
+				userTags.setUserDto(userObj);
+				userTags.setTags(tagsToList(tagDao.getTagsByUser(userObj.getName())));
 			}
 			UserDtoList userDtoList = new UserDtoList();
 			userDtoList.setUsers(usersObj);
@@ -81,29 +91,69 @@ public class UserService implements IUserService {
 		}
 	}
 	
+	private List<TagDto> tagsToList(List<Tag> tags) {
+		List<TagDto> tagDtos = new ArrayList<TagDto>();
+		for (Tag tag : tags) {
+			TagDto tagDto = new TagDto();
+			tagDto.setName(tag.getTagId().getName());
+			tagDto.setAlbums(albumToList(tag.getAlbums()));
+			tagDtos.add(tagDto);
+		}
+		return tagDtos;
+	}
+	
+	private List<String> albumToList(Collection<Album> albums) {
+		List<String> albumsName = new ArrayList<String>();
+		for (Album album : albums) {
+			albumsName.add(album.getName());
+		}
+		return albumsName;
+	}
+	
+	
+	
 	@Override
 	public void createUsersByXml(String xml) throws ServiceException {
 		try {
 			UserDtoList userdtoList = JAXBUtil.unmarshal(xml);
-			for (UserDto userDto : userdtoList.getUsers()) {
-				createUser(userDto);
+			for (UserTags userTags : userdtoList.getUsers()) {
+				UserDto userDto = userTags.getUserDto();
+				User user = toUser(new User(), userDto);
+				user.setPassword(userDto.getPassword());
+				getUserDao().mergeUser(user);
+				user = userDao.getUser(userDto.getName());
+				List<TagDto> tags = userTags.getTags();
+				for (TagDto tagDto : tags) {
+					List<String> albums = tagDto.getAlbums();
+					for (String album : albums) {
+						tagDao.addTag(user, album, tagDto.getName());
+					}
+				}
 			}
-		} catch (JAXBException e) {
+		} catch (Exception e) {
 			throw new ServiceException("error marshaling users", e);
-		}
+		} 
 	}
 	
 	public IUserDao getUserDao() {
-		return _userDao;
+		return userDao;
 	}
 
 	public void setUserDao(IUserDao userDao) {
-		_userDao = userDao;
+		this.userDao = userDao;
+	}
+
+	public ITagDao getTagDao() {
+		return tagDao;
+	}
+
+	public void setTagDao(ITagDao tagDao) {
+		this.tagDao = tagDao;
 	}
 
 	public UserDto getUser(Long id) throws ServiceException {
 		try {
-			return toUserDto(_userDao.getUser(id));
+			return toUserDto(userDao.getUser(id));
 		} catch (DaoException e) {
 			throw new ServiceException("Error getting User by Id",e);
 		}
@@ -111,8 +161,8 @@ public class UserService implements IUserService {
 
 	public void modifyUser(UserDto userDto) throws ServiceException {
 		try {
-			User user = toUser(_userDao.getUser(userDto.getName()), userDto);
-			_userDao.mergeUser(user);
+			User user = toUser(userDao.getUser(userDto.getName()), userDto);
+			userDao.mergeUser(user);
 		} catch (DaoException e) {
 			throw new ServiceException("Error modifying User",e);
 		}
@@ -121,7 +171,7 @@ public class UserService implements IUserService {
 	@Override
 	public void delete(List<String> users) throws ServiceException {
 		try {
-			_userDao.delete(users);
+			userDao.delete(users);
 		} catch (DaoException e) {
 			throw new ServiceException("Error deleting user",e);
 		}
