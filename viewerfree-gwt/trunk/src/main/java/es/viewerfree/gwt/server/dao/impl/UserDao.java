@@ -6,6 +6,7 @@ import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.IUserDao;
+import es.viewerfree.gwt.server.entities.Tag;
 import es.viewerfree.gwt.server.entities.User;
 
 
@@ -43,7 +44,6 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 	@SuppressWarnings("unchecked")
 	public List<User> findAllUsers() throws DaoException {
 		try{
-
 			return  getJpaTemplate().findByNamedQuery("findAllUsers");
 		}catch (Exception e) {
 			throw new DaoException("Unanabled to find all Users",e);
@@ -58,6 +58,10 @@ public class UserDao extends JpaDaoSupport implements IUserDao{
 	public void delete(List<String> users) throws DaoException {
 		for (String user : users) {
 			User userEntity = getUserEntity(user);
+			List<Tag> tags = getJpaTemplate().findByNamedQuery("findTagsByUser", new Object[]{user});
+			for (Tag tag : tags){
+				getJpaTemplate().remove(tag);
+			}
 			if(userEntity!=null)
 				getJpaTemplate().remove(userEntity);
 		}
