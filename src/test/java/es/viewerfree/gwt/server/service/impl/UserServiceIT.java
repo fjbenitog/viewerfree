@@ -11,10 +11,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import es.viewerfree.gwt.server.ServiceTestSupport;
+import es.viewerfree.gwt.server.service.ITagService;
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.service.ServiceException;
 
@@ -22,8 +24,14 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 @ContextConfiguration(locations = {"classpath:ApplicationTestContext.xml"})
 public class UserServiceIT extends ServiceTestSupport{
 	
-
 	private static final String USER2 = "USER2";
+	
+	private static final String TAG2 = "TAG2";
+	
+	private static final String TAG1 = "TAG1";
+	
+	@Autowired
+	private ITagService tagService;
 
 	@Before
 	public void setUp() throws ServiceException{
@@ -57,22 +65,37 @@ public class UserServiceIT extends ServiceTestSupport{
 	
 	@Test
 	public void deleteUser() throws Exception {
-		insertUser(createUserDto());
+		UserDto user = insertUser(createUserDto());
 		insertUser(createUserDto(USER2));
+		tagService.addTag(user.getName(), ALBUMS.get(0), TAG2);
 		userService.delete(Arrays.asList(USER_NAME.toLowerCase()));
 		assertNull(userService.getUser(USER_NAME));
 	}
 
 	@Test
 	public void importExportUser() throws Exception {
-		insertUser(createUserDto(USER_NAME,ALBUMS));
-		insertUser(createUserDto(USER2,ALBUMS_2));
+		UserDto user = insertUser(createUserDto(USER_NAME,ALBUMS));
+		UserDto user2 =insertUser(createUserDto(USER2,ALBUMS_2));
+		tagService.addTag(user.getName(), ALBUMS.get(0), TAG2);
+		tagService.addTag(user2.getName(), ALBUMS.get(1), TAG1);
+		
+		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG2));
+		assertEquals(Arrays.asList(ALBUMS.get(1)),tagService.getAlbums(user2.getName(), TAG1));
+		
 		String exportUsers = userService.exportUsers(Arrays.asList(USER_NAME,USER2));
+		System.err.println(exportUsers);
 		deleteFromTables(TABLES);
 		userService.createUsersByXml(exportUsers);
 		
+		user = userService.getUser(user.getName());
+		user2 = userService.getUser(user2.getName());
+		
 		assertEquals(USER_NAME.toLowerCase(),userService.getUser(USER_NAME).getName());
+		assertEquals(ALBUMS,user.getAlbums());
 		assertEquals(USER2.toLowerCase(),userService.getUser(USER2).getName());
+		assertEquals(ALBUMS_2,user2.getAlbums());
+		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG2));
+		assertEquals(Arrays.asList(ALBUMS.get(1)),tagService.getAlbums(user2.getName(), TAG1));
 		
 		assertNotNull(exportUsers);
 		
