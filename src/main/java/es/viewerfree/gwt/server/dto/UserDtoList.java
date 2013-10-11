@@ -6,7 +6,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import es.viewerfree.gwt.server.entities.Tag;
 import es.viewerfree.gwt.shared.dto.TagDto;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
@@ -31,6 +30,8 @@ public class UserDtoList {
 		
 		private List<TagDto> tags;
 		
+		@XmlElementWrapper(name = "tags")
+		@XmlElement(name = "tag")
 		public List<TagDto> getTags() {
 			return tags;
 		}
