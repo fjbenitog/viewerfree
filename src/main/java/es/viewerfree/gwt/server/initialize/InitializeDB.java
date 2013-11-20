@@ -1,6 +1,7 @@
 package es.viewerfree.gwt.server.initialize;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -12,6 +13,7 @@ import es.viewerfree.gwt.shared.service.ServiceException;
 public class InitializeDB implements ApplicationContextAware {
 
 	private static final String ADMIN = "admin";
+	@Autowired
 	private IUserService _userService;
 
 

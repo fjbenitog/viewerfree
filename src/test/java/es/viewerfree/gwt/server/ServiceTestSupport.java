@@ -6,8 +6,8 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
-import org.springframework.test.jdbc.SimpleJdbcTestUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.shared.dto.UserDto;
@@ -25,15 +25,15 @@ public class ServiceTestSupport {
 	@Autowired
 	protected IUserService userService;
 	
-	protected SimpleJdbcTemplate simpleJdbcTemplate;
+	protected JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
-		this.simpleJdbcTemplate = new SimpleJdbcTemplate(dataSource);
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
 	protected int deleteFromTables(String... names) {
-		return SimpleJdbcTestUtils.deleteFromTables(this.simpleJdbcTemplate, names);
+		return JdbcTestUtils.deleteFromTables(this.jdbcTemplate, names);
 	}
 	
 	protected UserDto insertUser(UserDto userDto) throws ServiceException {

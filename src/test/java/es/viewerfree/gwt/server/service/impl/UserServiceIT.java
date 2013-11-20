@@ -83,7 +83,7 @@ public class UserServiceIT extends ServiceTestSupport{
 		assertEquals(Arrays.asList(ALBUMS.get(1)),tagService.getAlbums(user2.getName(), TAG1));
 		
 		String exportUsers = userService.exportUsers(Arrays.asList(USER_NAME,USER2));
-		System.err.println(exportUsers);
+//		System.err.println(exportUsers);
 		deleteFromTables(TABLES);
 		userService.createUsersByXml(exportUsers);
 		

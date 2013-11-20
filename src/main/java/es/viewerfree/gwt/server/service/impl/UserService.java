@@ -7,6 +7,8 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.ITagDao;
@@ -23,10 +25,13 @@ import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.dto.UserProfile;
 import es.viewerfree.gwt.shared.service.ServiceException;
 
+@Service
 public class UserService implements IUserService {
 
+	@Autowired
 	private IUserDao userDao;
 	
+	@Autowired
 	private ITagDao tagDao;
 
 	public void createUser(UserDto userDto ) throws ServiceException {

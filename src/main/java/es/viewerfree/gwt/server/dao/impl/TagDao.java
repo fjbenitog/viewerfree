@@ -5,9 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
-import org.springframework.orm.jpa.EntityManagerFactoryUtils;
-import org.springframework.orm.jpa.support.JpaDaoSupport;
+import org.springframework.stereotype.Repository;
 
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.ITagDao;
@@ -16,10 +17,14 @@ import es.viewerfree.gwt.server.entities.Tag;
 import es.viewerfree.gwt.server.entities.Tag.TagId;
 import es.viewerfree.gwt.server.entities.User;
 
-public class TagDao extends JpaDaoSupport implements ITagDao {
+@Repository
+public class TagDao implements ITagDao {
 
 	private static final String DELETE_TAG_FROM_ALBUM = "Delete from  viewerfree.VF_ALBUM_TAG a " +
 			"where a.ALBUMS_NAME = ? AND a.VF_TAG_TAG_NAME = ? AND a.vf_tag_user_ID_USER = ?";
+	
+	@PersistenceContext
+	EntityManager entityManager;
 
 	@Override
 	public void addTag(User user, String albumName, String tagName) {
@@ -27,7 +32,7 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		Album album = getEntityAlbum(albumName);
 		if(tag == null){
 			tag = composeTag(user, album, tagName);
-			getJpaTemplate().merge(tag);
+			entityManager.merge(tag);
 		}else{
 			if(!tag.getAlbums().contains(album)){
 				tag.getAlbums().add(album);
@@ -48,25 +53,25 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		return sTags;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Tag> getTagsByAlbum(String user, String albumName) {
-		List<Tag> tags = getJpaTemplate().findByNamedQuery("findTagsByAlbum", new Object[]{user,albumName});
-
-		return tags;
+		Query namedQuery = entityManager.createNamedQuery("findTagsByAlbum").setParameter(1, user).setParameter(2, albumName);
+		return (List<Tag>) namedQuery.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Tag> getOtherTagsByAlbum(String user, String albumName) {
-		return getJpaTemplate().findByNamedQuery("findOtherTags", new Object[]{user,albumName});
+		Query namedQuery = entityManager.createNamedQuery("findOtherTags").setParameter(1, user).setParameter(2, albumName);
+		return namedQuery.getResultList();
 	}
 
 	@Override
 	public void removeTag(User user, String albumName, String tagName) throws DaoException {
 		try{
-			EntityManager em = EntityManagerFactoryUtils.getTransactionalEntityManager 
-					(getJpaTemplate ().getEntityManagerFactory () );
-			em.createNativeQuery(DELETE_TAG_FROM_ALBUM).setParameter(1, albumName)
-			.setParameter(3, user).setParameter(2, tagName).executeUpdate();
+			 entityManager.createNativeQuery(DELETE_TAG_FROM_ALBUM).setParameter(1, albumName)
+					.setParameter(3, user).setParameter(2, tagName).executeUpdate();
 		}catch(Exception ex){
 			throw new DaoException("Error deleting tag",ex);
 		}
@@ -75,11 +80,14 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Tag> getTagsByUser(String user) {
-		return getJpaTemplate().findByNamedQuery("findTagsByUser", new Object[]{user});
+		Query namedQuery = entityManager.createNamedQuery("findTagsByUser").setParameter(1, user);
+		return namedQuery.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	private Tag getEntityTag(String userName, String tagName) {
-		List<Tag> tags = getJpaTemplate().findByNamedQuery("findTagByName", new Object[]{tagName,userName});
+		Query namedQuery = entityManager.createNamedQuery("findTagByName").setParameter(1, tagName).setParameter(2, userName);
+		List<Tag> tags = namedQuery.getResultList();
 		Tag tagEntity = null;
 		if(tags!=null && tags.size()==1){
 			tagEntity = tags.get(0);
@@ -87,8 +95,10 @@ public class TagDao extends JpaDaoSupport implements ITagDao {
 		return tagEntity;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Album getEntityAlbum(String albumName) {
-		List<Album> albums = getJpaTemplate().findByNamedQuery("findAlbumByName", new Object[]{albumName});
+		Query namedQuery = entityManager.createNamedQuery("findAlbumByName").setParameter(1, albumName);
+		List<Album> albums = namedQuery.getResultList();
 		Album albumEntity = null;
 		if(albums.size()==1){
 			albumEntity = albums.get(0);

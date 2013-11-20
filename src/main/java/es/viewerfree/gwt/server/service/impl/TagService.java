@@ -3,6 +3,9 @@ package es.viewerfree.gwt.server.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import es.viewerfree.gwt.server.dao.DaoException;
 import es.viewerfree.gwt.server.dao.ITagDao;
 import es.viewerfree.gwt.server.dao.IUserDao;
@@ -10,10 +13,13 @@ import es.viewerfree.gwt.server.entities.Tag;
 import es.viewerfree.gwt.server.service.ITagService;
 import es.viewerfree.gwt.shared.service.ServiceException;
 
+@Service
 public class TagService implements ITagService {
 
+	@Autowired
 	private IUserDao userDao;
-
+	
+	@Autowired
 	private ITagDao tagDao;
 
 	@Override

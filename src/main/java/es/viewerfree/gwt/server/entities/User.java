@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,7 +49,7 @@ public class User implements Serializable{
 	
 	private String profile;
 	
-	@ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToMany( fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name="vf_album_user",
 			joinColumns=@JoinColumn(name="ID_USER"),
 	        inverseJoinColumns=@JoinColumn(name="ALBUM_ID"))

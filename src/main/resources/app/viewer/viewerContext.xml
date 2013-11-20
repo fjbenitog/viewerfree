@@ -50,7 +50,7 @@
       </property>
 	</bean>
 	<bean id="backupService" class="es.viewerfree.gwt.server.BackupService">
-		<property name="userService" ref="service.user"/>
+		<property name="userService" ref="userService"/>
 	</bean>
 	
 </beans>
