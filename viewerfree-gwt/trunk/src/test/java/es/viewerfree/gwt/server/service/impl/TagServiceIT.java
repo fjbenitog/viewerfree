@@ -4,6 +4,8 @@ package es.viewerfree.gwt.server.service.impl;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,16 +42,23 @@ public class TagServiceIT extends ServiceTestSupport{
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(0)));
 	}
 
 	@Test
 	public void addTagTwoAlbum() throws Exception {
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
-		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
-
 		tagService.addTag(user.getName(), user.getAlbums().get(1), TAG1);
+		
 		assertEquals(ALBUMS,tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(1)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(1)));
 	}
 
 	@Test
@@ -57,11 +66,18 @@ public class TagServiceIT extends ServiceTestSupport{
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(0)));
 
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG2);
 
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG2));
+		assertEquals(Arrays.asList(TAG1,TAG2),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1,TAG2),tagService.getTags(user.getName(), ALBUMS.get(0)));
+		
 	}
 
 	@Test
@@ -69,10 +85,15 @@ public class TagServiceIT extends ServiceTestSupport{
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(0)));
 
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
-
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(0)));
 	}
 
 	@Test
@@ -80,10 +101,17 @@ public class TagServiceIT extends ServiceTestSupport{
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(0)));
 
 		UserDto user2 = insertUser(createUserDto(USER_2));
+//		UserDto user2 = user;
 		tagService.addTag(user2.getName(), user2.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user2.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user2.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user2.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user2.getName(), ALBUMS.get(0)));
 	}
 
 	@Test
@@ -107,7 +135,7 @@ public class TagServiceIT extends ServiceTestSupport{
 		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), user.getAlbums().get(1)));
 		assertEquals(Arrays.asList(TAG2),tagService.getOtherTags(user.getName(), user.getAlbums().get(1)));
 		
-		assertEquals(Arrays.asList(TAG2,TAG1),tagService.getTags(user.getName(), user.getAlbums().get(0)));
+		assertEquals(sort(Arrays.asList(TAG2,TAG1)),sort(tagService.getTags(user.getName(), user.getAlbums().get(0))));
 		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), user.getAlbums().get(0)));
 		
 		tagService.removeTag(user.getName(), user.getAlbums().get(0), TAG2);
@@ -123,9 +151,15 @@ public class TagServiceIT extends ServiceTestSupport{
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(0)));
 		
 		tagService.removeTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(TAG1),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(),tagService.getTags(user.getName(), ALBUMS.get(0)));
 	}
 	
 	@Test
@@ -143,12 +177,26 @@ public class TagServiceIT extends ServiceTestSupport{
 		UserDto user = insertUser(createUserDto());
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(0)));
 		
 		tagService.removeTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(TAG1),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(),tagService.getTags(user.getName(), ALBUMS.get(0)));
 		
 		tagService.addTag(user.getName(), user.getAlbums().get(0), TAG1);
 		assertEquals(Arrays.asList(ALBUMS.get(0)),tagService.getAlbums(user.getName(), TAG1));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName()));
+		assertEquals(Arrays.asList(),tagService.getOtherTags(user.getName(), ALBUMS.get(0)));
+		assertEquals(Arrays.asList(TAG1),tagService.getTags(user.getName(), ALBUMS.get(0)));
+	}
+	
+	private List<String> sort(List<String> list){
+		Collections.sort(list);
+		return list;
 	}
 
 }

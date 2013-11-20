@@ -2,10 +2,12 @@ package es.viewerfree.gwt.server.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import es.viewerfree.gwt.shared.dto.UserDto;
 import es.viewerfree.gwt.shared.service.ServiceException;
 
-
+@Service
 public interface IUserService {
 
 	public UserDto getCredentials(String user, String password) throws ServiceException;

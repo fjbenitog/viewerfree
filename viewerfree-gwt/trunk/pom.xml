@@ -13,15 +13,9 @@
 		<!-- Convenience property to set the GWT version -->
 		<gwtVersion>2.4.0</gwtVersion>
 		<!-- GWT needs at least java 1.5 -->
-		<webappDirectory>
-			${project.build.directory}/${project.build.finalName}
-		</webappDirectory>
-		<project.build.sourceEncoding>
-			UTF-8
-		</project.build.sourceEncoding>
-		<org.springframework.version>
-			3.0.6.RELEASE
-		</org.springframework.version>
+		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<org.springframework.version>3.2.5.RELEASE</org.springframework.version>
 		<hiberante.version>3.2.5.GA</hiberante.version>
 	</properties>
 	<ciManagement>
@@ -79,6 +73,11 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-commons-annotations</artifactId>
 			<version>${hiberante.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>jboss</groupId>

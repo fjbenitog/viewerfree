@@ -2,23 +2,6 @@
 		  "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans>
   	
-  	<bean id="userDao" class="es.viewerfree.gwt.server.dao.impl.UserDao">
-  		<property name="entityManagerFactory" ref="entityManagerFactory"/>
-  	</bean>
-  	
-  	<bean id="tagDao" class="es.viewerfree.gwt.server.dao.impl.TagDao">
-  		<property name="entityManagerFactory" ref="entityManagerFactory"/>
-  	</bean>
-
-	<bean id="service.user" class="es.viewerfree.gwt.server.service.impl.UserService">
-		<property name="userDao" ref="userDao"/>
-		<property name="tagDao" ref="tagDao"/>
-	</bean>
-	<bean id="service.tag" class="es.viewerfree.gwt.server.service.impl.TagService">
-		<property name="userDao" ref="userDao"/>
-		<property name="tagDao" ref="tagDao"/>
-	</bean>
-	
 	<bean id="configurationService" class="es.viewerfree.gwt.server.configuration.impl.ConfigurationService">
 		<property name="albumManager" ref="albumManager"/>
 		<property name="fileUploadService" ref="uploadFileService"/>
@@ -26,12 +9,12 @@
 	</bean>
 	
 	<bean id="user" class="es.viewerfree.gwt.server.UserServiceImpl" scope="request">
-		<property name="userService" ref="service.user"/>
+		<property name="userService" ref="userService"/>
 	</bean>
 	
 	<bean id="viewer" class="es.viewerfree.gwt.server.ViewerServiceImpl" scope="request">
-		<property name="userService" ref="service.user"/>
-		<property name="tagService" ref="service.tag"/>
+		<property name="userService" ref="userService"/>
+		<property name="tagService" ref="tagService"/>
 		<property name="albumManager" ref="albumManager"/>
 
 	</bean>
