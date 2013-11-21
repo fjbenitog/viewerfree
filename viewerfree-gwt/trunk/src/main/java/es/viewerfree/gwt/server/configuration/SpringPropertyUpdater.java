@@ -42,15 +42,12 @@ public class SpringPropertyUpdater implements ApplicationContextAware {
 		PropertyValue propertyValue = propertyValues.getPropertyValue(LOCATION_PROPERTY);
 		List<TypedStringValue> locations = (List<TypedStringValue>) propertyValue.getValue();
 		for (TypedStringValue location : locations) {
-			System.err.println(location.getValue());
 			Resource res = ctx.getResource(location.getValue());
 			Properties properties = new Properties();
 			File file = res.getFile();
 			properties.load(new FileInputStream(file));
 			String property = properties.getProperty("jdbc.username");
-			System.err.println(property);
 			properties.setProperty("jdbc.username", "pepe");
-			System.err.println(file.getAbsolutePath());
 			properties.store(new FileOutputStream(file), comments);
 		}
 
