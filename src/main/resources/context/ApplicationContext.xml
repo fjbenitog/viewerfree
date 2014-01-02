@@ -21,6 +21,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<import resource="classpath:app/db/dataBaseContext.xml" />
 	<import resource="classpath:app/services/servicesContext.xml" />
+	<import resource="classpath:app/services/restContext.xml" />
 	<import resource="classpath:app/viewer/viewerContext.xml" />
 	<import resource="classpath:app/commonContext.xml" />
 
