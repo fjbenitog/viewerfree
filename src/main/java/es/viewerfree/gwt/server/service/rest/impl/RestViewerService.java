@@ -34,7 +34,7 @@ public class RestViewerService implements IRestViewerService {
     @Path("/login/{authorization}")
 	public String login(@PathParam("authorization") String authorization)  throws Exception{
 		String values[] = authorization.split("\\@");
-		UserDto credentials = userService.getCredentials(values[0], values[1]);
+		UserDto credentials = userService.getCredentials(values[1], values[0]);
 		if(credentials!=null){
 			return CryptoUtil.encrypt(credentials.getName()+":"+System.currentTimeMillis(), credentials.getName());
 		}else{
