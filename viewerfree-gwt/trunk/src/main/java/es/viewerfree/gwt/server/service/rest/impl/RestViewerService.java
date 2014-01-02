@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.server.service.rest.IRestViewerService;
-import es.viewerfree.gwt.server.util.CriptoUtilTest;
 import es.viewerfree.gwt.server.util.CryptoUtil;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
