@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import es.viewerfree.gwt.server.service.IAlbumService;
+import es.viewerfree.gwt.server.service.ITagService;
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.server.service.rest.IRestViewerService;
 import es.viewerfree.gwt.server.util.CryptoUtil;
@@ -25,6 +26,9 @@ public class RestViewerService implements IRestViewerService {
 	
 	@Autowired
 	private IAlbumService albumService;
+	
+	@Autowired
+	private ITagService tagService;
 	
 	@Override
 	@GET
@@ -55,6 +59,22 @@ public class RestViewerService implements IRestViewerService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<String>  getAlbums(@PathParam("user") String user) throws Exception {
 		return albumService.getAlbums(user);
+	}
+	
+	@Override
+	@GET
+    @Path("/{user}/tags")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String>  getTags(@PathParam("user") String user) throws Exception {
+		return tagService.getTags(user);
+	}
+	
+	@Override
+	@GET
+    @Path("/{user}/{tag}/albums")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> getAlbumByTags(@PathParam("user") String user, @PathParam("tag") String tag) throws Exception {
+		return tagService.getAlbums(user, tag);
 	}
 
 }
