@@ -8,5 +8,9 @@ public interface IRestViewerService {
 	
 	String login(String authorization)  throws Exception;
 	
-	List<String> getAlbums(String token) throws Exception;
+	List<String> getAlbums(String user) throws Exception;
+	
+	List<String> getTags(String user) throws Exception;
+	
+	List<String> getAlbumByTags(String user, String album) throws Exception;
 }
