@@ -15,6 +15,7 @@
 	<bean id="viewer" class="es.viewerfree.gwt.server.ViewerServiceImpl" scope="request">
 		<property name="userService" ref="userService"/>
 		<property name="tagService" ref="tagService"/>
+		<property name="albumService" ref="albumService"/>
 		<property name="albumManager" ref="albumManager"/>
 
 	</bean>

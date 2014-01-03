@@ -16,6 +16,7 @@
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="authorizationFilter" />
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
 		</jaxrs:providers>
 	</jaxrs:server>
 
