@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.viewerfree.gwt.client.service.ViewerService;
+import es.viewerfree.gwt.server.service.IAlbumService;
 import es.viewerfree.gwt.server.service.ITagService;
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.server.service.SpringRemoteServiceServlet;
@@ -21,6 +22,16 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	private IUserService userService;
 
 	private ITagService tagService;
+	
+	private IAlbumService albumService;
+	
+	public IAlbumService getAlbumService() {
+		return albumService;
+	}
+
+	public void setAlbumService(IAlbumService albumService) {
+		this.albumService = albumService;
+	}
 
 	public IUserService getUserService() {
 		return userService;
@@ -45,17 +56,7 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 
 	@Override
 	public List<String> getUserAlbums() throws ServiceException {
-		return getUserAlbums(userService.getUser((((UserDto)getSession(ParamKey.USER)).getId())), this.albumManager.getAlbums());
-	}
-
-	private List<String> getUserAlbums(UserDto userDto, List<String> albums) {
-		List<String> albumsList = new ArrayList<String>();
-		for (String album : userDto.getAlbums()) {
-			if(albums.contains(album)){
-				albumsList.add(album);
-			}
-		}
-		return albumsList ;
+		return albumService.getAlbums(((UserDto)getSession(ParamKey.USER)).getName());
 	}
 
 	@Override
