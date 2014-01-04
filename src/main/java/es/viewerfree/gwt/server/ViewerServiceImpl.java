@@ -62,15 +62,7 @@ public class ViewerServiceImpl extends SpringRemoteServiceServlet implements Vie
 	@Override
 	public AlbumDto getPictures(String albumName) {
 		UserDto userDto =(UserDto)getSession(ParamKey.USER);
-		List<String> pictures = albumManager.getPictures(albumName);
-		List<PictureDto> pictureDtos = new ArrayList<PictureDto>();
-		for (String pic : pictures) {
-			PictureDto pictureDto = new PictureDto(pic, CryptoUtil.encrypt(pic, userDto.getName()));
-			pictureDtos.add(pictureDto);
-		}
-		AlbumDto albumDto = new AlbumDto(albumName, pictureDtos);
-		albumDto.setCryptedName(CryptoUtil.encrypt(albumName, userDto.getName()));
-		return albumDto;
+		return albumService.getPictures(userDto.getName(), albumName);
 	}
 
 	@Override

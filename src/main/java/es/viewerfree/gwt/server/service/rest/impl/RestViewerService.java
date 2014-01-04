@@ -8,14 +8,21 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import es.viewerfree.gwt.server.service.IAlbumService;
 import es.viewerfree.gwt.server.service.ITagService;
 import es.viewerfree.gwt.server.service.IUserService;
 import es.viewerfree.gwt.server.service.rest.IRestViewerService;
 import es.viewerfree.gwt.server.util.CryptoUtil;
+import es.viewerfree.gwt.server.viewer.AlbumManager;
+import es.viewerfree.gwt.shared.Action;
+import es.viewerfree.gwt.shared.dto.AlbumDto;
 import es.viewerfree.gwt.shared.dto.UserDto;
 
 @Path("/")
@@ -29,6 +36,21 @@ public class RestViewerService implements IRestViewerService {
 	
 	@Autowired
 	private ITagService tagService;
+	
+	@Autowired
+	private AlbumManager albumManager;
+	
+	@Value("${thumbnail.path}")
+	private String thumbnailCachedPath;
+	
+	@Value("${thumbnail.max.height}")
+	private int thumbnailHeight;
+	
+	@Value("${preview.path}")
+	private String thumbnailPath;
+	
+	@Value("${image.max.height}")
+	private int height;
 	
 	@Override
 	@GET
@@ -76,5 +98,41 @@ public class RestViewerService implements IRestViewerService {
 	public List<String> getAlbumByTags(@PathParam("user") String user, @PathParam("tag") String tag) throws Exception {
 		return tagService.getAlbums(user, tag);
 	}
+	
+	@Override
+	@GET
+    @Path("/{user}/albums/{album}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public AlbumDto getPictures(@PathParam("user") String user,
+			@PathParam("album") String albumName) throws Exception {
+		return albumService.getPictures(user, albumName);
+	}
+
+	@Override
+	@GET
+    @Path("/{user}/{album}/{pic}/{type}")
+	@Produces("image/jpeg")
+	public Response getImage(@PathParam("user") String user,
+			@PathParam("album") String encriptedAlbum,
+			@PathParam("pic") String encriptedPic,
+			@PathParam("type") String picType) throws Exception {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		String album = CryptoUtil.decrypt(encriptedAlbum, user);
+		String pic = CryptoUtil.decrypt(encriptedPic, user);
+		Action type = Action.valueOf(picType);
+		switch (type) {
+		case SHOW_THUMBNAIL:
+			albumManager.getCachedPicture(album,pic, thumbnailCachedPath,thumbnailHeight,outputStream);
+			break;
+		case SHOW_PICTURE:
+			albumManager.getCachedPicture(album,pic, thumbnailPath,height,outputStream);
+			break;
+		}
+		ResponseBuilder response = Response.ok(outputStream.toByteArray());
+		response.header("Content-Disposition",
+			"attachment; filename=image_from_server.png");
+		return response.build();
+	}
+
 
 }
