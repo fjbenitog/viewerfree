@@ -130,7 +130,7 @@ public class RestViewerService implements IRestViewerService {
 		}
 		ResponseBuilder response = Response.ok(outputStream.toByteArray());
 		response.header("Content-Disposition",
-			"attachment; filename=image_from_server.png");
+			"attachment; filename="+pic);
 		return response.build();
 	}
 
