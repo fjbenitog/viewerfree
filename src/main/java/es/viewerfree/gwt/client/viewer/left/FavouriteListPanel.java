@@ -59,6 +59,7 @@ public class FavouriteListPanel extends VerticalPanel  {
 		if(this.tagsListPanel == null){
 			this.tagsListPanel =  new DisclosurePanel(messages.favouriteAlbums());
 			this.tagsListPanel.setAnimationEnabled(true);
+			this.tagsListPanel.setOpen(true);
 			this.tagsListPanel.setContent(getListPanel());
 			SubjectHandler handler = new SubjectHandler(messages.favouriteAlbums(), Type.TOTAL_TAGS);
 			tagsListPanel.addOpenHandler(handler);

@@ -1,4 +1,2 @@
 - Añadir Gmail
 - Crear grupos
-- Refactorizar para usar la ultima version the Spring y configuracion con anotaciones
-- Revisar UI para loading message

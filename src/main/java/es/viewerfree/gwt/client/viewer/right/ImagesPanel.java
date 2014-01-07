@@ -104,6 +104,7 @@ public class ImagesPanel extends LayoutPanel {
 		if(this.addTagImage== null){
 			this.addTagImage = new Image(constants.viewerImagesPath()+constants.imageAddTagIcon());
 			this.addTagImage.setStyleName("tag");
+			this.addTagImage.setTitle("Agregar Etiquetas");
 			this.addTagImage.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent arg0) {
