@@ -7,11 +7,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -24,37 +26,38 @@ import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
 import es.viewerfree.gwt.shared.dto.UserDto;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 @Path("/")
 public class RestViewerService implements IRestViewerService {
 
 	@Autowired
 	private IUserService userService;
-	
+
 	@Autowired
 	private IAlbumService albumService;
-	
+
 	@Autowired
 	private ITagService tagService;
-	
+
 	@Autowired
 	private AlbumManager albumManager;
-	
+
 	@Value("${thumbnail.path}")
 	private String thumbnailCachedPath;
-	
+
 	@Value("${thumbnail.max.height}")
 	private int thumbnailHeight;
-	
+
 	@Value("${preview.path}")
 	private String thumbnailPath;
-	
+
 	@Value("${image.max.height}")
 	private int height;
-	
+
 	@Override
 	@GET
-    @Path("/time")
+	@Path("/time")
 	@Produces("text/plain")
 	public String getTime() {
 		return new Date().toString();
@@ -62,76 +65,97 @@ public class RestViewerService implements IRestViewerService {
 
 	@Override
 	@GET
-    @Path("/login/{authorization}")
+	@Path("/login/{authorization}")
 	@Produces("text/plain")
-	public String login(@PathParam("authorization") String authorization)  throws Exception{
-		String values[] = authorization.split("\\@");
-		UserDto credentials = userService.getCredentials(values[1], values[0]);
-		if(credentials!=null){
-			return CryptoUtil.encrypt(credentials.getName()+":"+System.currentTimeMillis(), credentials.getName());
-		}else{
-			return "";
+	public String login(@PathParam("authorization") String authorization) {
+		try {
+			String values[] = authorization.split("\\@");
+			UserDto credentials;
+			credentials = userService.getCredentials(values[1], values[0]);
+			if(credentials!=null){
+				return CryptoUtil.encrypt(credentials.getName()+":"+System.currentTimeMillis(), credentials.getName());
+			}else{
+				return "";
+			}
+		} catch (Exception e) {
+			throw new WebApplicationException(e,Response.serverError().build());
 		}
-		
+
 	}
 
 	@Override
 	@GET
-    @Path("/{user}/albums")
+	@Path("/{user}/albums")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String>  getAlbums(@PathParam("user") String user) throws Exception {
-		return albumService.getAlbums(user);
+	public List<String>  getAlbums(@PathParam("user") String user)  {
+		try {
+			return albumService.getAlbums(user);
+		} catch (Exception e) {
+			throw new WebApplicationException(e,Response.serverError().build());
+		}
 	}
-	
+
 	@Override
 	@GET
-    @Path("/{user}/tags")
+	@Path("/{user}/tags")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String>  getTags(@PathParam("user") String user) throws Exception {
-		return tagService.getTags(user);
+	public List<String>  getTags(@PathParam("user") String user)  {
+		try {
+			return tagService.getTags(user);
+		} catch (Exception e) {
+			throw new WebApplicationException(e,Response.serverError().build());
+		}
 	}
-	
+
 	@Override
 	@GET
-    @Path("/{user}/{tag}/albums")
+	@Path("/{user}/{tag}/albums")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> getAlbumByTags(@PathParam("user") String user, @PathParam("tag") String tag) throws Exception {
-		return tagService.getAlbums(user, tag);
+	public List<String> getAlbumByTags(@PathParam("user") String user, @PathParam("tag") String tag) {
+		try {
+			return tagService.getAlbums(user, tag);
+		} catch (Exception e) {
+			throw new WebApplicationException(e,Response.serverError().build());
+		}
 	}
-	
+
 	@Override
 	@GET
-    @Path("/{user}/albums/{album}")
+	@Path("/{user}/albums/{album}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public AlbumDto getPictures(@PathParam("user") String user,
-			@PathParam("album") String albumName) throws Exception {
+			@PathParam("album") String albumName) {
 		return albumService.getPictures(user, albumName);
 	}
 
 	@Override
 	@GET
-    @Path("/{user}/{album}/{pic}/{type}")
+	@Path("/{user}/{album}/{pic}/{type}")
 	@Produces("image/jpeg")
 	public Response getImage(@PathParam("user") String user,
 			@PathParam("album") String encriptedAlbum,
 			@PathParam("pic") String encriptedPic,
-			@PathParam("type") String picType) throws Exception {
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		String album = CryptoUtil.decrypt(encriptedAlbum, user);
-		String pic = CryptoUtil.decrypt(encriptedPic, user);
-		Action type = Action.valueOf(picType);
-		switch (type) {
-		case SHOW_THUMBNAIL:
-			albumManager.getCachedPicture(album,pic, thumbnailCachedPath,thumbnailHeight,outputStream);
-			break;
-		case SHOW_PICTURE:
-			albumManager.getCachedPicture(album,pic, thumbnailPath,height,outputStream);
-			break;
+			@PathParam("type") String picType) {
+		try {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			String album = CryptoUtil.decrypt(encriptedAlbum, user);
+			String pic = CryptoUtil.decrypt(encriptedPic, user);
+			Action type = Action.valueOf(picType);
+			switch (type) {
+			case SHOW_THUMBNAIL:
+				albumManager.getCachedPicture(album,pic, thumbnailCachedPath,thumbnailHeight,outputStream);
+				break;
+			case SHOW_PICTURE:
+				albumManager.getCachedPicture(album,pic, thumbnailPath,height,outputStream);
+				break;
+			}
+			ResponseBuilder response = Response.ok(outputStream.toByteArray());
+			response.header("Content-Disposition",
+					"attachment; filename="+pic);
+			return response.build();
+		} catch (Exception e) {
+			throw new WebApplicationException(e,Response.serverError().build());
 		}
-		ResponseBuilder response = Response.ok(outputStream.toByteArray());
-		response.header("Content-Disposition",
-			"attachment; filename="+pic);
-		return response.build();
 	}
 
 
