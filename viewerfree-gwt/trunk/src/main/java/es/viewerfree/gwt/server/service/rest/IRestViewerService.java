@@ -10,15 +10,15 @@ public interface IRestViewerService {
 	
 	String getTime();
 	
-	String login(String authorization)  throws Exception;
+	String login(String authorization) ;
 	
-	List<String> getAlbums(String user) throws Exception;
+	List<String> getAlbums(String user) ;
 	
-	List<String> getTags(String user) throws Exception;
+	List<String> getTags(String user) ;
 	
-	List<String> getAlbumByTags(String user, String album) throws Exception;
+	List<String> getAlbumByTags(String user, String album) ;
 	
-	AlbumDto getPictures(String user,String albumName)throws Exception;
+	AlbumDto getPictures(String user,String albumName);
 	
-	Response getImage(String user,String encriptedAlbum, String pic, String imageType) throws Exception;
+	Response getImage(String user,String encriptedAlbum, String pic, String imageType);
 }
