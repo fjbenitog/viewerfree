@@ -70,6 +70,9 @@ public class RestViewerService implements IRestViewerService {
 	public String login(@PathParam("authorization") String authorization) {
 		try {
 			String values[] = authorization.split("\\@");
+			if(values==null || values.length<2){
+				return "";
+			}
 			UserDto credentials;
 			credentials = userService.getCredentials(values[1], values[0]);
 			if(credentials!=null){
