@@ -48,6 +48,7 @@
            		<value>bmp</value>
         	</list>
       </property>
+      <property name="albumService" ref="albumService"/>
 	</bean>
 	<bean id="backupService" class="es.viewerfree.gwt.server.BackupService">
 		<property name="userService" ref="userService"/>

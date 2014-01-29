@@ -1,7 +1,5 @@
 package es.viewerfree.gwt.server;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
@@ -16,11 +14,12 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.HttpRequestHandler;
 
+import es.viewerfree.gwt.server.service.IAlbumService;
 import es.viewerfree.gwt.shared.ParamKey;
+import es.viewerfree.gwt.shared.service.ServiceException;
 
 
 public class FileUploadService implements HttpRequestHandler{
@@ -33,6 +32,8 @@ public class FileUploadService implements HttpRequestHandler{
 
 	private Collection<String> fileExtensions;
 
+	private IAlbumService albumService;
+
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -44,7 +45,7 @@ public class FileUploadService implements HttpRequestHandler{
 		FileItemFactory factory = new DiskFileItemFactory();
 		((DiskFileItemFactory) factory).setSizeThreshold(1000);
 		ServletFileUpload upload = new ServletFileUpload(factory); 
-		
+
 		try{
 			List<FileItem> items = validateFileItem(upload.parseRequest(request));
 			copyImageToAlbum(items, getAlbumName(items), validateImageFile(items));
@@ -72,14 +73,8 @@ public class FileUploadService implements HttpRequestHandler{
 	}
 
 	private void copyImageToAlbum(List<FileItem> items, String album,
-			String imageName) throws  IOException, FileUploadException {
-		File fileImage = new File(getPath()+"/"+album+"/"+imageName);
-		if(fileImage.exists()){
-			throw new FileUploadException("Error: This picture already exists in this album.");
-		}
-		FileOutputStream output = new FileOutputStream(fileImage);
-		IOUtils.copyLarge(items.get(1).getInputStream(), output);
-		IOUtils.closeQuietly(output);
+			String imageName) throws  IOException, FileUploadException, ServiceException {
+		albumService.uploadPictures(items.get(1).getInputStream(), album, imageName);
 	}
 
 	private String validateImageFile(List<FileItem> items) throws FileUploadException {
@@ -132,6 +127,14 @@ public class FileUploadService implements HttpRequestHandler{
 		public FileUploadException(String message) {
 			super(message);
 		}
-		
+
+	}
+
+	public IAlbumService getAlbumService() {
+		return albumService;
+	}
+
+	public void setAlbumService(IAlbumService albumService) {
+		this.albumService = albumService;
 	}
 }

@@ -3,7 +3,9 @@ package es.viewerfree.gwt.server.service.rest.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -13,7 +15,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
+import org.apache.cxf.jaxrs.ext.multipart.Multipart;
+import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -26,7 +29,6 @@ import es.viewerfree.gwt.server.viewer.AlbumManager;
 import es.viewerfree.gwt.shared.Action;
 import es.viewerfree.gwt.shared.dto.AlbumDto;
 import es.viewerfree.gwt.shared.dto.UserDto;
-import es.viewerfree.gwt.shared.service.ServiceException;
 
 @Path("/")
 public class RestViewerService implements IRestViewerService {
@@ -156,6 +158,26 @@ public class RestViewerService implements IRestViewerService {
 			response.header("Content-Disposition",
 					"attachment; filename="+pic);
 			return response.build();
+		} catch (Exception e) {
+			throw new WebApplicationException(e,Response.serverError().build());
+		}
+	}
+
+	@Override
+	@POST
+	@Path("/{album}/{pic}")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public void uploadImage(@Multipart("file")
+    	MultipartBody multipart,
+			@PathParam("album") String albumName,
+			@PathParam("pic") String picName) {
+		try {
+			System.err.println("----Entro-----");
+			System.err.println("encriptedAlbum:"+albumName);
+			System.err.println("encriptedPic:"+picName);
+			System.err.println("p_attachment:"+multipart);
+			albumService.uploadPictures(multipart.getRootAttachment()
+					.getDataHandler().getInputStream(), albumName, picName);
 		} catch (Exception e) {
 			throw new WebApplicationException(e,Response.serverError().build());
 		}

@@ -11,6 +11,11 @@
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
 	<jaxrs:server id="restService" address="/viewer">
+	    <jaxrs:properties>
+         <entry key="attachment-directory" value="/tmp/viewerfree"/>
+         <entry key="attachment-memory-threshold" value="1000"/>
+         <entry key="attachment-max-size" value="5242880"/>
+     </jaxrs:properties>
 		<jaxrs:serviceBeans>
 			<ref bean="serviceBean" />
 		</jaxrs:serviceBeans>
