@@ -21,7 +21,7 @@ public class AuthorizationRequestHandler implements RequestHandler,ResponseHandl
 	@Override
 	public Response handleRequest(Message message, ClassResourceInfo classResourceInfo) {
 		String path = message.get(Message.PATH_INFO).toString();
-		if(path.startsWith("/service/viewer/login/")){
+		if(!path.startsWith("/service/viewer/login/")){
 			Map<String, List<String>> headers = (Map<String, List<String>>)message.get(Message.PROTOCOL_HEADERS);
 			List<String> tokenList = headers.get("VIEWER_TOKEN");
 			if(tokenList!=null){
