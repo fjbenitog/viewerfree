@@ -2,10 +2,8 @@ package es.viewerfree.gwt.server.service.rest;
 
 import java.util.List;
 
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 
 import es.viewerfree.gwt.shared.dto.AlbumDto;
@@ -26,8 +24,5 @@ public interface IRestViewerService {
 
 	Response getImage(String user,String encriptedAlbum, String pic, String imageType);
 
-	void uploadImage(@Multipart("file")
-	MultipartBody p_attachment,
-	@PathParam("album") String encriptedAlbum,
-	@PathParam("pic") String encriptedPic);
+	void uploadImage(MultipartBody p_attachment,String user,String encriptedAlbum,String encriptedPic);
 }

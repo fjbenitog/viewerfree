@@ -165,17 +165,13 @@ public class RestViewerService implements IRestViewerService {
 
 	@Override
 	@POST
-	@Path("/{album}/{pic}")
+	@Path("/{user}/{album}/{pic}/")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public void uploadImage(@Multipart("file")
-    	MultipartBody multipart,
+	public void uploadImage(@Multipart("file") MultipartBody multipart,
+			@PathParam("album") String user,
 			@PathParam("album") String albumName,
 			@PathParam("pic") String picName) {
 		try {
-			System.err.println("----Entro-----");
-			System.err.println("encriptedAlbum:"+albumName);
-			System.err.println("encriptedPic:"+picName);
-			System.err.println("p_attachment:"+multipart);
 			albumService.uploadPictures(multipart.getRootAttachment()
 					.getDataHandler().getInputStream(), albumName, picName);
 		} catch (Exception e) {
